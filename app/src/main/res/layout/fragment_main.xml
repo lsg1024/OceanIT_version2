@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainFragment"
+    android:background="@color/light_blue">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/white_edge"
+                android:elevation="5dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/white_edge">
+
+
+                    <TextView
+                        android:id="@+id/Max1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="최대 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/max1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="max"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Max1">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/Min1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최소 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/Max1"
+                        app:layout_constraintStart_toStartOf="@+id/Max1"
+                        app:layout_constraintTop_toBottomOf="@+id/Max1" />
+
+                    <TextView
+                        android:id="@+id/min1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="min"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Min1">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/text_view_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="50dp"
+                        android:maxLength="5"
+                        android:text="50.12"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar1"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_bar1"
+                        app:layout_constraintStart_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintTop_toTopOf="@+id/progress_bar1" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar1"
+                        android:indeterminateOnly="false"
+                        android:progressDrawable="@drawable/circle"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:elevation="20dp"
+                        android:rotation="-150"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/white_edge"
+                android:elevation="5dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardview1">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/white_edge">
+
+
+                    <TextView
+                        android:id="@+id/Max2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="최대 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/max2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="max"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Max2">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/Min2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최소 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/Max2"
+                        app:layout_constraintStart_toStartOf="@+id/Max2"
+                        app:layout_constraintTop_toBottomOf="@+id/Max2" />
+
+                    <TextView
+                        android:id="@+id/min2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="min"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Min2">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/text_view_progress2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="50dp"
+                        android:maxLength="5"
+                        android:text="50.12"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar2"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_bar2"
+                        app:layout_constraintStart_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintTop_toTopOf="@+id/progress_bar2" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar2"
+                        android:indeterminateOnly="false"
+                        android:progressDrawable="@drawable/circle"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:elevation="20dp"
+                        android:rotation="-150"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/white_edge"
+                android:elevation="5dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardview2">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/white_edge">
+
+
+                    <TextView
+                        android:id="@+id/Max3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="최대 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/max3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="max"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Max3">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/Min3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최소 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/Max3"
+                        app:layout_constraintStart_toStartOf="@+id/Max3"
+                        app:layout_constraintTop_toBottomOf="@+id/Max3" />
+
+                    <TextView
+                        android:id="@+id/min3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="min"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Min3">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/text_view_progress3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="50dp"
+                        android:maxLength="5"
+                        android:text="50.12"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar3"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_bar3"
+                        app:layout_constraintStart_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintTop_toTopOf="@+id/progress_bar3" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar3"
+                        android:indeterminateOnly="false"
+                        android:progressDrawable="@drawable/circle"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:elevation="20dp"
+                        android:rotation="-150"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/white_edge"
+                android:elevation="5dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardview3">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/white_edge">
+
+
+                    <TextView
+                        android:id="@+id/Max4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="최대 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/max4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="max"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Max4">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/Min4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최소 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/Max4"
+                        app:layout_constraintStart_toStartOf="@+id/Max4"
+                        app:layout_constraintTop_toBottomOf="@+id/Max4" />
+
+                    <TextView
+                        android:id="@+id/min4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="min"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Min4">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/text_view_progress4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="50dp"
+                        android:maxLength="5"
+                        android:text="50.12"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar4"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_bar4"
+                        app:layout_constraintStart_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintTop_toTopOf="@+id/progress_bar4" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar4"
+                        android:indeterminateOnly="false"
+                        android:progressDrawable="@drawable/circle"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:elevation="20dp"
+                        android:rotation="-150"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/white_edge"
+                android:elevation="5dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardview4">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/white_edge">
+
+
+                    <TextView
+                        android:id="@+id/Max5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="최대 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/max5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="max"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Max5">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/Min5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최소 임계치"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/Max5"
+                        app:layout_constraintStart_toStartOf="@+id/Max5"
+                        app:layout_constraintTop_toBottomOf="@+id/Max5" />
+
+                    <TextView
+                        android:id="@+id/min5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="min"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Min5">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/text_view_progress5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="50dp"
+                        android:maxLength="5"
+                        android:text="50.12"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar5"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_bar5"
+                        app:layout_constraintStart_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintTop_toTopOf="@+id/progress_bar5" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar5"
+                        android:indeterminateOnly="false"
+                        android:progressDrawable="@drawable/circle"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:elevation="20dp"
+                        android:rotation="-150"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/white_edge"
+                android:elevation="5dp"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardview5">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/white_edge">
+
+
+                    <TextView
+                        android:id="@+id/Max6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="최대 임계치"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/max6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="max"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Max6">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/Min6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최소 임계치"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/Max6"
+                        app:layout_constraintStart_toStartOf="@+id/Max6"
+                        app:layout_constraintTop_toBottomOf="@+id/Max6" />
+
+                    <TextView
+                        android:id="@+id/min6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="min"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Min6">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/text_view_progress6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLength="5"
+                        android:text="50.12"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="50dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar6"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_bar6"
+                        app:layout_constraintStart_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintTop_toTopOf="@+id/progress_bar6" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar6"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:elevation="20dp"
+                        android:indeterminateOnly="false"
+                        android:progressDrawable="@drawable/circle"
+                        android:rotation="-150"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
