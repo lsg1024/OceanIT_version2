@@ -31,19 +31,19 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager2) {tab, position ->
             when (position) {
                 0 -> {
-//                    tab.text = "홈"
+                    tab.text = "홈"
                     tab.setIcon(R.drawable.airplay)
 
                 }
 
                 1 -> {
-//                    tab.text = "그래프"
+                    tab.text = "그래프"
                     tab.setIcon(R.drawable.combo_chart)
                 }
 
                 2 -> {
                     tab.setIcon(R.drawable.set)
-//                    tab.text = "셋팅"
+                    tab.text = "셋팅"
                 }
             }
         }.attach()

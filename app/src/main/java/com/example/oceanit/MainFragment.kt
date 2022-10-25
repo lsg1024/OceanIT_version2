@@ -55,12 +55,12 @@ class MainFragment : Fragment() {
 
 //        circleProgressView1.maxValue = 50f
 //        circleProgressView1.unit = 20f.toString()
-        var data1 = 25
+        val data1 = 25.04
         progress_bar1.progress = data1.toInt()
         progressTextView1.text = "$data1"
 
         // 이걸 수정하면 max min
-        progressMaxText.text = "37"
+        progressMaxText.text = "35"
         progressMinText.text = "25"
 
         val maxValue = (progressMaxText.text as String).toInt()
