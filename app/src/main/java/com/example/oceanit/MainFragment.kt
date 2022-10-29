@@ -12,8 +12,14 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import at.grabner.circleprogress.CircleProgressView
+import com.example.oceanit.DTO.SensorDTO
+import com.example.oceanit.Retrofit.Loginkey
+import com.example.oceanit.Retrofit.Retrofit2
 import io.socket.client.IO
 import io.socket.client.Socket
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.net.URISyntaxException
 
 class MainFragment : Fragment() {
@@ -24,6 +30,11 @@ class MainFragment : Fragment() {
     lateinit var progressMaxText : TextView
     lateinit var progressMinText : TextView
     lateinit var mSocket: Socket
+    private var user_key : Int = 0
+
+    val call by lazy { Retrofit2.getInstance() }
+
+    lateinit var mainActivity: MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,33 +57,52 @@ class MainFragment : Fragment() {
         progressMaxText = view.findViewById(R.id.max1)
         progressMinText = view.findViewById(R.id.min1)
 
-        try {
-            mSocket = IO.socket("http://oceanit.synology.me:8001/")
+        mainActivity = context as MainActivity
 
-        } catch (e: URISyntaxException) {
-            e.printStackTrace()
+        user_key = Loginkey.getUserKey(mainActivity).toInt()
+
+        if (Loginkey.getUserKey(mainActivity).isNullOrEmpty()){
+            Log.d("Login_key", "Login_key 없음")
+        } else {
+            Log.d("Login_key", "응답 ${Loginkey.getUserKey(mainActivity)} SettingFragment")
+
+            try {
+                mSocket = IO.socket("http://oceanit.synology.me:8001/")
+
+            } catch (e: URISyntaxException) {
+                e.printStackTrace()
+            }
+
+            call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO>{
+
+                override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
+                    if (response.isSuccessful) {
+                        val result : SensorDTO? = response.body()
+
+
+                        // 소켓에서 받은 데이터를 넣는 곳
+                        val data1 = 25.04
+                        progress_bar1.progress = data1.toInt()
+                        progressTextView1.text = "$data1"
+
+                        // 이걸 수정하면 max min -> 서버에서 받아오기
+                        progressMaxText.text = result!!.result.DO_high.toString()
+                        progressMinText.text = result.result.DO_low.toString()
+
+                        // 측정되는 최소값과 최대값
+                        progress_bar1.max = 50
+                        progress_bar1.min = 0
+
+                    }
+                }
+
+                override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
+
+                }
+
+            })
+
         }
-
-//        circleProgressView1.maxValue = 50f
-//        circleProgressView1.unit = 20f.toString()
-        val data1 = 25.04
-        progress_bar1.progress = data1.toInt()
-        progressTextView1.text = "$data1"
-
-        // 이걸 수정하면 max min -> 서버에서 받아오기
-        progressMaxText.text = "35"
-        progressMinText.text = "25"
-
-        val maxValue = (progressMaxText.text as String).toInt()
-
-        Log.d("maxValue", "$maxValue")
-
-        // 측정되는 최소값과 최대값
-        progress_bar1.max = maxValue + 10
-        progress_bar1.min = 0
-
-
-
         return view
     }
 
