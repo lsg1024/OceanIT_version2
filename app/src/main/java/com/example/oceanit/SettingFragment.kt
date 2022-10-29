@@ -14,7 +14,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.oceanit.DTO.SensorDTO
+import com.example.oceanit.DTO.SensorResult
+import com.example.oceanit.DTO.Sensor_Body
+import com.example.oceanit.DTO.Sensor_CG_DTO
+import com.example.oceanit.Retrofit.Loginkey
+import com.example.oceanit.Retrofit.Retrofit2
 import com.google.android.material.slider.RangeSlider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // 자유롭게 변경하고 버튼을 누르면 edittext 값들을 서버로 전송
 // 페이지에 들어왔을 때 onCreateView에서 서버에 저장된 값을 불러온다
@@ -53,9 +62,15 @@ class SettingFragment : Fragment() {
     lateinit var img: ImageView
     lateinit var button: Button
 
+    var num : Float = 0F
     var number1: String = ""
     var number2: String = ""
 
+    val call by lazy { Retrofit2.getInstance() }
+
+    private var user_key : Int = 0
+
+    lateinit var mainActivity: MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,75 +121,160 @@ class SettingFragment : Fragment() {
         num5_2 = view.findViewById(R.id.num5_2)
         num6_2 = view.findViewById(R.id.num6_2)
 
+        mainActivity = context as MainActivity
+
         // 데이터 입력하는 값 수조 / 서버에서 수조 이름 받아오기 / 데이터 스크롤 + EditText 값 변경
 
-        // 키보드 입력 값을 받아오고 슬라이더 모양 변화
-        keyborad(num1_1, num1_2)
-        // 최대 측량 범위
-        rangeSlider.valueFrom = 10f
-        // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
-        rangeSlider.valueTo = 40f
-        // 슬라이더 움직일때 조절되는 단위
-        rangeSlider.stepSize = 0.01f
-        // 서버에서 지정된 사용자의 min max 값 받아오기
-        rangeSlider.setValues(15f, 25f)
+        user_key = Loginkey.getUserKey(mainActivity).toInt()
 
-        rangeSlider.addOnSliderTouchListener(rangeListner(num1_1, num1_2, rangeSlider))
+        if (Loginkey.getUserKey(mainActivity).isNullOrEmpty()){
+            Log.d("Login_key", "Login_key 없음")
+        } else {
+            Log.d("Login_key", "응답 ${Loginkey.getUserKey(mainActivity)} SettingFragment")
+
+            button.setOnClickListener {
+
+                num = num1_1.text.toString().toFloat()
+
+                call?.Sensor_CG(user_key, Sensor_Body(
+                    DO_low = num1_1.text.toString().toFloat(),
+                    DO_high = num1_2.text.toString().toFloat(),
+                    pH_low = num2_1.text.toString().toFloat(),
+                    pH_high =num2_2.text.toString().toFloat(),
+                    Sa_low = num3_1.text.toString().toFloat(),
+                    Sa_high = num3_2.text.toString().toFloat(),
+                    ORP_low =  num4_1.text.toString().toFloat(),
+                    ORP_high = num4_2.text.toString().toFloat(),
+                    Tc_low = num5_1.text.toString().toFloat(),
+                    Tc_high = num5_2.text.toString().toFloat(),
+                    TUR_low = num6_1.text.toString().toFloat(),
+                    TUR_high = num6_2.text.toString().toFloat()
+                ))?.enqueue(object : Callback<Sensor_CG_DTO>{
+
+                    override fun onResponse(call: Call<Sensor_CG_DTO>, response: Response<Sensor_CG_DTO>) {
+                        if (response.isSuccessful) {
+                            val result : Sensor_CG_DTO? = response.body()
+
+                            Log.d("change_sensor", "$result")
+                            fragmentManager?.let { refreshFragment(this@SettingFragment, it) }
+                        }
+                    }
+
+
+                    override fun onFailure(call: Call<Sensor_CG_DTO>, t: Throwable) {
+
+                    }
+
+                })
+            }
+        }
+
+        call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
+
+            override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
+                if (response.isSuccessful) {
+
+                    val result : SensorDTO? = response.body()
+
+                    Log.d("Sensor_value", "$result")
+
+                    // 데이터 EditText에 저장
+                    num1_1.setText(num1_1.text.toString() + result!!.result.DO_low.toString())
+                    num1_2.setText(num1_2.text.toString() + result!!.result.DO_high.toString())
+                    // 키보드 입력 값을 받아오고 슬라이더 모양 변화
+                    keyborad(num1_1, num1_2)
+                    // 최대 측량 범위
+                    rangeSlider.valueFrom = 0f
+                    // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
+                    rangeSlider.valueTo = 40f
+                    // 슬라이더 움직일때 조절되는 단위
+                    rangeSlider.stepSize = 0.01f
+                    // 서버에서 지정된 사용자의 min max 값 받아오기
+                    rangeSlider.setValues(result.result.DO_low, result.result.DO_high)
+                    // 바 움직이면서 min max 값
+                    rangeSlider.addOnSliderTouchListener(rangeListner(num1_1, num1_2, rangeSlider))
 
 // ---------------------------------------------------------------------------------------------------- //
 
-        keyborad(num2_1, num2_2)
+                    // 데이터 EditText에 저장
+                    num2_1.setText(num2_1.text.toString() + result!!.result.pH_low.toString())
+                    num2_2.setText(num2_2.text.toString() + result!!.result.pH_high.toString())
 
-        rangeSlider2.valueFrom = 10f
-        rangeSlider2.valueTo = 40f
-        rangeSlider2.stepSize = 0.01f
-        rangeSlider2.setValues(15f, 25f)
+                    keyborad(num2_1, num2_2)
 
-        rangeSlider2.addOnSliderTouchListener(rangeListner(num2_1, num2_2, rangeSlider2))
+                    rangeSlider2.valueFrom = 0f
+                    rangeSlider2.valueTo = 40f
+                    rangeSlider2.stepSize = 0.01f
+                    rangeSlider2.setValues(result.result.pH_low, result.result.pH_high)
 
-// ---------------------------------------------------------------------------------------------------- //
-
-        keyborad(num3_1, num3_2)
-
-        rangeSlider3.valueFrom = 10f
-        rangeSlider3.valueTo = 40f
-        rangeSlider3.stepSize = 0.01f
-        rangeSlider3.setValues(15f, 25f)
-
-        rangeSlider3.addOnSliderTouchListener(rangeListner(num3_1, num3_2, rangeSlider3))
+                    rangeSlider2.addOnSliderTouchListener(rangeListner(num2_1, num2_2, rangeSlider2))
 
 // ---------------------------------------------------------------------------------------------------- //
 
-        keyborad(num4_1, num4_2)
+                    // 데이터 EditText에 저장
+                    num3_1.setText(num3_1.text.toString() + result!!.result.Sa_low.toString())
+                    num3_2.setText(num3_2.text.toString() + result!!.result.Sa_high.toString())
 
-        rangeSlider4.valueFrom = 10f
-        rangeSlider4.valueTo = 40f
-        rangeSlider4.stepSize = 0.01f
-        rangeSlider4.setValues(15f, 25f)
+                    keyborad(num3_1, num3_2)
 
-        rangeSlider4.addOnSliderTouchListener(rangeListner(num4_1, num4_2, rangeSlider4))
+                    rangeSlider3.valueFrom = 0f
+                    rangeSlider3.valueTo = 40f
+                    rangeSlider3.stepSize = 0.01f
+                    rangeSlider3.setValues(result.result.Sa_low, result.result.Sa_high)
 
-// ---------------------------------------------------------------------------------------------------- //
-
-        keyborad(num5_1, num5_2)
-
-        rangeSlider5.valueFrom = 10f
-        rangeSlider5.valueTo = 40f
-        rangeSlider5.stepSize = 0.01f
-        rangeSlider5.setValues(15f, 25f)
-
-        rangeSlider5.addOnSliderTouchListener(rangeListner(num5_1, num5_2, rangeSlider5))
+                    rangeSlider3.addOnSliderTouchListener(rangeListner(num3_1, num3_2, rangeSlider3))
 
 // ---------------------------------------------------------------------------------------------------- //
 
-        keyborad(num6_1, num6_2)
+                    // 데이터 EditText에 저장
+                    num4_1.setText(num4_1.text.toString() + result!!.result.ORP_low.toString())
+                    num4_2.setText(num4_2.text.toString() + result!!.result.ORP_high.toString())
 
-        rangeSlider6.valueFrom = 10f
-        rangeSlider6.valueTo = 40f
-        rangeSlider6.stepSize = 0.01f
-        rangeSlider6.setValues(15f, 25f)
+                    keyborad(num4_1, num4_2)
 
-        rangeSlider6.addOnSliderTouchListener(rangeListner(num6_1, num6_2, rangeSlider6))
+                    rangeSlider4.valueFrom = 0f
+                    rangeSlider4.valueTo = 40f
+                    rangeSlider4.stepSize = 0.01f
+                    rangeSlider4.setValues(result.result.ORP_low, result.result.ORP_high)
+
+                    rangeSlider4.addOnSliderTouchListener(rangeListner(num4_1, num4_2, rangeSlider4))
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                    num5_1.setText(num5_1.text.toString() + result!!.result.Tc_low.toString())
+                    num5_2.setText(num5_2.text.toString() + result!!.result.Tc_high.toString())
+
+                    keyborad(num5_1, num5_2)
+
+                    rangeSlider5.valueFrom = 00f
+                    rangeSlider5.valueTo = 40f
+                    rangeSlider5.stepSize = 0.01f
+                    rangeSlider5.setValues(result.result.Tc_low, result.result.Tc_high)
+
+                    rangeSlider5.addOnSliderTouchListener(rangeListner(num5_1, num5_2, rangeSlider5))
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                    num6_1.setText(num6_1.text.toString() + result!!.result.TUR_low.toString())
+                    num6_2.setText(num6_2.text.toString() + result!!.result.TUR_high.toString())
+
+                    keyborad(num6_1, num6_2)
+
+                    rangeSlider6.valueFrom = 0f
+                    rangeSlider6.valueTo = 40f
+                    rangeSlider6.stepSize = 0.01f
+                    rangeSlider6.setValues(result.result.TUR_low, result.result.TUR_high)
+
+                    rangeSlider6.addOnSliderTouchListener(rangeListner(num6_1, num6_2, rangeSlider6))
+
+                }
+            }
+
+            override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
+                Log.d("Sensor_value", "${t.message}")
+            }
+
+        })
 
         return view
     }
@@ -219,6 +319,7 @@ class SettingFragment : Fragment() {
             number1 = knum_1.text.toString()
             number2 = null.toString()
             number2 = knum_2.text.toString()
+
             Log.d("numberLog", "$number1")
             Log.d("numberLog", "$number2")
 
@@ -250,7 +351,7 @@ class SettingFragment : Fragment() {
 
     // Fragment 새로고침
     fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
-        Log.d("numberLog", "refresh")
+        Log.d("refresh", "refresh")
         var ft: FragmentTransaction = fragmentManager.beginTransaction()
         ft.detach(fragment).attach(fragment).commit()
     }
