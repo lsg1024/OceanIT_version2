@@ -1,4 +1,4 @@
-package com.example.oceanit
+package com.example.oceanit.Retrofit
 
 import android.content.Context
 import android.content.SharedPreferences

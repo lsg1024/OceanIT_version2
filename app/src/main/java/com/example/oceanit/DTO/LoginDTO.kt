@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class LoginDTO(
 
     @SerializedName("result")
-    val result : ArrayList<LoginData>
+    val result : LoginResult
 )
 
 data class LoginData(
@@ -16,3 +16,13 @@ data class LoginData(
     @SerializedName("pw")
     val pw : String,
 )
+
+data class LoginResult(
+    @SerializedName("user_key")
+    val user_key : Int?,
+
+    @SerializedName("msg")
+    val msg : String
+)
+
+

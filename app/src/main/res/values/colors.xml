@@ -19,4 +19,8 @@
     <color name="lime">#00FF00</color>
     <color name="yellow">#FFFF00</color>
     <color name="light_blue">#DCDCDC</color>
+    <color name="colorPrimary">#FFC107</color>
+    <color name="colorPrimaryDark">#FF7043</color>
+    <color name="colorAccent">#FFAB40</color>
+    <color name="colorGray">#8C8C8C</color>
 </resources>
