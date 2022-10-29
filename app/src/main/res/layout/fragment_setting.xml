@@ -7,53 +7,520 @@
     tools:context=".SettingFragment">
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <EditText
-        android:id="@+id/editTextNumber2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumber"
-        app:layout_constraintTop_toTopOf="@+id/editTextNumber" />
-
-    <com.google.android.material.slider.RangeSlider
-        android:id="@+id/rangeSlider"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/customlayout01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView">
+
+                <TextView
+                    android:id="@+id/watertank_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="watertank"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/rangeSlider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/customlayout01"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </TextView>
 
 
-        app:layout_constraintBottom_toBottomOf="@id/editTextNumber2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+                <EditText
+                    android:id="@+id/num1_1"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:imeOptions="actionNext"
+                    android:text="12.52"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider"
+                    app:layout_constraintStart_toStartOf="@id/customlayout01"
+                    app:layout_constraintTop_toTopOf="@+id/rangeSlider" />
 
-    </com.google.android.material.slider.RangeSlider>
+                <EditText
+                    android:id="@+id/num1_2"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:imeOptions="actionDone"
+                    android:text="24.12"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider"
+                    app:layout_constraintEnd_toEndOf="@id/customlayout01"
+                    app:layout_constraintTop_toBottomOf="@+id/watertank_name">
 
+                </EditText>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rangeSlider"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/num1_2"
+                    app:layout_constraintStart_toEndOf="@+id/num1_1"
+                    app:layout_constraintTop_toTopOf="@+id/customlayout01"
+                    app:thumbColor="@color/primary"
+                    app:tickColor="@color/primary"
+                    app:tickColorActive="@color/primary_light"
+                    app:trackColor="@color/primary_light">
+
+                </com.google.android.material.slider.RangeSlider>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/customlayout02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/customlayout01">
+
+                <TextView
+                    android:id="@+id/watertank_name02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="watertank"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/rangeSlider2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/customlayout02"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </TextView>
+
+
+                <EditText
+                    android:id="@+id/num2_1"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:imeOptions="actionNext"
+                    android:text="20.12"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider2"
+                    app:layout_constraintStart_toStartOf="@id/customlayout02"
+                    app:layout_constraintTop_toTopOf="@+id/rangeSlider2" />
+
+                <EditText
+                    android:id="@+id/num2_2"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:imeOptions="actionDone"
+                    android:text="26.12"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/watertank_name02">
+
+                </EditText>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rangeSlider2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/num2_2"
+                    app:layout_constraintStart_toEndOf="@+id/num2_1"
+                    app:layout_constraintTop_toTopOf="@+id/customlayout02"
+                    app:thumbColor="@color/primary"
+                    app:tickColor="@color/primary"
+                    app:tickColorActive="@color/primary_light"
+                    app:trackColor="@color/primary_light">
+
+                </com.google.android.material.slider.RangeSlider>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/customlayout03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/customlayout02">
+
+                <TextView
+                    android:id="@+id/watertank_name03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="watertank"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/rangeSlider3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/customlayout03"
+                    app:layout_constraintTop_toTopOf="@id/customlayout03">
+
+                </TextView>
+
+
+                <EditText
+                    android:id="@+id/num3_1"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionNext"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider3"
+                    app:layout_constraintStart_toStartOf="@id/customlayout03"
+                    app:layout_constraintTop_toTopOf="@+id/rangeSlider3" />
+
+                <EditText
+                    android:id="@+id/num3_2"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionDone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/watertank_name03">
+
+                </EditText>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rangeSlider3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/num3_2"
+                    app:layout_constraintStart_toEndOf="@+id/num3_1"
+                    app:layout_constraintTop_toTopOf="@+id/customlayout03"
+                    app:thumbColor="@color/primary"
+                    app:tickColor="@color/primary"
+                    app:tickColorActive="@color/primary_light"
+                    app:trackColor="@color/primary_light">
+
+                </com.google.android.material.slider.RangeSlider>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/customlayout04"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/customlayout03">
+
+                <TextView
+                    android:id="@+id/watertank_name04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="watertank"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/rangeSlider4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/customlayout04"
+                    app:layout_constraintTop_toTopOf="@id/customlayout04">
+
+                </TextView>
+
+
+                <EditText
+                    android:id="@+id/num4_1"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionNext"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider4"
+                    app:layout_constraintStart_toStartOf="@id/customlayout04"
+                    app:layout_constraintTop_toTopOf="@+id/rangeSlider4" />
+
+                <EditText
+                    android:id="@+id/num4_2"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionDone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/watertank_name04">
+
+                </EditText>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rangeSlider4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/num4_2"
+                    app:layout_constraintStart_toEndOf="@+id/num4_1"
+                    app:layout_constraintTop_toTopOf="@+id/customlayout04"
+                    app:thumbColor="@color/primary"
+                    app:tickColor="@color/primary"
+                    app:tickColorActive="@color/primary_light"
+                    app:trackColor="@color/primary_light">
+
+                </com.google.android.material.slider.RangeSlider>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/customlayout05"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/customlayout04">
+
+                <TextView
+                    android:id="@+id/watertank_name05"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="watertank"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/rangeSlider5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/customlayout05"
+                    app:layout_constraintTop_toTopOf="@id/customlayout05">
+
+                </TextView>
+
+
+                <EditText
+                    android:id="@+id/num5_1"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionNext"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider5"
+                    app:layout_constraintStart_toStartOf="@id/customlayout05"
+                    app:layout_constraintTop_toTopOf="@+id/rangeSlider5" />
+
+                <EditText
+                    android:id="@+id/num5_2"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionDone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/watertank_name05">
+
+                </EditText>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rangeSlider5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/num5_2"
+                    app:layout_constraintStart_toEndOf="@+id/num5_1"
+                    app:layout_constraintTop_toTopOf="@+id/customlayout05"
+                    app:thumbColor="@color/primary"
+                    app:tickColor="@color/primary"
+                    app:tickColorActive="@color/primary_light"
+                    app:trackColor="@color/primary_light">
+
+                </com.google.android.material.slider.RangeSlider>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/customlayout06"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/customlayout05">
+
+                <TextView
+                    android:id="@+id/watertank_name06"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="watertank"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/rangeSlider6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/customlayout06"
+                    app:layout_constraintTop_toTopOf="@id/customlayout06">
+
+                </TextView>
+
+
+                <EditText
+                    android:id="@+id/num6_1"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionNext"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider6"
+                    app:layout_constraintStart_toStartOf="@id/customlayout06"
+                    app:layout_constraintTop_toTopOf="@+id/rangeSlider6" />
+
+                <EditText
+                    android:id="@+id/num6_2"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:text="24.12"
+                    android:imeOptions="actionDone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/rangeSlider6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/watertank_name06">
+
+                </EditText>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rangeSlider6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/num6_2"
+                    app:layout_constraintStart_toEndOf="@+id/num6_1"
+                    app:layout_constraintTop_toTopOf="@+id/customlayout06"
+                    app:thumbColor="@color/primary"
+                    app:tickColor="@color/primary"
+                    app:tickColorActive="@color/primary_light"
+                    app:trackColor="@color/primary_light">
+
+                </com.google.android.material.slider.RangeSlider>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/setb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="완료"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

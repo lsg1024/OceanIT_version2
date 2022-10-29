@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
         progress_bar1.progress = data1.toInt()
         progressTextView1.text = "$data1"
 
-        // 이걸 수정하면 max min
+        // 이걸 수정하면 max min -> 서버에서 받아오기
         progressMaxText.text = "35"
         progressMinText.text = "25"
 
