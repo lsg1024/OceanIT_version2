@@ -20,7 +20,6 @@ interface O2_Interface {
     @GET("api/sensor/set")
     fun Sensor_OG(
         @Header("user_key") user_key: Int?,
-
     ) : Call<SensorDTO>
 
     @POST("api/sensor/set")

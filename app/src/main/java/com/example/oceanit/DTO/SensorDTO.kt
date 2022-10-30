@@ -10,6 +10,7 @@ data class SensorDTO(
 )
 
 data class SensorResult(
+
     @SerializedName("user_key")
     val user_key : Int,
 

@@ -1,5 +1,6 @@
 package com.example.oceanit
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.oceanit.DTO.SensorDTO
-import com.example.oceanit.DTO.SensorResult
 import com.example.oceanit.DTO.Sensor_Body
 import com.example.oceanit.DTO.Sensor_CG_DTO
 import com.example.oceanit.Retrofit.Loginkey
@@ -121,53 +121,15 @@ class SettingFragment : Fragment() {
         num5_2 = view.findViewById(R.id.num5_2)
         num6_2 = view.findViewById(R.id.num6_2)
 
+        return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         mainActivity = context as MainActivity
 
-        // 데이터 입력하는 값 수조 / 서버에서 수조 이름 받아오기 / 데이터 스크롤 + EditText 값 변경
-
         user_key = Loginkey.getUserKey(mainActivity).toInt()
-
-        if (Loginkey.getUserKey(mainActivity).isNullOrEmpty()){
-            Log.d("Login_key", "Login_key 없음")
-        } else {
-            Log.d("Login_key", "응답 ${Loginkey.getUserKey(mainActivity)} SettingFragment")
-
-            button.setOnClickListener {
-
-                num = num1_1.text.toString().toFloat()
-
-                call?.Sensor_CG(user_key, Sensor_Body(
-                    DO_low = num1_1.text.toString().toFloat(),
-                    DO_high = num1_2.text.toString().toFloat(),
-                    pH_low = num2_1.text.toString().toFloat(),
-                    pH_high =num2_2.text.toString().toFloat(),
-                    Sa_low = num3_1.text.toString().toFloat(),
-                    Sa_high = num3_2.text.toString().toFloat(),
-                    ORP_low =  num4_1.text.toString().toFloat(),
-                    ORP_high = num4_2.text.toString().toFloat(),
-                    Tc_low = num5_1.text.toString().toFloat(),
-                    Tc_high = num5_2.text.toString().toFloat(),
-                    TUR_low = num6_1.text.toString().toFloat(),
-                    TUR_high = num6_2.text.toString().toFloat()
-                ))?.enqueue(object : Callback<Sensor_CG_DTO>{
-
-                    override fun onResponse(call: Call<Sensor_CG_DTO>, response: Response<Sensor_CG_DTO>) {
-                        if (response.isSuccessful) {
-                            val result : Sensor_CG_DTO? = response.body()
-
-                            Log.d("change_sensor", "$result")
-                            fragmentManager?.let { refreshFragment(this@SettingFragment, it) }
-                        }
-                    }
-
-
-                    override fun onFailure(call: Call<Sensor_CG_DTO>, t: Throwable) {
-
-                    }
-
-                })
-            }
-        }
 
         call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
 
@@ -180,7 +142,7 @@ class SettingFragment : Fragment() {
 
                     // 데이터 EditText에 저장
                     num1_1.setText(num1_1.text.toString() + result!!.result.DO_low.toString())
-                    num1_2.setText(num1_2.text.toString() + result!!.result.DO_high.toString())
+                    num1_2.setText(num1_2.text.toString() + result.result.DO_high.toString())
                     // 키보드 입력 값을 받아오고 슬라이더 모양 변화
                     keyborad(num1_1, num1_2)
                     // 최대 측량 범위
@@ -191,14 +153,12 @@ class SettingFragment : Fragment() {
                     rangeSlider.stepSize = 0.01f
                     // 서버에서 지정된 사용자의 min max 값 받아오기
                     rangeSlider.setValues(result.result.DO_low, result.result.DO_high)
-                    // 바 움직이면서 min max 값
-                    rangeSlider.addOnSliderTouchListener(rangeListner(num1_1, num1_2, rangeSlider))
 
 // ---------------------------------------------------------------------------------------------------- //
 
                     // 데이터 EditText에 저장
-                    num2_1.setText(num2_1.text.toString() + result!!.result.pH_low.toString())
-                    num2_2.setText(num2_2.text.toString() + result!!.result.pH_high.toString())
+                    num2_1.setText(num2_1.text.toString() + result.result.pH_low.toString())
+                    num2_2.setText(num2_2.text.toString() + result.result.pH_high.toString())
 
                     keyborad(num2_1, num2_2)
 
@@ -207,13 +167,11 @@ class SettingFragment : Fragment() {
                     rangeSlider2.stepSize = 0.01f
                     rangeSlider2.setValues(result.result.pH_low, result.result.pH_high)
 
-                    rangeSlider2.addOnSliderTouchListener(rangeListner(num2_1, num2_2, rangeSlider2))
-
 // ---------------------------------------------------------------------------------------------------- //
 
                     // 데이터 EditText에 저장
-                    num3_1.setText(num3_1.text.toString() + result!!.result.Sa_low.toString())
-                    num3_2.setText(num3_2.text.toString() + result!!.result.Sa_high.toString())
+                    num3_1.setText(num3_1.text.toString() + result.result.Sa_low.toString())
+                    num3_2.setText(num3_2.text.toString() + result.result.Sa_high.toString())
 
                     keyborad(num3_1, num3_2)
 
@@ -222,13 +180,11 @@ class SettingFragment : Fragment() {
                     rangeSlider3.stepSize = 0.01f
                     rangeSlider3.setValues(result.result.Sa_low, result.result.Sa_high)
 
-                    rangeSlider3.addOnSliderTouchListener(rangeListner(num3_1, num3_2, rangeSlider3))
-
 // ---------------------------------------------------------------------------------------------------- //
 
                     // 데이터 EditText에 저장
-                    num4_1.setText(num4_1.text.toString() + result!!.result.ORP_low.toString())
-                    num4_2.setText(num4_2.text.toString() + result!!.result.ORP_high.toString())
+                    num4_1.setText(num4_1.text.toString() + result.result.ORP_low.toString())
+                    num4_2.setText(num4_2.text.toString() + result.result.ORP_high.toString())
 
                     keyborad(num4_1, num4_2)
 
@@ -237,12 +193,10 @@ class SettingFragment : Fragment() {
                     rangeSlider4.stepSize = 0.01f
                     rangeSlider4.setValues(result.result.ORP_low, result.result.ORP_high)
 
-                    rangeSlider4.addOnSliderTouchListener(rangeListner(num4_1, num4_2, rangeSlider4))
-
 // ---------------------------------------------------------------------------------------------------- //
 
-                    num5_1.setText(num5_1.text.toString() + result!!.result.Tc_low.toString())
-                    num5_2.setText(num5_2.text.toString() + result!!.result.Tc_high.toString())
+                    num5_1.setText(num5_1.text.toString() + result.result.Tc_low.toString())
+                    num5_2.setText(num5_2.text.toString() + result.result.Tc_high.toString())
 
                     keyborad(num5_1, num5_2)
 
@@ -251,12 +205,10 @@ class SettingFragment : Fragment() {
                     rangeSlider5.stepSize = 0.01f
                     rangeSlider5.setValues(result.result.Tc_low, result.result.Tc_high)
 
-                    rangeSlider5.addOnSliderTouchListener(rangeListner(num5_1, num5_2, rangeSlider5))
-
 // ---------------------------------------------------------------------------------------------------- //
 
-                    num6_1.setText(num6_1.text.toString() + result!!.result.TUR_low.toString())
-                    num6_2.setText(num6_2.text.toString() + result!!.result.TUR_high.toString())
+                    num6_1.setText(num6_1.text.toString() + result.result.TUR_low.toString())
+                    num6_2.setText(num6_2.text.toString() + result.result.TUR_high.toString())
 
                     keyborad(num6_1, num6_2)
 
@@ -264,8 +216,6 @@ class SettingFragment : Fragment() {
                     rangeSlider6.valueTo = 40f
                     rangeSlider6.stepSize = 0.01f
                     rangeSlider6.setValues(result.result.TUR_low, result.result.TUR_high)
-
-                    rangeSlider6.addOnSliderTouchListener(rangeListner(num6_1, num6_2, rangeSlider6))
 
                 }
             }
@@ -276,11 +226,74 @@ class SettingFragment : Fragment() {
 
         })
 
-        return view
+    }
+
+    override fun onResume() {
+
+        super.onResume()
+
+        mainActivity = context as MainActivity
+
+        // 데이터 입력하는 값 수조 / 서버에서 수조 이름 받아오기 / 데이터 스크롤 + EditText 값 변경
+
+        user_key = Loginkey.getUserKey(mainActivity).toInt()
+
+        button.setOnClickListener {
+
+            num = num1_1.text.toString().toFloat()
+
+            call?.Sensor_CG(user_key, Sensor_Body(
+                DO_low = num1_1.text.toString().toFloat(),
+                DO_high = num1_2.text.toString().toFloat(),
+                pH_low = num2_1.text.toString().toFloat(),
+                pH_high =num2_2.text.toString().toFloat(),
+                Sa_low = num3_1.text.toString().toFloat(),
+                Sa_high = num3_2.text.toString().toFloat(),
+                ORP_low =  num4_1.text.toString().toFloat(),
+                ORP_high = num4_2.text.toString().toFloat(),
+                Tc_low = num5_1.text.toString().toFloat(),
+                Tc_high = num5_2.text.toString().toFloat(),
+                TUR_low = num6_1.text.toString().toFloat(),
+                TUR_high = num6_2.text.toString().toFloat()
+            ))?.enqueue(object : Callback<Sensor_CG_DTO>{
+
+                override fun onResponse(call: Call<Sensor_CG_DTO>, response: Response<Sensor_CG_DTO>) {
+                    if (response.isSuccessful) {
+                        val result : Sensor_CG_DTO? = response.body()
+
+                        Log.d("change_sensor", "$result")
+
+                        rangeSlider.setValues(result!!.result.DO_low, result.result.DO_high)
+                        rangeSlider2.setValues(result.result.pH_low, result.result.pH_high)
+                        rangeSlider3.setValues(result.result.Sa_low, result.result.Sa_high)
+                        rangeSlider4.setValues(result.result.ORP_low, result.result.ORP_high)
+                        rangeSlider5.setValues(result.result.Tc_low, result.result.Tc_high)
+                        rangeSlider6.setValues(result.result.TUR_low, result.result.TUR_high)
+
+                    }
+                }
+
+
+                override fun onFailure(call: Call<Sensor_CG_DTO>, t: Throwable) {
+
+                }
+
+            })
+
+        }
+
+        // 바 움직이면서 min max 값
+        rangeSlider.addOnSliderTouchListener(range_Listner(num1_1, num1_2, rangeSlider))
+        rangeSlider2.addOnSliderTouchListener(range_Listner(num2_1, num2_2, rangeSlider2))
+        rangeSlider3.addOnSliderTouchListener(range_Listner(num3_1, num3_2, rangeSlider3))
+        rangeSlider4.addOnSliderTouchListener(range_Listner(num4_1, num4_2, rangeSlider4))
+        rangeSlider5.addOnSliderTouchListener(range_Listner(num5_1, num5_2, rangeSlider5))
+        rangeSlider6.addOnSliderTouchListener(range_Listner(num6_1, num6_2, rangeSlider6))
+
     }
 
 
-    fun rangeListner(num1 : EditText, num2 : EditText, frangeSlider : RangeSlider): RangeSlider.OnSliderTouchListener {
+    private fun range_Listner(num1 : EditText, num2 : EditText, frangeSlider : RangeSlider): RangeSlider.OnSliderTouchListener {
 
         val rangeSliderTouchListener: RangeSlider.OnSliderTouchListener =
             object : RangeSlider.OnSliderTouchListener {
@@ -320,8 +333,8 @@ class SettingFragment : Fragment() {
             number2 = null.toString()
             number2 = knum_2.text.toString()
 
-            Log.d("numberLog", "$number1")
-            Log.d("numberLog", "$number2")
+            Log.d("numberLog", number1)
+            Log.d("numberLog", number2)
 
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Log.d("numberLog", "Done")
@@ -351,8 +364,9 @@ class SettingFragment : Fragment() {
 
     // Fragment 새로고침
     fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+        // 갱신되는거 확인
         Log.d("refresh", "refresh")
-        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        val ft: FragmentTransaction = fragmentManager.beginTransaction()
         ft.detach(fragment).attach(fragment).commit()
     }
 
