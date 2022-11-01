@@ -22,18 +22,19 @@ import kotlin.concurrent.thread
 class GraphFragment : Fragment() {
 
     lateinit var chart : LineChart
+    lateinit var chart2 : LineChart
+    lateinit var chart3 : LineChart
+    lateinit var chart4 : LineChart
+    lateinit var chart5 : LineChart
+    lateinit var chart6 : LineChart
+
     lateinit var des : Description
     lateinit var legend: Legend
     lateinit var leftAxis : YAxis
     lateinit var rightAxis : YAxis
     lateinit var data :LineData
+
     lateinit var mainActivity: MainActivity
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        mainActivity = context as MainActivity
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +43,14 @@ class GraphFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_graph_framgment, container, false)
 
+        mainActivity = context as MainActivity
+
         chart = view.findViewById(R.id.LineChart)
+        chart2 = view.findViewById(R.id.LineChart2)
+        chart3 = view.findViewById(R.id.LineChart3)
+        chart4 = view.findViewById(R.id.LineChart4)
+        chart5 = view.findViewById(R.id.LineChart5)
+        chart6 = view.findViewById(R.id.LineChart6)
 
         setChart()
 
@@ -114,7 +122,7 @@ class GraphFragment : Fragment() {
                 mainActivity.runOnUiThread(runnable)
                 try {
                     // 지연시간 그래프 나오기까지
-                    Thread.sleep(10000)
+                    Thread.sleep(1000)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }

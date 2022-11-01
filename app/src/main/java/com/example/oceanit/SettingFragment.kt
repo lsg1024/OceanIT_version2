@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.DTO.Sensor_Body
 import com.example.oceanit.DTO.Sensor_CG_DTO
+import com.example.oceanit.DTO.companyDTO
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
 import com.google.android.material.slider.RangeSlider
@@ -59,7 +60,7 @@ class SettingFragment : Fragment() {
     lateinit var num5_2: EditText
     lateinit var num6_2: EditText
 
-    lateinit var img: ImageView
+    lateinit var name : TextView
     lateinit var button: Button
 
     var num : Float = 0F
@@ -89,7 +90,7 @@ class SettingFragment : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_setting, container, false)
 
         // 회사 이미지 받아오기 서버에서
-        img = view.findViewById(R.id.imageView)
+        name = view.findViewById(R.id.name)
         // 설정 완료 후 확인 버튼
         button = view.findViewById(R.id.setb)
 
@@ -130,6 +131,29 @@ class SettingFragment : Fragment() {
         mainActivity = context as MainActivity
 
         user_key = Loginkey.getUserKey(mainActivity).toInt()
+
+        call?.company(user_key)?.enqueue(object : Callback<companyDTO>{
+
+            override fun onResponse(call: Call<companyDTO>, response: Response<companyDTO>) {
+                if (response.isSuccessful) {
+                    val result : companyDTO? = response.body()
+
+                    Log.d("company_name", "$result")
+
+                    // 회사 이름 textViewd에 넣어주기
+                    name.text = result!!.result.fishery
+
+                }
+            }
+
+
+            override fun onFailure(call: Call<companyDTO>, t: Throwable) {
+
+                Log.d("company_name", "${t.message}")
+
+            }
+
+        })
 
         call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
 
@@ -189,7 +213,7 @@ class SettingFragment : Fragment() {
                     keyborad(num4_1, num4_2)
 
                     rangeSlider4.valueFrom = 0f
-                    rangeSlider4.valueTo = 40f
+                    rangeSlider4.valueTo = 300f
                     rangeSlider4.stepSize = 0.01f
                     rangeSlider4.setValues(result.result.ORP_low, result.result.ORP_high)
 
@@ -270,11 +294,15 @@ class SettingFragment : Fragment() {
                         rangeSlider5.setValues(result.result.Tc_low, result.result.Tc_high)
                         rangeSlider6.setValues(result.result.TUR_low, result.result.TUR_high)
 
+                        Toast.makeText(context, "서버에 변경된 데이터를 전송했습니다", Toast.LENGTH_SHORT).show()
+
                     }
                 }
 
 
                 override fun onFailure(call: Call<Sensor_CG_DTO>, t: Throwable) {
+
+                    Log.d("change_sensor", "${t.message}")
 
                 }
 
@@ -340,7 +368,7 @@ class SettingFragment : Fragment() {
                 Log.d("numberLog", "Done")
 
                 // 값을 입력했을 때 조건별로 분류
-                if (number1.isNotBlank() && number2.isNotBlank() && ((10 <= number1.toFloat()) && (number2.toFloat() <= 40))){
+                if (number1.isNotBlank() && number2.isNotBlank() && ((0 <= number1.toFloat()) && (number2.toFloat() <= 40))){
                     Log.d("numberLog", "$number1    $number2")
                     handled = false
                     knum_2.isCursorVisible = false

@@ -36,28 +36,39 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수온"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </TextView>
 
                     <TextView
                         android:id="@+id/Max1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="28dp"
+                        android:layout_marginTop="10dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
-                        app:layout_constraintHorizontal_bias="0.511"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/text1" />
 
                     <TextView
                         android:id="@+id/max1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="max"
-                        android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Max1">
@@ -105,7 +116,7 @@
                     <ProgressBar
                         android:id="@+id/progress_bar1"
                         android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/circle"
+                        android:progressDrawable="@drawable/firstcircle"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:elevation="20dp"
@@ -141,19 +152,31 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
+                    <TextView
+                        android:id="@+id/text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="용존 산소량"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </TextView>
 
                     <TextView
                         android:id="@+id/Max2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="36dp"
+                        android:layout_marginTop="10dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
-                        app:layout_constraintHorizontal_bias="0.511"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/text2" />
 
                     <TextView
                         android:id="@+id/max2"
@@ -209,7 +232,7 @@
                     <ProgressBar
                         android:id="@+id/progress_bar2"
                         android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/circle"
+                        android:progressDrawable="@drawable/firstcircle"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:elevation="20dp"
@@ -245,18 +268,31 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
+                    <TextView
+                        android:id="@+id/text3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="pH"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </TextView>
 
                     <TextView
                         android:id="@+id/Max3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="10dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/text3" />
 
                     <TextView
                         android:id="@+id/max3"
@@ -312,7 +348,7 @@
                     <ProgressBar
                         android:id="@+id/progress_bar3"
                         android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/circle"
+                        android:progressDrawable="@drawable/firstcircle"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:elevation="20dp"
@@ -348,18 +384,31 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
+                    <TextView
+                        android:id="@+id/text4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="염도"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </TextView>
 
                     <TextView
                         android:id="@+id/Max4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="10dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/text4" />
 
                     <TextView
                         android:id="@+id/max4"
@@ -415,7 +464,7 @@
                     <ProgressBar
                         android:id="@+id/progress_bar4"
                         android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/circle"
+                        android:progressDrawable="@drawable/firstcircle"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:elevation="20dp"
@@ -451,18 +500,31 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
+                    <TextView
+                        android:id="@+id/text5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ORP"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </TextView>
 
                     <TextView
                         android:id="@+id/Max5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="10dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/text5" />
 
                     <TextView
                         android:id="@+id/max5"
@@ -518,7 +580,7 @@
                     <ProgressBar
                         android:id="@+id/progress_bar5"
                         android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/circle"
+                        android:progressDrawable="@drawable/firstcircle"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:elevation="20dp"
@@ -556,18 +618,31 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
+                    <TextView
+                        android:id="@+id/text6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="탁도"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </TextView>
 
                     <TextView
                         android:id="@+id/Max6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="10dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/text6" />
 
                     <TextView
                         android:id="@+id/max6"
@@ -626,7 +701,7 @@
                         android:layout_height="200dp"
                         android:elevation="20dp"
                         android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/circle"
+                        android:progressDrawable="@drawable/firstcircle"
                         android:rotation="-150"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
