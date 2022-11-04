@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
+import com.example.oceanit.Socket_File.Join_Data
+import com.example.oceanit.Socket_File.Sensor_data
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -166,6 +168,7 @@ class MainFragment : Fragment() {
         })
 
         return view
+
     }
 
     override fun onStart() {

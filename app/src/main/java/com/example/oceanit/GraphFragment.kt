@@ -1,12 +1,14 @@
 package com.example.oceanit
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.oceanit.Retrofit.Loginkey
+import com.example.oceanit.Socket_File.Join_Data
+import com.example.oceanit.Socket_File.Sensor_data
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
@@ -15,8 +17,11 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import kotlin.concurrent.thread
+import com.google.gson.Gson
+import io.socket.client.IO
+import io.socket.client.Socket
+import io.socket.emitter.Emitter
+import java.net.URISyntaxException
 
 
 class GraphFragment : Fragment() {
@@ -33,6 +38,13 @@ class GraphFragment : Fragment() {
     lateinit var leftAxis : YAxis
     lateinit var rightAxis : YAxis
     lateinit var data :LineData
+    var user_key : Int = 0
+    lateinit var socket_data : Array<Sensor_data>
+    var data_list: Float? = null
+    var count : Int = 0
+
+    private val gson = Gson()
+    lateinit var mSocket: Socket
 
     lateinit var mainActivity: MainActivity
 
@@ -45,6 +57,8 @@ class GraphFragment : Fragment() {
 
         mainActivity = context as MainActivity
 
+        user_key = Loginkey.getUserKey(mainActivity).toInt()
+
         chart = view.findViewById(R.id.LineChart)
         chart2 = view.findViewById(R.id.LineChart2)
         chart3 = view.findViewById(R.id.LineChart3)
@@ -52,35 +66,85 @@ class GraphFragment : Fragment() {
         chart5 = view.findViewById(R.id.LineChart5)
         chart6 = view.findViewById(R.id.LineChart6)
 
-        setChart()
+
+        try {
+            mSocket = IO.socket("http://211.184.227.81:8500")
+            Log.d("SOCKET", "Connection success : $mSocket")
+
+        } catch (e: URISyntaxException) {
+            e.printStackTrace()
+        }
+
+        mSocket.connect()
+
+
+        mSocket.on(Socket.EVENT_CONNECT) { arg: Array<Any?>? ->
+            mSocket.emit("join", gson.toJson(Join_Data(room = user_key)))
+            Log.d("Socket_join", "입장")
+        }
+
+        mSocket.on("sensor_before", Emitter.Listener { args ->
+
+            Log.d("Socket_on", "arg before data $args")
+
+            // 형식없는 [{ }] json 형식을 array 형태로 반환해준다
+            socket_data = gson.fromJson(args[0].toString(), Array<Sensor_data>::class.java)
+
+            Log.d("Socket_on", "before data ${socket_data.size}")
+
+            for (i in 0..(socket_data.size-1)){
+                print(i)
+                Log.d("print_log", "$i")
+                //                Log.d("print_log", "${socket_data[i].DO}")
+
+
+                mainActivity.runOnUiThread(Runnable {
+                    setChart(chart, "수온", socket_data[i].DO)
+
+                })
+
+                Log.d("print_log", "${socket_data[i].DO}")
+
+
+
+////        setChart(chart2, "수")
+////        setChart(chart3, "test")
+////        setChart(chart4, "탁도")
+////        setChart(chart5, "스타일")
+////        setChart(chart6, "라벨")
+
+//                    Log.d("count_data1", "${socket_data[i].DO}")
+
+            }
+
+//            mainActivity.runOnUiThread(Runnable {
+//
+//                setChart(chart, "수온", socket_data[i].DO)
+//        setChart(chart2, "수")
+//        setChart(chart3, "test")
+//        setChart(chart4, "탁도")
+//        setChart(chart5, "스타일")
+//        setChart(chart6, "라벨")
+//            })
+
+//            Log.d("data_list", "before data ${data_list}")
+
+//            count++
+//            Log.d("count_data", "$count")
+
+        })
 
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
 
-//        make_chart()
-//
-//        mainActivity.runOnUiThread{
-//
-//            addEntry()
-//        }
 
-    }
+    @JvmName("setChart1")
+    private fun setChart(set_chart : LineChart, label: String, input_data: Float?) {
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        make_chart()
-//        mainActivity.runOnUiThread{
-//            addEntry(10.1)
-//        }
-//
-//    }
 
-    private fun setChart() {
-        val xAxis = chart.xAxis
+
+        val xAxis = set_chart.xAxis
 
         xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
@@ -91,9 +155,10 @@ class GraphFragment : Fragment() {
             isGranularityEnabled = true //
         }
 
-        chart.apply {
+        set_chart.apply {
             axisRight.isEnabled = false
-            axisLeft.axisMaximum = 50f
+            axisLeft.axisMaximum = 30f
+            axisLeft.axisMinimum - 20f
             legend.apply {
                 textSize = 15f
                 verticalAlignment = Legend.LegendVerticalAlignment.TOP
@@ -103,76 +168,152 @@ class GraphFragment : Fragment() {
             }
         }
         val lineData = LineData()
-        chart.data = lineData
-        feedMultiple()
+        set_chart.data = lineData
+        feedMultiple(set_chart, label, input_data)
+
+
+
+        count++
+
     }
 
-    private fun feedMultiple(){
+    private fun feedMultiple(set_chart : LineChart, label: String, input_data : Float?){
 
         var thread : Thread? = null
+        var thread_count : Int = 0
 
-        thread?.interrupt()
+        // thread?.interrupt()
 
-        val runnable = Runnable{
-            addEntry()
-        }
 
         thread = Thread(Runnable {
-            while (true) {
-                mainActivity.runOnUiThread(runnable)
+            while (thread_count < 1) {
                 try {
                     // 지연시간 그래프 나오기까지
+
                     Thread.sleep(1000)
+                    addEntry(set_chart, label, input_data)
+
+                    Log.d("thread_count", "$thread_count")
+                    Log.d("thread_count2", "$input_data")
+
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
+
+                thread_count++
             }
         })
         thread.start()
     }
+//
+private fun addEntry(set_chart : LineChart, label : String, input_data : Float?){
+    val data : LineData = chart.data
 
-    private fun addEntry(){
-        val data : LineData = chart.data
-
-        val TempList = mutableListOf<Float>(35.6f)
-
-        data.let {
-
-            var set : ILineDataSet? = data.getDataSetByIndex(0)
-
-            if (set == null) {
-                set = createSet()
-                data.addDataSet(set)
-            }
-
-            data.addEntry(Entry(set.entryCount.toFloat(), TempList[0]), 0)
-
-            data.notifyDataChanged()
-            chart.apply {
-                notifyDataSetChanged()
-                moveViewToX(data.entryCount.toFloat())
-                setVisibleXRangeMaximum(4f)
-                setPinchZoom(false)
-                isDoubleTapToZoomEnabled = false
-                description.text = "시간"
-                description.textSize = 30f
-                setExtraOffsets(8f, 16f, 8f, 16f)
-            }
+    if (data != null) {
+        var set = data.getDataSetByIndex(0)
+        if (set == null) {
+            set = createSet(label)
+            data.addDataSet(set)
         }
+        Log.d("set_addEntry", "$set")
+        Log.d("input_data_addEntry", "$input_data")
+        data.addEntry(Entry(set.entryCount.toFloat(), input_data!!), 0)
+
+        data.notifyDataChanged()
+
+        set_chart.apply {
+            notifyDataSetChanged()
+            moveViewToX(data.entryCount.toFloat())
+            setVisibleXRangeMaximum(5f)
+            setPinchZoom(false)
+            isDoubleTapToZoomEnabled = false
+            setExtraOffsets(8f, 16f, 8f, 16f)
+
+        }
+
     }
 
 
+
+
+        // 인덱스 size는 0부터 시작하므로 전체 사이즈에서 -1을 해줘야 된다 -> 반복문??? 사용
+
+//    if(input_data != null){
+//        val data : LineData = set_chart.data
+//
+//        Log.d("input_data", "add_set ${input_data}")
+//
+//        var set : ILineDataSet? = data.getDataSetByIndex(0)
+//
+//        Log.d("set_data2", "add_set ${set}")
+//
+//        Log.d("input_data6", "add_set ${input_data}")
+//
+//        if (set == null) {
+//            set = createSet(label)
+//            data.addDataSet(set)
+//            Log.d("set_data4", "add_set ${set}")
+//            Log.d("set_data6", "add_set ${data}")
+//        }
+//
+//        Log.d("set_data3", "add_set ${set}")
+//        Log.d("input_data5", "add_set ${input_data}")
+//
+//        data.addEntry(Entry(set.entryCount.toFloat(), input_data), 0)
+//
+//        count++
+//        Log.d("count_data3", "$count")
+//
+////    Log.d("input_data", "add_set ${input_data}")
+//
+//        //            Log.d("Socket_list_size", "before data ${data_list}")
+//
+//        data.notifyDataChanged()
+////
+//        set_chart.notifyDataSetChanged()
+//        set_chart.moveViewToX(data.entryCount.toFloat())
+//        set_chart.setVisibleXRangeMaximum(3f)
+//        set_chart.setPinchZoom(false)
+//        set_chart.isDoubleTapToZoomEnabled = false
+//        set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
+//    }
+
+
+//    count++
+//    Log.d("count_data3", "$count")
+//
+////    Log.d("input_data", "add_set ${input_data}")
+//
+//    //            Log.d("Socket_list_size", "before data ${data_list}")
+//
+//        data.notifyDataChanged()
+////
+//        set_chart.notifyDataSetChanged()
+//        set_chart.moveViewToX(data.entryCount.toFloat())
+//        set_chart.setVisibleXRangeMaximum(3f)
+//        set_chart.setPinchZoom(false)
+//        set_chart.isDoubleTapToZoomEnabled = false
+//        set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
+
+
+
+//        Log.d("input_data", "$input_data")
+
+//        data.let {
+//
+//        }
     }
+}
 
-    private fun createSet(): LineDataSet {
+    private fun createSet(label : String): LineDataSet {
 
-        val set = LineDataSet(null, "체온")
+        val set = LineDataSet(null, label)
         set.apply {
             axisDependency = YAxis.AxisDependency.LEFT
             color = getColor(R.color.black)
             setCircleColor(getColor(R.color.black))
-            valueTextSize = 10f
-            lineWidth = 2f
+            valueTextSize = 15f
+            lineWidth = 4f
             circleRadius = 3f
             fillAlpha = 0
             fillColor = getColor(R.color.white)
@@ -181,110 +322,5 @@ class GraphFragment : Fragment() {
         }
         return set
     }
-
-
-//    fun make_chart(){
-//        chart.setDrawGridBackground(true)
-//        chart.setBackgroundColor(Color.BLACK)
-//        chart.setGridBackgroundColor(Color.BLACK)
-//
-//        chart.description.isEnabled = true
-//        des = chart.description
-//        des.isEnabled = true
-//        des.text = "test"
-//        des.textSize = 15f
-//        des.textColor = Color.WHITE
-//
-//        chart.setTouchEnabled(false)
-//
-//        // 차트 클릭 gestures  비활성화
-//        chart.setTouchEnabled(false)
-//
-//        chart.isDragEnabled = false
-//        chart.setScaleEnabled(false)
-//
-//        chart.isAutoScaleMinMaxEnabled = true
-//
-//        chart.setPinchZoom(false)
-//
-//        chart.xAxis.setDrawGridLines(true)
-//        chart.xAxis.setDrawAxisLine(false)
-//
-//        chart.xAxis.isEnabled = true
-//        chart.xAxis.setDrawGridLines(false)
-//
-//        legend = chart.legend
-//        legend.isEnabled = true
-//        legend.formSize = 10f
-//        legend.textSize = 12f
-//        legend.textColor = Color.WHITE
-//
-//        leftAxis = chart.axisLeft
-//        leftAxis.isEnabled = true
-//        leftAxis.textColor = resources.getColor(R.color.primary)
-//        leftAxis.setDrawGridLines(true)
-//        leftAxis.gridColor = resources.getColor(R.color.primary)
-//
-//        rightAxis = chart.axisRight
-//        rightAxis.isEnabled = false
-//
-//        chart.invalidate()
-//
-//    }
-//
-//
-//    private fun addEntry(num: Double) {
-//
-//        data.let {
-//            var set = data.getDataSetByIndex(0)
-//            data = chart.data
-//            // set.addEntry(...); // can be called as well
-//
-//            // set.addEntry(...); // can be called as well
-//            if (set == null) {
-//                set = createSet()
-//                data.addDataSet(set)
-//            }
-//
-//            data.addEntry(Entry(set.entryCount.toFloat(), num.toFloat()), 0)
-//            data.notifyDataChanged()
-//
-//            // let the chart know it's data has changed
-//            chart.notifyDataSetChanged()
-//            chart.setVisibleXRangeMaximum(150f)
-//            // this automatically refreshes the chart (calls invalidate())
-//            chart.moveViewTo(data.entryCount.toFloat(), 50f, YAxis.AxisDependency.LEFT)
-//        }
-//    }
-//
-//    private fun createSet(): LineDataSet {
-//
-//        val set = LineDataSet(null, "Real-time Line Data")
-//        set.lineWidth = 1f
-//        set.setDrawValues(false)
-//        set.valueTextColor = resources.getColor(R.color.white)
-//        set.color = resources.getColor(R.color.white)
-//        set.mode = LineDataSet.Mode.LINEAR
-//        set.setDrawCircles(false)
-//        set.highLightColor = Color.rgb(190, 190, 190)
-//        return set
-//
-//    }
-//
-//
-//
-//
-//    companion object {
-//
-//        @JvmStatic
-//        fun newInstance() =
-//            GraphFragment().apply {
-//                arguments = Bundle().apply {
-//
-//
-//                }
-//            }
-//    }
-//}
 
 
