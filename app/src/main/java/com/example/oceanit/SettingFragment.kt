@@ -165,8 +165,8 @@ class SettingFragment : Fragment() {
                     Log.d("Sensor_value", "$result")
 
                     // 데이터 EditText에 저장
-                    num1_1.setText(num1_1.text.toString() + result!!.result.DO_low.toString())
-                    num1_2.setText(num1_2.text.toString() + result.result.DO_high.toString())
+                    num1_1.setText(num1_1.text.toString() + result!!.result.Tc_low.toString())
+                    num1_2.setText(num1_2.text.toString() + result.result.Tc_high.toString())
                     // 키보드 입력 값을 받아오고 슬라이더 모양 변화
                     keyborad(num1_1, num1_2)
                     // 최대 측량 범위
@@ -176,58 +176,58 @@ class SettingFragment : Fragment() {
                     // 슬라이더 움직일때 조절되는 단위
                     rangeSlider.stepSize = 0.01f
                     // 서버에서 지정된 사용자의 min max 값 받아오기
-                    rangeSlider.setValues(result.result.DO_low, result.result.DO_high)
+                    rangeSlider.setValues(result.result.Tc_low, result.result.Tc_high)
 
 // ---------------------------------------------------------------------------------------------------- //
 
                     // 데이터 EditText에 저장
-                    num2_1.setText(num2_1.text.toString() + result.result.pH_low.toString())
-                    num2_2.setText(num2_2.text.toString() + result.result.pH_high.toString())
+                    num2_1.setText(num2_1.text.toString() + result.result.DO_low.toString())
+                    num2_2.setText(num2_2.text.toString() + result.result.DO_high.toString())
 
                     keyborad(num2_1, num2_2)
 
                     rangeSlider2.valueFrom = 0f
                     rangeSlider2.valueTo = 40f
                     rangeSlider2.stepSize = 0.01f
-                    rangeSlider2.setValues(result.result.pH_low, result.result.pH_high)
+                    rangeSlider2.setValues(result.result.DO_low, result.result.DO_high)
 
 // ---------------------------------------------------------------------------------------------------- //
 
                     // 데이터 EditText에 저장
-                    num3_1.setText(num3_1.text.toString() + result.result.Sa_low.toString())
-                    num3_2.setText(num3_2.text.toString() + result.result.Sa_high.toString())
+                    num3_1.setText(num3_1.text.toString() + result.result.pH_low.toString())
+                    num3_2.setText(num3_2.text.toString() + result.result.pH_high.toString())
 
                     keyborad(num3_1, num3_2)
 
                     rangeSlider3.valueFrom = 0f
                     rangeSlider3.valueTo = 40f
                     rangeSlider3.stepSize = 0.01f
-                    rangeSlider3.setValues(result.result.Sa_low, result.result.Sa_high)
+                    rangeSlider3.setValues(result.result.pH_low, result.result.pH_high)
 
 // ---------------------------------------------------------------------------------------------------- //
 
                     // 데이터 EditText에 저장
-                    num4_1.setText(num4_1.text.toString() + result.result.ORP_low.toString())
-                    num4_2.setText(num4_2.text.toString() + result.result.ORP_high.toString())
+                    num4_1.setText(num4_1.text.toString() + result.result.Sa_low.toString())
+                    num4_2.setText(num4_2.text.toString() + result.result.Sa_high.toString())
 
                     keyborad(num4_1, num4_2)
 
                     rangeSlider4.valueFrom = 0f
                     rangeSlider4.valueTo = 300f
                     rangeSlider4.stepSize = 0.01f
-                    rangeSlider4.setValues(result.result.ORP_low, result.result.ORP_high)
+                    rangeSlider4.setValues(result.result.Sa_low, result.result.ORP_high)
 
 // ---------------------------------------------------------------------------------------------------- //
 
-                    num5_1.setText(num5_1.text.toString() + result.result.Tc_low.toString())
-                    num5_2.setText(num5_2.text.toString() + result.result.Tc_high.toString())
+                    num5_1.setText(num5_1.text.toString() + result.result.ORP_low.toString())
+                    num5_2.setText(num5_2.text.toString() + result.result.ORP_high.toString())
 
                     keyborad(num5_1, num5_2)
 
                     rangeSlider5.valueFrom = 00f
                     rangeSlider5.valueTo = 40f
                     rangeSlider5.stepSize = 0.01f
-                    rangeSlider5.setValues(result.result.Tc_low, result.result.Tc_high)
+                    rangeSlider5.setValues(result.result.ORP_low, result.result.ORP_high)
 
 // ---------------------------------------------------------------------------------------------------- //
 
@@ -267,16 +267,16 @@ class SettingFragment : Fragment() {
             num = num1_1.text.toString().toFloat()
 
             call?.Sensor_CG(user_key, Sensor_Body(
-                DO_low = num1_1.text.toString().toFloat(),
-                DO_high = num1_2.text.toString().toFloat(),
-                pH_low = num2_1.text.toString().toFloat(),
-                pH_high =num2_2.text.toString().toFloat(),
-                Sa_low = num3_1.text.toString().toFloat(),
-                Sa_high = num3_2.text.toString().toFloat(),
-                ORP_low =  num4_1.text.toString().toFloat(),
-                ORP_high = num4_2.text.toString().toFloat(),
-                Tc_low = num5_1.text.toString().toFloat(),
-                Tc_high = num5_2.text.toString().toFloat(),
+                Tc_low = num1_1.text.toString().toFloat(),
+                Tc_high = num1_2.text.toString().toFloat(),
+                DO_low = num2_1.text.toString().toFloat(),
+                DO_high =num2_2.text.toString().toFloat(),
+                pH_low = num3_1.text.toString().toFloat(),
+                pH_high = num3_2.text.toString().toFloat(),
+                Sa_low =  num4_1.text.toString().toFloat(),
+                Sa_high = num4_2.text.toString().toFloat(),
+                ORP_low = num5_1.text.toString().toFloat(),
+                ORP_high = num5_2.text.toString().toFloat(),
                 TUR_low = num6_1.text.toString().toFloat(),
                 TUR_high = num6_2.text.toString().toFloat()
             ))?.enqueue(object : Callback<Sensor_CG_DTO>{
@@ -287,11 +287,11 @@ class SettingFragment : Fragment() {
 
                         Log.d("change_sensor", "$result")
 
-                        rangeSlider.setValues(result!!.result.DO_low, result.result.DO_high)
-                        rangeSlider2.setValues(result.result.pH_low, result.result.pH_high)
-                        rangeSlider3.setValues(result.result.Sa_low, result.result.Sa_high)
-                        rangeSlider4.setValues(result.result.ORP_low, result.result.ORP_high)
-                        rangeSlider5.setValues(result.result.Tc_low, result.result.Tc_high)
+                        rangeSlider.setValues(result!!.result.Tc_low, result.result.Tc_high)
+                        rangeSlider2.setValues(result.result.DO_low, result.result.DO_high)
+                        rangeSlider3.setValues(result.result.pH_low, result.result.pH_high)
+                        rangeSlider4.setValues(result.result.Sa_low, result.result.Sa_high)
+                        rangeSlider5.setValues(result.result.ORP_low, result.result.ORP_high)
                         rangeSlider6.setValues(result.result.TUR_low, result.result.TUR_high)
 
                         Toast.makeText(context, "서버에 변경된 데이터를 전송했습니다", Toast.LENGTH_SHORT).show()

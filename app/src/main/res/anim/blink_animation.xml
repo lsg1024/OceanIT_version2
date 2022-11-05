@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <alpha
+
+        android:duration="1000"
+        android:fromAlpha="1.0"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:repeatCount="infinite"
+        android:repeatMode="reverse"
+        android:toAlpha="0.0" />
+
+</set>
+
+<!--1번 애니메이션 시간-->
+<!--fromAlpha 시작 투명도 0 안보임 1 다보임-->
+<!--interpolator 애니메시연 시작과 끝사이를 어떠헥 표현할지-->

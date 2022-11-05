@@ -5,9 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.oceanit.DTO.companyDTO
 import com.example.oceanit.Retrofit.Loginkey
+import com.example.oceanit.Retrofit.Retrofit2
 import com.example.oceanit.Socket_File.Join_Data
 import com.example.oceanit.Socket_File.Sensor_data
 import com.github.mikephil.charting.charts.LineChart
@@ -22,6 +25,9 @@ import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.net.URISyntaxException
 import java.util.*
 
@@ -38,10 +44,12 @@ class GraphFragment : Fragment() {
     lateinit var data :LineData
     var user_key : Int = 0
     lateinit var socket_data : Array<Sensor_data>
+    lateinit var company_name : TextView
 
     private val gson = Gson()
     lateinit var mSocket: Socket
     lateinit var mainActivity: MainActivity
+    val call by lazy { Retrofit2.getInstance() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,22 +68,9 @@ class GraphFragment : Fragment() {
         chart4 = view.findViewById(R.id.LineChart4)
         chart5 = view.findViewById(R.id.LineChart5)
         chart6 = view.findViewById(R.id.LineChart6)
-//
-//        // 데이터 넣는 데이터 셋
-//        val dataSets1 = ArrayList<ILineDataSet>()
-//        val dataSets2 = ArrayList<ILineDataSet>()
-//        val dataSets3 = ArrayList<ILineDataSet>()
-//        val dataSets4 = ArrayList<ILineDataSet>()
-//        val dataSets5 = ArrayList<ILineDataSet>()
-//        val dataSets6 = ArrayList<ILineDataSet>()
+        company_name =view.findViewById(R.id.grap_name)
 
         return view
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-
     }
 
     override fun onResume() {
@@ -96,6 +91,29 @@ class GraphFragment : Fragment() {
         val dataList4 = ArrayList<Entry>()
         val dataList5 = ArrayList<Entry>()
         val dataList6 = ArrayList<Entry>()
+
+        call?.company(user_key)?.enqueue(object : Callback<companyDTO> {
+
+            override fun onResponse(call: Call<companyDTO>, response: Response<companyDTO>) {
+                if (response.isSuccessful) {
+                    val result : companyDTO? = response.body()
+
+                    Log.d("company_name", "$result")
+
+                    // 회사 이름 textViewd에 넣어주기
+                    company_name.text = result!!.result.fishery
+
+                }
+            }
+
+
+            override fun onFailure(call: Call<companyDTO>, t: Throwable) {
+
+                Log.d("company_name", "${t.message}")
+
+            }
+
+        })
 
         try {
             mSocket = IO.socket("http://211.184.227.81:8500")
@@ -126,6 +144,7 @@ class GraphFragment : Fragment() {
 
                 fun data1(): ArrayList<Entry> {
                     dataList1.add(Entry(i.toFloat(), socket_data[i].Tc))
+                    Log.d("Socket_on2", "before data ${socket_data[i].Tc}")
                     return dataList1
                 }
 
@@ -193,6 +212,10 @@ class GraphFragment : Fragment() {
             val line_data5 = LineData(dataSets5)
             val line_data6 = LineData(dataSets6)
 
+            // set data
+            // set data
+//            chart.setData(line_data1)
+
             mainActivity.runOnUiThread {
                 chart_shape(chart)
                 chart_shape(chart2)
@@ -212,32 +235,42 @@ class GraphFragment : Fragment() {
 
             lineDataSet1.color = ContextCompat.getColor(mainActivity, R.color.red)
             lineDataSet1.setCircleColor(ContextCompat.getColor(mainActivity, R.color.red))
+            line_data1.setValueFormatter(MyValueFormatter())
 
             lineDataSet2.color = ContextCompat.getColor(mainActivity, R.color.primary)
             lineDataSet2.setCircleColor(ContextCompat.getColor(mainActivity, R.color.primary))
+            line_data2.setValueFormatter(MyValueFormatter())
 
             lineDataSet3.color = ContextCompat.getColor(mainActivity, R.color.brawn)
             lineDataSet3.setCircleColor(ContextCompat.getColor(mainActivity, R.color.brawn))
+            line_data3.setValueFormatter(MyValueFormatter())
 
             lineDataSet4.color = ContextCompat.getColor(mainActivity, R.color.light_grean)
             lineDataSet4.setCircleColor(ContextCompat.getColor(mainActivity, R.color.light_grean))
+            line_data4.setValueFormatter(MyValueFormatter())
 
             lineDataSet5.color = ContextCompat.getColor(mainActivity, R.color.colorAccent)
             lineDataSet5.setCircleColor(ContextCompat.getColor(mainActivity, R.color.colorAccent))
+            line_data5.setValueFormatter(MyValueFormatter())
 
             lineDataSet6.color = ContextCompat.getColor(mainActivity, R.color.purple_200)
             lineDataSet6.setCircleColor(ContextCompat.getColor(mainActivity, R.color.purple_200))
+            line_data6.setValueFormatter(MyValueFormatter())
 
             chart_YAxis(chart)
             chart_YAxis(chart2)
             chart_YAxis(chart3)
             chart_YAxis(chart4)
-            chart_YAxis(chart5)
+            val yAxis: YAxis = chart5.axisLeft
+            chart5.axisRight.isEnabled = false
+            yAxis.enableGridDashedLine(10f, 10f, 0f)
+            // axis range
+            yAxis.axisMaximum = 400f
+            yAxis.axisMinimum = 0f
             chart_YAxis(chart6)
 
             chart.data = line_data1
 //            if (line_data1.notifyDataChanged())
-
             chart2.data = line_data2
             chart3.data = line_data3
             chart4.data = line_data4
@@ -287,7 +320,6 @@ private fun chart_YAxis(set_chart: LineChart) {
 
     // horizontal grid lines
     yAxis.enableGridDashedLine(10f, 10f, 0f)
-
     // axis range
     yAxis.axisMaximum = 50f
     yAxis.axisMinimum = 0f

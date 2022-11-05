@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainFragment"
-    android:background="@color/light_blue">
+    android:background="@color/primary_light">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,46 +15,68 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutCompat"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#354794"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/main_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textView2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="양식장"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/main_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardview1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/white_edge"
-                android:elevation="5dp"
-                android:layout_marginTop="20dp"
+                android:elevation="20dp"
                 app:cardCornerRadius="15dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_margin="20dp"
+
                     android:background="@drawable/white_edge">
-
-                    <TextView
-                        android:id="@+id/text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="수온"
-                        android:textStyle="bold"
-                        android:layout_marginTop="20dp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
-                        app:layout_constraintStart_toStartOf="parent">
-
-                    </TextView>
 
                     <TextView
                         android:id="@+id/Max1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
@@ -68,6 +90,7 @@
                         android:layout_height="wrap_content"
                         android:text="max"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="@color/red"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
                         app:layout_constraintStart_toStartOf="parent"
@@ -80,8 +103,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="최소 임계치"
-                        android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/Max1"
                         app:layout_constraintStart_toStartOf="@+id/Max1"
@@ -92,8 +115,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="min"
-                        android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="@color/primary_dark"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Min1">
@@ -104,26 +128,59 @@
                         android:id="@+id/text_view_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="50dp"
+                        android:layout_marginEnd="15dp"
                         android:maxLength="5"
-                        android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="40dp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/progress_bar1"
                         app:layout_constraintEnd_toEndOf="@+id/progress_bar1"
                         app:layout_constraintStart_toStartOf="@+id/progress_bar1"
                         app:layout_constraintTop_toTopOf="@+id/progress_bar1" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="℃"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_progress"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_progress">
+
+                    </TextView>
+
                     <ProgressBar
                         android:id="@+id/progress_bar1"
+                        android:layout_width="220dp"
+                        android:layout_height="220dp"
+                        android:elevation="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:indeterminateOnly="false"
                         android:progressDrawable="@drawable/firstcircle"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:elevation="20dp"
                         android:rotation="-150"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@+id/text1"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="수온 (℃)"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:background="@drawable/top_radius1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </TextView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -137,7 +194,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/white_edge"
-                android:elevation="5dp"
+                android:elevation="20dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,20 +206,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
                     <TextView
                         android:id="@+id/text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="용존 산소량"
-                        android:textStyle="bold"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:background="#52bafa"
+                        android:text="산소 (mg/L)"
+                        android:textColor="@color/white"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
-                        app:layout_constraintStart_toStartOf="parent">
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </TextView>
 
@@ -170,7 +228,7 @@
                         android:id="@+id/Max2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
@@ -183,6 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="max"
+                        android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
@@ -208,6 +267,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="min"
+                        android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
@@ -220,7 +280,8 @@
                         android:id="@+id/text_view_progress2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="50dp"
+                        android:textSize="40dp"
+                        android:layout_marginEnd="15dp"
                         android:maxLength="5"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -229,17 +290,30 @@
                         app:layout_constraintStart_toStartOf="@+id/progress_bar2"
                         app:layout_constraintTop_toTopOf="@+id/progress_bar2" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="mg/L"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress2"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_progress2"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_progress2" />
+
                     <ProgressBar
                         android:id="@+id/progress_bar2"
+                        android:layout_width="220dp"
+                        android:layout_height="220dp"
+                        android:elevation="20dp"
+                        android:layout_marginTop = "10dp"
+                        android:layout_marginBottom="10dp"
                         android:indeterminateOnly="false"
                         android:progressDrawable="@drawable/firstcircle"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:elevation="20dp"
                         android:rotation="-150"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@+id/text2" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -253,7 +327,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/white_edge"
-                android:elevation="5dp"
+                android:elevation="20dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -265,20 +339,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_margin="20dp"
+
                     android:background="@drawable/white_edge">
 
                     <TextView
                         android:id="@+id/text3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="pH"
-                        android:textStyle="bold"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="pH (pH)"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:background="#665d54"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
-                        app:layout_constraintStart_toStartOf="parent">
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </TextView>
 
@@ -286,7 +362,7 @@
                         android:id="@+id/Max3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -299,6 +375,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="max"
+                        android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
@@ -324,6 +401,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="min"
+                        android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
@@ -336,7 +414,8 @@
                         android:id="@+id/text_view_progress3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="50dp"
+                        android:textSize="40dp"
+                        android:layout_marginEnd="15dp"
                         android:maxLength="5"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -345,17 +424,30 @@
                         app:layout_constraintStart_toStartOf="@+id/progress_bar3"
                         app:layout_constraintTop_toTopOf="@+id/progress_bar3" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="pH"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress3"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_progress3"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_progress3" />
+
                     <ProgressBar
                         android:id="@+id/progress_bar3"
+                        android:layout_width="220dp"
+                        android:layout_height="220dp"
+                        android:elevation="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:indeterminateOnly="false"
                         android:progressDrawable="@drawable/firstcircle"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:elevation="20dp"
                         android:rotation="-150"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@+id/text3" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -369,7 +461,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/white_edge"
-                android:elevation="5dp"
+                android:elevation="20dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -381,20 +473,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
                     <TextView
                         android:id="@+id/text4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="염도"
-                        android:textStyle="bold"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="염도 (ppt)"
+                        android:background="#3c8f70"
+                        android:gravity="center"
+                        android:textColor="@color/white"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
-                        app:layout_constraintStart_toStartOf="parent">
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </TextView>
 
@@ -402,7 +495,7 @@
                         android:id="@+id/Max4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -415,6 +508,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="max"
+                        android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
@@ -440,6 +534,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="min"
+                        android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
@@ -452,7 +547,8 @@
                         android:id="@+id/text_view_progress4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="50dp"
+                        android:textSize="40dp"
+                        android:layout_marginEnd="17dp"
                         android:maxLength="5"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -461,17 +557,31 @@
                         app:layout_constraintStart_toStartOf="@+id/progress_bar4"
                         app:layout_constraintTop_toTopOf="@+id/progress_bar4" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ppt"
+                        android:textSize="20dp"
+                        android:maxLength="5"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress4"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_progress4"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_progress4" />
+
                     <ProgressBar
                         android:id="@+id/progress_bar4"
+                        android:layout_width="220dp"
+                        android:layout_height="220dp"
+                        android:elevation="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:indeterminateOnly="false"
                         android:progressDrawable="@drawable/firstcircle"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:elevation="20dp"
                         android:rotation="-150"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@+id/text4" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -485,7 +595,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/white_edge"
-                android:elevation="5dp"
+                android:elevation="20dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -497,20 +607,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
                     <TextView
                         android:id="@+id/text5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ORP"
-                        android:textStyle="bold"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="ORP (mV)"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:background="#fa9852"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
-                        app:layout_constraintStart_toStartOf="parent">
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </TextView>
 
@@ -518,7 +629,7 @@
                         android:id="@+id/Max5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -531,6 +642,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="max"
+                        android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
@@ -556,6 +668,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="min"
+                        android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
@@ -568,7 +681,8 @@
                         android:id="@+id/text_view_progress5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="50dp"
+                        android:textSize="40dp"
+                        android:layout_marginEnd="20dp"
                         android:maxLength="5"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -577,17 +691,30 @@
                         app:layout_constraintStart_toStartOf="@+id/progress_bar5"
                         app:layout_constraintTop_toTopOf="@+id/progress_bar5" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="mV"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress5"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_progress5"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_progress5" />
+
                     <ProgressBar
                         android:id="@+id/progress_bar5"
+                        android:layout_width="220dp"
+                        android:layout_height="220dp"
+                        android:elevation="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:indeterminateOnly="false"
                         android:progressDrawable="@drawable/firstcircle"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:elevation="20dp"
                         android:rotation="-150"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@+id/text5" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -601,12 +728,11 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
                 android:background="@drawable/white_edge"
-                android:elevation="5dp"
+                android:elevation="20dp"
                 app:cardCornerRadius="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.473"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardview5">
 
@@ -615,20 +741,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_margin="20dp"
                     android:background="@drawable/white_edge">
 
                     <TextView
                         android:id="@+id/text6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="탁도"
-                        android:textStyle="bold"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="탁도 (NTU)"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:background="#71548c"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
-                        app:layout_constraintStart_toStartOf="parent">
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </TextView>
 
@@ -636,7 +763,7 @@
                         android:id="@+id/Max6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
@@ -650,6 +777,7 @@
                         android:layout_height="wrap_content"
                         android:text="max"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="@color/red"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
                         app:layout_constraintStart_toStartOf="parent"
@@ -675,6 +803,7 @@
                         android:layout_height="wrap_content"
                         android:text="min"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="@color/primary_dark"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
                         app:layout_constraintStart_toStartOf="parent"
@@ -686,31 +815,83 @@
                         android:id="@+id/text_view_progress6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
                         android:maxLength="5"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="50dp"
+                        android:textSize="40dp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/progress_bar6"
                         app:layout_constraintEnd_toEndOf="@+id/progress_bar6"
                         app:layout_constraintStart_toStartOf="@+id/progress_bar6"
                         app:layout_constraintTop_toTopOf="@+id/progress_bar6" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NTU"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="17dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress6"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_progress6"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_progress6" />
+
                     <ProgressBar
                         android:id="@+id/progress_bar6"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
+                        android:layout_width="220dp"
+                        android:layout_height="220dp"
                         android:elevation="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:indeterminateOnly="false"
                         android:progressDrawable="@drawable/firstcircle"
                         android:rotation="-150"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/text6" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearlayout2"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@color/light_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardview6">
+
+                <TextView
+                    android:id="@+id/imageView"
+                    android:layout_width="120dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.5"
+                    android:text="어업기술센터"
+                    android:gravity="center"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/linearlayout2" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="120dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/gb_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearlayout2" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
