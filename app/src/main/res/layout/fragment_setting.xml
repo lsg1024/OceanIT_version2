@@ -446,7 +446,6 @@
                 android:background="@drawable/white_edge"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/customlayout05">
@@ -579,6 +578,34 @@
                     app:layout_constraintTop_toBottomOf="@+id/layout3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="220dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/white_edge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/customlayout06">
+
+                <Button
+                    android:id="@+id/logout_btn"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="로그아웃"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

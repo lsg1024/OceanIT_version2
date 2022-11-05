@@ -1,6 +1,7 @@
 package com.example.oceanit
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -66,6 +67,7 @@ class SettingFragment : Fragment() {
     var num : Float = 0F
     var number1: String = ""
     var number2: String = ""
+    lateinit var logout_btn : Button
 
     val call by lazy { Retrofit2.getInstance() }
 
@@ -121,6 +123,20 @@ class SettingFragment : Fragment() {
         num4_2 = view.findViewById(R.id.num4_2)
         num5_2 = view.findViewById(R.id.num5_2)
         num6_2 = view.findViewById(R.id.num6_2)
+        logout_btn = view.findViewById(R.id.logout_btn)
+
+        logout_btn.setOnClickListener {
+            Loginkey.removeKey(mainActivity)
+            Toast.makeText(mainActivity, "로그아웃 성공", Toast.LENGTH_LONG).show()
+
+            // 앱 종료 후 재시작
+            val packageManager = (context as MainActivity).packageManager
+            val intent = packageManager.getLaunchIntentForPackage((context as MainActivity).packageName)
+            val componentName = intent!!.component
+            val mainIntent = Intent.makeRestartActivityTask(componentName)
+            (context as MainActivity).startActivity(mainIntent)
+            Runtime.getRuntime().exit(0)
+        }
 
         return view
     }
@@ -213,9 +229,9 @@ class SettingFragment : Fragment() {
                     keyborad(num4_1, num4_2)
 
                     rangeSlider4.valueFrom = 0f
-                    rangeSlider4.valueTo = 300f
+                    rangeSlider4.valueTo = 40f
                     rangeSlider4.stepSize = 0.01f
-                    rangeSlider4.setValues(result.result.Sa_low, result.result.ORP_high)
+                    rangeSlider4.setValues(result.result.Sa_low, result.result.Sa_high)
 
 // ---------------------------------------------------------------------------------------------------- //
 
@@ -224,8 +240,8 @@ class SettingFragment : Fragment() {
 
                     keyborad(num5_1, num5_2)
 
-                    rangeSlider5.valueFrom = 00f
-                    rangeSlider5.valueTo = 40f
+                    rangeSlider5.valueFrom = 0f
+                    rangeSlider5.valueTo = 300f
                     rangeSlider5.stepSize = 0.01f
                     rangeSlider5.setValues(result.result.ORP_low, result.result.ORP_high)
 

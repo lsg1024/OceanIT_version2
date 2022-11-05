@@ -138,7 +138,7 @@ class MainFragment : Fragment() {
 
                 // 소켓에서 받은 데이터를 넣는 곳
                 progress_bar1.progress = data.Tc.toInt()
-                progressTextView1.text = (data.Tc.toString() + "℃")
+                progressTextView1.text = "${data.Tc}"
 
                 progress_bar2.progress = data.DO.toInt()
                 progressTextView2.text = "${data.DO}"
