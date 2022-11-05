@@ -23,4 +23,6 @@
     <color name="colorPrimaryDark">#FF7043</color>
     <color name="colorAccent">#FFAB40</color>
     <color name="colorGray">#8C8C8C</color>
+    <color name="brawn">#665d54</color>
+    <color name="light_grean">#3c8f70</color>
 </resources>

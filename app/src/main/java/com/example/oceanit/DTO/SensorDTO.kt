@@ -50,4 +50,4 @@ data class SensorResult(
     @SerializedName("TUR_low")
     val TUR_low : Float,
 
-)
+    )

@@ -1,5 +1,6 @@
 package com.example.oceanit
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,8 @@ import com.example.oceanit.DTO.LoginDTO
 import com.example.oceanit.DTO.LoginData
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,6 +20,7 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     val call by lazy { Retrofit2.getInstance() }
+    var token : String =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +29,20 @@ class LoginActivity : AppCompatActivity() {
         val E_id : EditText = findViewById(R.id.login_id)
         val E_pw : EditText = findViewById(R.id.login_password)
         val loginB : Button = findViewById(R.id.login_button)
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            token = task.result.toString()
+
+            // Log
+            Log.d("토큰", token)
+
+        })
 
         // 유저키 유무 확인 -> 로그인 유지 위해 없으면 if 문 아니면 else 문 실행
         if (Loginkey.getUserKey(this@LoginActivity).isEmpty()) {
@@ -35,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                 val id = E_id.text.toString()
                 val pw = E_pw.text.toString()
                 Log.d("Login_Log", "$id + $pw")
-                call?.login(LoginData(id, pw))?.enqueue(object : Callback<LoginDTO>{
+                call?.login(token, LoginData(id, pw))?.enqueue(object : Callback<LoginDTO>{
 
                     override fun onResponse(call: Call<LoginDTO>, response: Response<LoginDTO>) {
                         if (response.isSuccessful) {
@@ -65,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(intent)
         }
+
     }
 
 }

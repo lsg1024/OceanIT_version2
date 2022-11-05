@@ -12,9 +12,10 @@ import retrofit2.http.POST
 
 interface O2_Interface {
 
-    // 로그인
+    // 로그인 -> 헤더에 넣는걸로
     @POST("api/user/login")
     fun login(
+        @Header("token") token : String,
         @Body loginData: LoginData
     ) : Call<LoginDTO>
 

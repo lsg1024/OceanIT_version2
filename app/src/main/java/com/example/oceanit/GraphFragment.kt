@@ -5,23 +5,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Socket_File.Join_Data
 import com.example.oceanit.Socket_File.Sensor_data
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import java.net.URISyntaxException
+import java.util.*
 
 
 class GraphFragment : Fragment() {
@@ -33,19 +35,12 @@ class GraphFragment : Fragment() {
     lateinit var chart5 : LineChart
     lateinit var chart6 : LineChart
 
-    lateinit var des : Description
-    lateinit var legend: Legend
-    lateinit var leftAxis : YAxis
-    lateinit var rightAxis : YAxis
     lateinit var data :LineData
     var user_key : Int = 0
     lateinit var socket_data : Array<Sensor_data>
-    var data_list: Float? = null
-    var count : Int = 0
 
     private val gson = Gson()
     lateinit var mSocket: Socket
-
     lateinit var mainActivity: MainActivity
 
     override fun onCreateView(
@@ -65,7 +60,42 @@ class GraphFragment : Fragment() {
         chart4 = view.findViewById(R.id.LineChart4)
         chart5 = view.findViewById(R.id.LineChart5)
         chart6 = view.findViewById(R.id.LineChart6)
+//
+//        // 데이터 넣는 데이터 셋
+//        val dataSets1 = ArrayList<ILineDataSet>()
+//        val dataSets2 = ArrayList<ILineDataSet>()
+//        val dataSets3 = ArrayList<ILineDataSet>()
+//        val dataSets4 = ArrayList<ILineDataSet>()
+//        val dataSets5 = ArrayList<ILineDataSet>()
+//        val dataSets6 = ArrayList<ILineDataSet>()
 
+        return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // 데이터 넣는 데이터 셋
+        val dataSets1 = ArrayList<ILineDataSet>()
+        val dataSets2 = ArrayList<ILineDataSet>()
+        val dataSets3 = ArrayList<ILineDataSet>()
+        val dataSets4 = ArrayList<ILineDataSet>()
+        val dataSets5 = ArrayList<ILineDataSet>()
+        val dataSets6 = ArrayList<ILineDataSet>()
+
+        // 어디선가 가져온 데이터를 리스트에 넣는데
+        val dataList1 = ArrayList<Entry>()
+        val dataList2 = ArrayList<Entry>()
+        val dataList3 = ArrayList<Entry>()
+        val dataList4 = ArrayList<Entry>()
+        val dataList5 = ArrayList<Entry>()
+        val dataList6 = ArrayList<Entry>()
 
         try {
             mSocket = IO.socket("http://211.184.227.81:8500")
@@ -92,235 +122,221 @@ class GraphFragment : Fragment() {
 
             Log.d("Socket_on", "before data ${socket_data.size}")
 
-            for (i in 0..(socket_data.size-1)){
-                print(i)
-                Log.d("print_log", "$i")
-                //                Log.d("print_log", "${socket_data[i].DO}")
+            for (i in 0 until socket_data.size - 1) {
 
-
-                mainActivity.runOnUiThread(Runnable {
-                    setChart(chart, "수온", socket_data[i].DO)
-
-                })
-
-                Log.d("print_log", "${socket_data[i].DO}")
-
-
-
-////        setChart(chart2, "수")
-////        setChart(chart3, "test")
-////        setChart(chart4, "탁도")
-////        setChart(chart5, "스타일")
-////        setChart(chart6, "라벨")
-
-//                    Log.d("count_data1", "${socket_data[i].DO}")
-
-            }
-
-//            mainActivity.runOnUiThread(Runnable {
-//
-//                setChart(chart, "수온", socket_data[i].DO)
-//        setChart(chart2, "수")
-//        setChart(chart3, "test")
-//        setChart(chart4, "탁도")
-//        setChart(chart5, "스타일")
-//        setChart(chart6, "라벨")
-//            })
-
-//            Log.d("data_list", "before data ${data_list}")
-
-//            count++
-//            Log.d("count_data", "$count")
-
-        })
-
-        return view
-    }
-
-
-
-    @JvmName("setChart1")
-    private fun setChart(set_chart : LineChart, label: String, input_data: Float?) {
-
-
-
-        val xAxis = set_chart.xAxis
-
-        xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM
-            textSize = 10f
-            setDrawGridLines(false)
-            granularity = 2f
-            axisMinimum = 3f
-            isGranularityEnabled = true //
-        }
-
-        set_chart.apply {
-            axisRight.isEnabled = false
-            axisLeft.axisMaximum = 30f
-            axisLeft.axisMinimum - 20f
-            legend.apply {
-                textSize = 15f
-                verticalAlignment = Legend.LegendVerticalAlignment.TOP
-                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-                orientation = Legend.LegendOrientation.HORIZONTAL
-                setDrawInside(false)
-            }
-        }
-        val lineData = LineData()
-        set_chart.data = lineData
-        feedMultiple(set_chart, label, input_data)
-
-
-
-        count++
-
-    }
-
-    private fun feedMultiple(set_chart : LineChart, label: String, input_data : Float?){
-
-        var thread : Thread? = null
-        var thread_count : Int = 0
-
-        // thread?.interrupt()
-
-
-        thread = Thread(Runnable {
-            while (thread_count < 1) {
-                try {
-                    // 지연시간 그래프 나오기까지
-
-                    Thread.sleep(1000)
-                    addEntry(set_chart, label, input_data)
-
-                    Log.d("thread_count", "$thread_count")
-                    Log.d("thread_count2", "$input_data")
-
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
+                fun data1(): ArrayList<Entry> {
+                    dataList1.add(Entry(i.toFloat(), socket_data[i].Tc))
+                    return dataList1
                 }
 
-                thread_count++
+                fun data2(): ArrayList<Entry> {
+                    dataList2.add(Entry(i.toFloat(), socket_data[i].DO))
+                    return dataList2
+                }
+
+                fun data3(): ArrayList<Entry> {
+                    dataList3.add(Entry(i.toFloat(), socket_data[i].pH))
+                    return dataList3
+                }
+
+                fun data4(): ArrayList<Entry> {
+                    dataList4.add(Entry(i.toFloat(), socket_data[i].Sa))
+                    return dataList4
+                }
+
+                fun data5(): ArrayList<Entry> {
+                    dataList5.add(Entry(i.toFloat(), socket_data[i].ORP))
+                    return dataList5
+                }
+
+                fun data6(): ArrayList<Entry> {
+                    dataList6.add(Entry(i.toFloat(), socket_data[i].TUR))
+                    return dataList6
+                }
+                data1()
+                data2()
+                data3()
+                data4()
+                data5()
+                data6()
             }
+
+
+            val lineDataSet1 = LineDataSet(dataList1, "수온")
+            val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
+            val lineDataSet3 = LineDataSet(dataList3, "pH(pH)")
+            val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
+            val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
+            val lineDataSet6 = LineDataSet(dataList6, "탁도(TUR)")
+
+            //1. 데이터 셋 만들기
+            createSet(lineDataSet1)
+            createSet(lineDataSet2)
+            createSet(lineDataSet3)
+            createSet(lineDataSet4)
+            createSet(lineDataSet5)
+            createSet(lineDataSet6)
+
+            //2. 리스트에 데이터셋 추가
+            dataSets1.add(lineDataSet1)
+            dataSets2.add(lineDataSet2)
+            dataSets3.add(lineDataSet3)
+            dataSets4.add(lineDataSet4)
+            dataSets5.add(lineDataSet5)
+            dataSets6.add(lineDataSet6)
+
+            //3. 라인 데이터에 리스트 추가
+            val line_data1 = LineData(dataSets1)
+            val line_data2 = LineData(dataSets2)
+            val line_data3 = LineData(dataSets3)
+            val line_data4 = LineData(dataSets4)
+            val line_data5 = LineData(dataSets5)
+            val line_data6 = LineData(dataSets6)
+
+            mainActivity.runOnUiThread {
+                chart_shape(chart)
+                chart_shape(chart2)
+                chart_shape(chart3)
+                chart_shape(chart4)
+                chart_shape(chart5)
+                chart_shape(chart6)
+            }
+
+            Custom_Legend(chart)
+            Custom_Legend(chart2)
+            Custom_Legend(chart3)
+            Custom_Legend(chart4)
+            Custom_Legend(chart5)
+            Custom_Legend(chart6)
+
+
+            lineDataSet1.color = ContextCompat.getColor(mainActivity, R.color.red)
+            lineDataSet1.setCircleColor(ContextCompat.getColor(mainActivity, R.color.red))
+
+            lineDataSet2.color = ContextCompat.getColor(mainActivity, R.color.primary)
+            lineDataSet2.setCircleColor(ContextCompat.getColor(mainActivity, R.color.primary))
+
+            lineDataSet3.color = ContextCompat.getColor(mainActivity, R.color.brawn)
+            lineDataSet3.setCircleColor(ContextCompat.getColor(mainActivity, R.color.brawn))
+
+            lineDataSet4.color = ContextCompat.getColor(mainActivity, R.color.light_grean)
+            lineDataSet4.setCircleColor(ContextCompat.getColor(mainActivity, R.color.light_grean))
+
+            lineDataSet5.color = ContextCompat.getColor(mainActivity, R.color.colorAccent)
+            lineDataSet5.setCircleColor(ContextCompat.getColor(mainActivity, R.color.colorAccent))
+
+            lineDataSet6.color = ContextCompat.getColor(mainActivity, R.color.purple_200)
+            lineDataSet6.setCircleColor(ContextCompat.getColor(mainActivity, R.color.purple_200))
+
+            chart_YAxis(chart)
+            chart_YAxis(chart2)
+            chart_YAxis(chart3)
+            chart_YAxis(chart4)
+            chart_YAxis(chart5)
+            chart_YAxis(chart6)
+
+            chart.data = line_data1
+//            if (line_data1.notifyDataChanged())
+
+            chart2.data = line_data2
+            chart3.data = line_data3
+            chart4.data = line_data4
+            chart5.data = line_data5
+            chart6.data = line_data6
+
+            chart.invalidate()
+            chart2.invalidate()
+            chart3.invalidate()
+            chart4.invalidate()
+            chart5.invalidate()
+            chart6.invalidate()
         })
-        thread.start()
-    }
-//
-private fun addEntry(set_chart : LineChart, label : String, input_data : Float?){
-    val data : LineData = chart.data
 
-    if (data != null) {
-        var set = data.getDataSetByIndex(0)
-        if (set == null) {
-            set = createSet(label)
-            data.addDataSet(set)
-        }
-        Log.d("set_addEntry", "$set")
-        Log.d("input_data_addEntry", "$input_data")
-        data.addEntry(Entry(set.entryCount.toFloat(), input_data!!), 0)
-
-        data.notifyDataChanged()
-
-        set_chart.apply {
-            notifyDataSetChanged()
-            moveViewToX(data.entryCount.toFloat())
-            setVisibleXRangeMaximum(5f)
-            setPinchZoom(false)
-            isDoubleTapToZoomEnabled = false
-            setExtraOffsets(8f, 16f, 8f, 16f)
-
-        }
 
     }
 
 
 
+    override fun onPause() {
+        super.onPause()
 
-        // 인덱스 size는 0부터 시작하므로 전체 사이즈에서 -1을 해줘야 된다 -> 반복문??? 사용
-
-//    if(input_data != null){
-//        val data : LineData = set_chart.data
-//
-//        Log.d("input_data", "add_set ${input_data}")
-//
-//        var set : ILineDataSet? = data.getDataSetByIndex(0)
-//
-//        Log.d("set_data2", "add_set ${set}")
-//
-//        Log.d("input_data6", "add_set ${input_data}")
-//
-//        if (set == null) {
-//            set = createSet(label)
-//            data.addDataSet(set)
-//            Log.d("set_data4", "add_set ${set}")
-//            Log.d("set_data6", "add_set ${data}")
-//        }
-//
-//        Log.d("set_data3", "add_set ${set}")
-//        Log.d("input_data5", "add_set ${input_data}")
-//
-//        data.addEntry(Entry(set.entryCount.toFloat(), input_data), 0)
-//
-//        count++
-//        Log.d("count_data3", "$count")
-//
-////    Log.d("input_data", "add_set ${input_data}")
-//
-//        //            Log.d("Socket_list_size", "before data ${data_list}")
-//
-//        data.notifyDataChanged()
-////
-//        set_chart.notifyDataSetChanged()
-//        set_chart.moveViewToX(data.entryCount.toFloat())
-//        set_chart.setVisibleXRangeMaximum(3f)
-//        set_chart.setPinchZoom(false)
-//        set_chart.isDoubleTapToZoomEnabled = false
-//        set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
-//    }
-
-
-//    count++
-//    Log.d("count_data3", "$count")
-//
-////    Log.d("input_data", "add_set ${input_data}")
-//
-//    //            Log.d("Socket_list_size", "before data ${data_list}")
-//
-//        data.notifyDataChanged()
-////
-//        set_chart.notifyDataSetChanged()
-//        set_chart.moveViewToX(data.entryCount.toFloat())
-//        set_chart.setVisibleXRangeMaximum(3f)
-//        set_chart.setPinchZoom(false)
-//        set_chart.isDoubleTapToZoomEnabled = false
-//        set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
-
-
-
-//        Log.d("input_data", "$input_data")
-
-//        data.let {
-//
-//        }
+        chart.removeView(view)
+        chart2.removeView(view)
+        chart3.removeView(view)
+        chart4.removeView(view)
+        chart5.removeView(view)
+        chart6.removeView(view)
     }
+
 }
 
-    private fun createSet(label : String): LineDataSet {
+private fun Custom_Legend(set_chart: LineChart) {
 
-        val set = LineDataSet(null, label)
-        set.apply {
-            axisDependency = YAxis.AxisDependency.LEFT
-            color = getColor(R.color.black)
-            setCircleColor(getColor(R.color.black))
-            valueTextSize = 15f
-            lineWidth = 4f
-            circleRadius = 3f
-            fillAlpha = 0
-            fillColor = getColor(R.color.white)
-            setDrawValues(true)
+    val legend : Legend = set_chart.legend
 
-        }
-        return set
+    legend.formSize = 10f
+    legend.textSize = 15f
+}
+
+private fun chart_YAxis(set_chart: LineChart) {
+
+    val yAxis: YAxis = set_chart.axisLeft
+
+    // disable dual axis (only use LEFT axis)
+    set_chart.axisRight.isEnabled = false
+
+    // horizontal grid lines
+    yAxis.enableGridDashedLine(10f, 10f, 0f)
+
+    // axis range
+    yAxis.axisMaximum = 50f
+    yAxis.axisMinimum = 0f
+
+}
+
+private fun chart_shape(set_chart : LineChart) {
+
+    set_chart.animateX(2000)
+    set_chart.setTouchEnabled(true)
+    set_chart.setVisibleXRangeMaximum(4f)
+    set_chart.setPinchZoom(false)
+    set_chart.isDoubleTapToZoomEnabled = false
+    set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
+    set_chart.description = null
+    set_chart.isScaleXEnabled = false
+    set_chart.isScaleYEnabled = false
+//    set_chart.description.isEnabled = false
+//    set_chart.setNo
+
+    set_chart.xAxis.apply {
+        position = XAxis.XAxisPosition.BOTTOM
+        setDrawGridLines(false)
+
     }
+
+    set_chart.axisRight.apply {
+        setDrawGridLines(false)
+        setDrawLabels(false)
+        setDrawAxisLine(false)
+    }
+
+}
+
+private fun createSet(set : LineDataSet): LineDataSet{
+
+    set.apply {
+        axisDependency = YAxis.AxisDependency.LEFT
+        color = getColor(R.color.red)
+        setCircleColor(color)
+        valueTextSize = 15f
+        lineWidth = 1f
+        circleRadius = 3f
+        fillAlpha = 0
+        fillColor = getColor(R.color.white)
+        setDrawValues(true)
+
+    }
+    return set
+}
 
 

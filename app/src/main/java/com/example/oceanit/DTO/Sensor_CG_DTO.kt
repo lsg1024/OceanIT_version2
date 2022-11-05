@@ -86,4 +86,4 @@ data class Sensor_Body(
     @SerializedName("TUR_low")
     val TUR_low : Float,
 
-)
+    )
