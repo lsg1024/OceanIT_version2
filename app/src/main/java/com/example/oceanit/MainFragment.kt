@@ -110,7 +110,7 @@ class MainFragment : Fragment() {
         user_key = Loginkey.getUserKey(mainActivity).toInt()
 
         try {
-            mSocket = IO.socket("http://211.184.227.81:8500")
+            mSocket = IO.socket("")
             Log.d("SOCKET", "Connection success : $mSocket")
 
         } catch (e: URISyntaxException) {
