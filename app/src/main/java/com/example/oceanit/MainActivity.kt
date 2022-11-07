@@ -2,6 +2,7 @@ package com.example.oceanit
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -24,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         viewPager2.apply {
             adapter = FragmentAdapter(context as FragmentActivity)
-
             isUserInputEnabled = false
         }
 
@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.attach()
+
     }
 
     override fun onBackPressed() {

@@ -110,7 +110,7 @@ class MainFragment : Fragment() {
         user_key = Loginkey.getUserKey(mainActivity).toInt()
 
         try {
-            mSocket = IO.socket("")
+            mSocket = IO.socket("http://211.184.227.81:8500")
             Log.d("SOCKET", "Connection success : $mSocket")
 
         } catch (e: URISyntaxException) {
@@ -203,8 +203,8 @@ class MainFragment : Fragment() {
                     progressMinText.text = result.result.Tc_low.toString() + "℃"
 
                     // 측정되는 최소값과 최대값
-                    progress_bar1.max = 40
-                    progress_bar1.min = 0
+                    progress_bar1.max = result.result.Tc_high.toInt() + 15
+                    progress_bar1.min = result.result.Tc_low.toInt() - 15
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText2.text = result.result.DO_high.toString()
