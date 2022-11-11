@@ -20,7 +20,8 @@
                 <gradient
                     android:type="sweep"
                     android:centerColor="@color/primary"
-                    android:endColor="@color/red"/>
+                    android:endColor="@color/red"
+                    android:useLevel="false"/>
             </shape>
         </rotate>
     </item>

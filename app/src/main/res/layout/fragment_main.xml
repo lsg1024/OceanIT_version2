@@ -69,18 +69,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-
                     android:background="@drawable/white_edge">
 
                     <TextView
                         android:id="@+id/Max1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="50dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text1" />
 
@@ -92,7 +91,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/red"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Max1">
 
@@ -118,54 +117,36 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/primary_dark"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar1"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Min1">
 
                     </TextView>
 
-                    <TextView
-                        android:id="@+id/text_view_progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:maxLength="5"
-                        android:text="25.25"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="40dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar1"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar1"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar1"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="℃"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress"
-                        app:layout_constraintStart_toEndOf="@+id/text_view_progress"
-                        app:layout_constraintTop_toTopOf="@+id/text_view_progress">
-
-                    </TextView>
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar1"
-                        android:layout_width="220dp"
-                        android:layout_height="220dp"
-                        android:elevation="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/firstcircle"
-                        android:rotation="-150"
+                    <com.github.anastr.speedviewlib.SpeedView
+                        android:id="@+id/speedView1"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        app:sv_startDegree="180"
+                        app:sv_endDegree="360"
+                        app:sv_minSpeed="0.00"
+                        app:sv_speedTextPadding="80dp"
+                        app:sv_speedTextSize="30dp"
+                        app:sv_unit="℃"
+                        app:sv_withTremble="false"
+                        app:sv_textSize="20dp"
+                        app:sv_tickNumber="6"
+                        app:sv_indicatorWidth="8dp"
+                        app:sv_indicator="NormalSmallIndicator"
+                        app:sv_indicatorColor="#fa5252"
+                        app:sv_speedTextFormat="FLOAT"
+                        app:sv_speedTextColor="#fa5252"
+                        app:sv_centerCircleRadius="0dp"
+                        android:layout_marginTop="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text1"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintTop_toBottomOf="@+id/text1" >
+                    </com.github.anastr.speedviewlib.SpeedView>
 
                     <TextView
                         android:id="@+id/text1"
@@ -229,11 +210,11 @@
                         android:id="@+id/Max2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="50dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text2" />
 
@@ -245,7 +226,7 @@
                         android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Max2">
 
@@ -271,51 +252,36 @@
                         android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar2"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Min2">
 
                     </TextView>
 
-                    <TextView
-                        android:id="@+id/text_view_progress2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="40dp"
-                        android:layout_marginEnd="25dp"
-                        android:maxLength="5"
-                        android:text="25.25"
-                        android:textStyle="bold"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar2"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar2"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar2"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="mg/L"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="15dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress2"
-                        app:layout_constraintStart_toEndOf="@+id/text_view_progress2"
-                        app:layout_constraintTop_toTopOf="@+id/text_view_progress2" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar2"
-                        android:layout_width="220dp"
-                        android:layout_height="220dp"
-                        android:elevation="20dp"
-                        android:layout_marginTop = "10dp"
-                        android:layout_marginBottom="10dp"
-                        android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/firstcircle"
-                        android:rotation="-150"
+                    <com.github.anastr.speedviewlib.SpeedView
+                        android:id="@+id/speedView2"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        app:sv_startDegree="180"
+                        app:sv_endDegree="360"
+                        app:sv_minSpeed="0.00"
+                        app:sv_speedTextPadding="80dp"
+                        app:sv_speedTextSize="30dp"
+                        app:sv_unit="mg/L"
+                        app:sv_withTremble="false"
+                        app:sv_textSize="20dp"
+                        app:sv_tickNumber="6"
+                        app:sv_indicatorWidth="8dp"
+                        app:sv_indicator="NormalSmallIndicator"
+                        app:sv_indicatorColor="#52bafa"
+                        app:sv_speedTextFormat="FLOAT"
+                        app:sv_speedTextColor="#52bafa"
+                        app:sv_centerCircleRadius="0dp"
+                        android:layout_marginTop="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text2" />
+                        app:layout_constraintTop_toBottomOf="@+id/text2" >
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -364,11 +330,11 @@
                         android:id="@+id/Max3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="50dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text3" />
 
@@ -380,7 +346,7 @@
                         android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Max3">
 
@@ -406,51 +372,36 @@
                         android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar3"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Min3">
 
                     </TextView>
 
-                    <TextView
-                        android:id="@+id/text_view_progress3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="25.25"
-                        android:textSize="40dp"
-                        android:layout_marginEnd="15dp"
-                        android:maxLength="5"
-                        android:textStyle="bold"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar3"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar3"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar3"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar3" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="pH"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress3"
-                        app:layout_constraintStart_toEndOf="@+id/text_view_progress3"
-                        app:layout_constraintTop_toTopOf="@+id/text_view_progress3" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar3"
-                        android:layout_width="220dp"
-                        android:layout_height="220dp"
-                        android:elevation="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/firstcircle"
-                        android:rotation="-150"
+                    <com.github.anastr.speedviewlib.SpeedView
+                        android:id="@+id/speedView3"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        app:sv_startDegree="180"
+                        app:sv_endDegree="360"
+                        app:sv_minSpeed="0.00"
+                        app:sv_speedTextPadding="80dp"
+                        app:sv_speedTextSize="30dp"
+                        app:sv_unit="pH"
+                        app:sv_withTremble="false"
+                        app:sv_textSize="20dp"
+                        app:sv_tickNumber="6"
+                        app:sv_indicatorWidth="8dp"
+                        app:sv_indicator="NormalSmallIndicator"
+                        app:sv_indicatorColor="#665d54"
+                        app:sv_speedTextFormat="FLOAT"
+                        app:sv_speedTextColor="#665d54"
+                        app:sv_centerCircleRadius="0dp"
+                        android:layout_marginTop="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text3" />
+                        app:layout_constraintTop_toBottomOf="@+id/text3" >
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -498,11 +449,11 @@
                         android:id="@+id/Max4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="50dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text4" />
 
@@ -514,7 +465,7 @@
                         android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Max4">
 
@@ -540,52 +491,36 @@
                         android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar4"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Min4">
 
                     </TextView>
 
-                    <TextView
-                        android:id="@+id/text_view_progress4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="25.25"
-                        android:textSize="40dp"
-                        android:layout_marginEnd="17dp"
-                        android:maxLength="5"
-                        android:textStyle="bold"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar4"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar4"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar4"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar4" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ppt"
-                        android:textSize="20dp"
-                        android:maxLength="5"
-                        android:textStyle="bold"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress4"
-                        app:layout_constraintStart_toEndOf="@+id/text_view_progress4"
-                        app:layout_constraintTop_toTopOf="@+id/text_view_progress4" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar4"
-                        android:layout_width="220dp"
-                        android:layout_height="220dp"
-                        android:elevation="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/firstcircle"
-                        android:rotation="-150"
+                    <com.github.anastr.speedviewlib.SpeedView
+                        android:id="@+id/speedView4"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        app:sv_startDegree="180"
+                        app:sv_endDegree="360"
+                        app:sv_minSpeed="0.00"
+                        app:sv_speedTextPadding="80dp"
+                        app:sv_speedTextSize="30dp"
+                        app:sv_unit="mV"
+                        app:sv_withTremble="false"
+                        app:sv_textSize="20dp"
+                        app:sv_tickNumber="6"
+                        app:sv_indicatorWidth="8dp"
+                        app:sv_indicator="NormalSmallIndicator"
+                        app:sv_indicatorColor="#3c8f70"
+                        app:sv_speedTextFormat="FLOAT"
+                        app:sv_speedTextColor="#3c8f70"
+                        app:sv_centerCircleRadius="0dp"
+                        android:layout_marginTop="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text4" />
+                        app:layout_constraintTop_toBottomOf="@+id/text4" >
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -633,11 +568,11 @@
                         android:id="@+id/Max5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="50dp"
                         android:text="최대 임계치"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text5" />
 
@@ -649,7 +584,7 @@
                         android:textColor="@color/red"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Max5">
 
@@ -675,51 +610,36 @@
                         android:textColor="@color/primary_dark"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar5"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Min5">
 
                     </TextView>
 
-                    <TextView
-                        android:id="@+id/text_view_progress5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="255.25"
-                        android:textSize="40dp"
-                        android:layout_marginEnd="20dp"
-                        android:maxLength="5"
-                        android:textStyle="bold"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar5"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar5"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar5"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="mV"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress5"
-                        app:layout_constraintStart_toEndOf="@+id/text_view_progress5"
-                        app:layout_constraintTop_toTopOf="@+id/text_view_progress5" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar5"
-                        android:layout_width="220dp"
-                        android:layout_height="220dp"
-                        android:elevation="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/firstcircle"
-                        android:rotation="-150"
+                    <com.github.anastr.speedviewlib.SpeedView
+                        android:id="@+id/speedView5"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        app:sv_startDegree="180"
+                        app:sv_endDegree="360"
+                        app:sv_minSpeed="0.00"
+                        app:sv_speedTextPadding="80dp"
+                        app:sv_speedTextSize="30dp"
+                        app:sv_unit="ppt"
+                        app:sv_withTremble="false"
+                        app:sv_textSize="20dp"
+                        app:sv_tickNumber="6"
+                        app:sv_indicatorWidth="8dp"
+                        app:sv_indicator="NormalSmallIndicator"
+                        app:sv_indicatorColor="#fa9852"
+                        app:sv_speedTextFormat="FLOAT"
+                        app:sv_speedTextColor="#fa9852"
+                        app:sv_centerCircleRadius="0dp"
+                        android:layout_marginTop="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text5" />
+                        app:layout_constraintTop_toBottomOf="@+id/text5" >
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -768,11 +688,11 @@
                         android:id="@+id/Max6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="50dp"
                         android:text="최대 임계치"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView6"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text6" />
 
@@ -784,7 +704,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/red"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView6"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Max6">
 
@@ -810,51 +730,36 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/primary_dark"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/progress_bar6"
+                        app:layout_constraintEnd_toStartOf="@+id/speedView6"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Min6">
 
                     </TextView>
 
-                    <TextView
-                        android:id="@+id/text_view_progress6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="25dp"
-                        android:text="25.25"
-                        android:maxLength="5"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="40dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar6"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar6"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar6"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar6" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="NTU"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="17dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_view_progress6"
-                        app:layout_constraintStart_toEndOf="@+id/text_view_progress6"
-                        app:layout_constraintTop_toTopOf="@+id/text_view_progress6" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar6"
-                        android:layout_width="220dp"
-                        android:layout_height="220dp"
-                        android:elevation="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:indeterminateOnly="false"
-                        android:progressDrawable="@drawable/firstcircle"
-                        android:rotation="-150"
+                    <com.github.anastr.speedviewlib.SpeedView
+                        android:id="@+id/speedView6"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        app:sv_startDegree="180"
+                        app:sv_endDegree="360"
+                        app:sv_minSpeed="0.00"
+                        app:sv_speedTextPadding="80dp"
+                        app:sv_speedTextSize="30dp"
+                        app:sv_unit="℃"
+                        app:sv_withTremble="false"
+                        app:sv_textSize="20dp"
+                        app:sv_tickNumber="6"
+                        app:sv_indicatorWidth="8dp"
+                        app:sv_indicator="NormalSmallIndicator"
+                        app:sv_indicatorColor="#71548c"
+                        app:sv_speedTextFormat="FLOAT"
+                        app:sv_speedTextColor="#71548c"
+                        app:sv_centerCircleRadius="0dp"
+                        android:layout_marginTop="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text6" />
+                        app:layout_constraintTop_toBottomOf="@+id/text6" >
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

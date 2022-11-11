@@ -1,15 +1,13 @@
 package com.example.oceanit
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -31,13 +29,11 @@ import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import kotlinx.coroutines.delay
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URISyntaxException
 import java.util.*
-import kotlin.concurrent.thread
 
 
 class GraphFragment : Fragment() {
@@ -48,6 +44,13 @@ class GraphFragment : Fragment() {
     lateinit var chart4: LineChart
     lateinit var chart5: LineChart
     lateinit var chart6: LineChart
+
+    lateinit var line_data1 : LineData
+    lateinit var line_data2 : LineData
+    lateinit var line_data3 : LineData
+    lateinit var line_data4 : LineData
+    lateinit var line_data5 : LineData
+    lateinit var line_data6 : LineData
 
     var user_key: Int = 0
     lateinit var socket_data: Array<Sensor_data>
@@ -120,7 +123,7 @@ class GraphFragment : Fragment() {
         val dataList6 = ArrayList<Entry>()
 
         try {
-            mSocket = IO.socket("http://211.184.227.81:8500")
+            mSocket = IO.socket("")
             Log.d("SOCKET", "Connection success : $mSocket")
 
         } catch (e: URISyntaxException) {
@@ -219,12 +222,12 @@ class GraphFragment : Fragment() {
             dataSets6.add(lineDataSet6)
 //
             //3. 라인 데이터에 리스트 추가
-            val line_data1 = LineData(dataSets1)
-            val line_data2 = LineData(dataSets2)
-            val line_data3 = LineData(dataSets3)
-            val line_data4 = LineData(dataSets4)
-            val line_data5 = LineData(dataSets5)
-            val line_data6 = LineData(dataSets6)
+            line_data1 = LineData(dataSets1)
+            line_data2 = LineData(dataSets2)
+            line_data3 = LineData(dataSets3)
+            line_data4 = LineData(dataSets4)
+            line_data5 = LineData(dataSets5)
+            line_data6 = LineData(dataSets6)
 //
             Custom_Legend(chart)
             Custom_Legend(chart2)
@@ -274,21 +277,6 @@ class GraphFragment : Fragment() {
             // axis range
             yAxis2.axisMaximum = 20f
             yAxis2.axisMinimum = 0f
-//
-//            // set data
-            chart.data = line_data1
-            chart2.data = line_data2
-            chart3.data = line_data3
-            chart4.data = line_data4
-            chart5.data = line_data5
-            chart6.data = line_data6
-//
-            chart.invalidate()
-            chart2.invalidate()
-            chart3.invalidate()
-            chart4.invalidate()
-            chart5.invalidate()
-            chart6.invalidate()
 
         })
 
@@ -313,7 +301,7 @@ class GraphFragment : Fragment() {
         val dataList4 = ArrayList<Entry>()
         val dataList5 = ArrayList<Entry>()
         val dataList6 = ArrayList<Entry>()
-
+//
         call?.company(user_key)?.enqueue(object : Callback<companyDTO> {
 
             override fun onResponse(call: Call<companyDTO>, response: Response<companyDTO>) {
@@ -338,7 +326,7 @@ class GraphFragment : Fragment() {
         })
 
         try {
-            mSocket = IO.socket("http://211.184.227.81:8500")
+            mSocket = IO.socket("")
             Log.d("SOCKET", "Connection success : $mSocket")
 
         } catch (e: URISyntaxException) {
@@ -428,12 +416,12 @@ class GraphFragment : Fragment() {
             dataSets6.add(lineDataSet6)
 
             //3. 라인 데이터에 리스트 추가
-            val line_data1 = LineData(dataSets1)
-            val line_data2 = LineData(dataSets2)
-            val line_data3 = LineData(dataSets3)
-            val line_data4 = LineData(dataSets4)
-            val line_data5 = LineData(dataSets5)
-            val line_data6 = LineData(dataSets6)
+            line_data1 = LineData(dataSets1)
+            line_data2 = LineData(dataSets2)
+            line_data3 = LineData(dataSets3)
+            line_data4 = LineData(dataSets4)
+            line_data5 = LineData(dataSets5)
+            line_data6 = LineData(dataSets6)
 
             chart_shape(chart)
             chart_shape(chart2)
@@ -488,8 +476,7 @@ class GraphFragment : Fragment() {
             yAxis2.enableGridDashedLine(10f, 10f, 0f)
             // axis range
             yAxis2.axisMaximum = 20f
-            yAxis2.axisMinimum = 0f
-
+            yAxis2.axisMinimum = -5f
 
             chart.data = line_data1
             chart2.data = line_data2
@@ -498,13 +485,13 @@ class GraphFragment : Fragment() {
             chart5.data = line_data5
             chart6.data = line_data6
 
+//        chart.invalidate()
+//        chart2.invalidate()
+//        chart3.invalidate()
+//        chart4.invalidate()
+//        chart5.invalidate()
+//        chart6.invalidate()
 
-            chart.invalidate()
-            chart2.invalidate()
-            chart3.invalidate()
-            chart4.invalidate()
-            chart5.invalidate()
-            chart6.invalidate()
         })
     }
 
@@ -536,7 +523,8 @@ class GraphFragment : Fragment() {
         mainActivity.runOnUiThread {
             set_chart.animateX(2000)
             set_chart.setTouchEnabled(true)
-            set_chart.setVisibleXRangeMaximum(4f)
+            set_chart.setVisibleXRangeMaximum(6f)
+            set_chart.invalidate()
             set_chart.setPinchZoom(false)
             set_chart.isDoubleTapToZoomEnabled = false
             set_chart.setExtraOffsets(8f, 16f, 8f, 16f)

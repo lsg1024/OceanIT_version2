@@ -15,6 +15,9 @@
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
     <style name="defaultButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>
@@ -25,10 +28,9 @@
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
     </style>
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/background_splash</item>
-    </style>
     <style name="Theme.TransparentStatusBar" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+    <style name="Theme.OceanIT.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.OceanIT.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

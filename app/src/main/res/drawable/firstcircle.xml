@@ -21,7 +21,8 @@
                     android:type="sweep"
                     android:startColor="@color/primary"
                     android:centerColor="@color/lime"
-                    android:endColor="@color/red"/>
+                    android:endColor="@color/red"
+                    android:useLevel="false"/>
             </shape>
         </rotate>
     </item>

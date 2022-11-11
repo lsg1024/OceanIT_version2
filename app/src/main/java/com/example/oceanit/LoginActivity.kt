@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
 
                             Loginkey.setUserKey(this@LoginActivity, result!!.result.user_key!!.toInt())
 
-                            Log.d("Login_key", "${result!!.result.user_key!!.toInt()}")
+                            Log.d("Login_key", "${result.result.user_key!!.toInt()}")
 
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             startActivity(intent)

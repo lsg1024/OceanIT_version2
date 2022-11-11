@@ -1,5 +1,6 @@
 package com.example.oceanit
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +11,15 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.DTO.companyDTO
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
 import com.example.oceanit.Socket_File.Join_Data
 import com.example.oceanit.Socket_File.Sensor_data
+import com.github.anastr.speedviewlib.SpeedView
+import com.github.anastr.speedviewlib.components.Section
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -28,33 +32,27 @@ import java.net.URISyntaxException
 
 class MainFragment : Fragment() {
 
-    lateinit var progress_bar1 : ProgressBar
-    lateinit var progressTextView1: TextView
+    lateinit var speedView1: SpeedView
     lateinit var progressMaxText : TextView
     lateinit var progressMinText : TextView
 
-    lateinit var progress_bar2 : ProgressBar
-    lateinit var progressTextView2: TextView
+    lateinit var speedView2: SpeedView
     lateinit var progressMaxText2 : TextView
     lateinit var progressMinText2 : TextView
 
-    lateinit var progress_bar3 : ProgressBar
-    lateinit var progressTextView3: TextView
+    lateinit var speedView3: SpeedView
     lateinit var progressMaxText3 : TextView
     lateinit var progressMinText3 : TextView
 
-    lateinit var progress_bar4 : ProgressBar
-    lateinit var progressTextView4: TextView
+    lateinit var speedView4: SpeedView
     lateinit var progressMaxText4 : TextView
     lateinit var progressMinText4 : TextView
 
-    lateinit var progress_bar5 : ProgressBar
-    lateinit var progressTextView5: TextView
+    lateinit var speedView5: SpeedView
     lateinit var progressMaxText5 : TextView
     lateinit var progressMinText5 : TextView
 
-    lateinit var progress_bar6 : ProgressBar
-    lateinit var progressTextView6: TextView
+    lateinit var speedView6: SpeedView
     lateinit var progressMaxText6 : TextView
     lateinit var progressMinText6 : TextView
     lateinit var mSocket: Socket
@@ -74,34 +72,68 @@ class MainFragment : Fragment() {
 
         main_name = view.findViewById(R.id.main_name)
 
-        progress_bar1 = view.findViewById(R.id.progress_bar1)
-        progressTextView1 = view.findViewById(R.id.text_view_progress)
-        progressTextView1.bringToFront()
+        speedView1 = view.findViewById(R.id.speedView1)
+
+        speedView1.clearSections()
+        speedView1.addSections(
+            Section(0f, .2f, Color.BLUE, speedView1.dpTOpx(30f)),
+            Section(.2f, .8f, Color.GREEN, speedView1.dpTOpx(30f)),
+            Section(.8f, 1f, Color.RED, speedView1.dpTOpx(30f)),
+        )
+
         progressMaxText = view.findViewById(R.id.max1)
         progressMinText = view.findViewById(R.id.min1)
 
-        progress_bar2 = view.findViewById(R.id.progress_bar2)
-        progressTextView2 = view.findViewById(R.id.text_view_progress2)
+        speedView2 = view.findViewById(R.id.speedView2)
+        speedView2.clearSections()
+        speedView2.addSections(
+            Section(0f, .2f, Color.BLUE, speedView2.dpTOpx(30f)),
+            Section(.2f, .8f, Color.GREEN, speedView2.dpTOpx(30f)),
+            Section(.8f, 1f, Color.RED, speedView2.dpTOpx(30f)),
+        )
+
         progressMaxText2 = view.findViewById(R.id.max2)
         progressMinText2 = view.findViewById(R.id.min2)
 
-        progress_bar3 = view.findViewById(R.id.progress_bar3)
-        progressTextView3 = view.findViewById(R.id.text_view_progress3)
+        speedView3 = view.findViewById(R.id.speedView3)
+        speedView3.clearSections()
+        speedView3.addSections(
+            Section(0f, .2f, Color.BLUE, speedView3.dpTOpx(30f)),
+            Section(.2f, .8f, Color.GREEN, speedView3.dpTOpx(30f)),
+            Section(.8f, 1f, Color.RED, speedView3.dpTOpx(30f)),
+        )
+
         progressMaxText3 = view.findViewById(R.id.max3)
         progressMinText3 = view.findViewById(R.id.min3)
 
-        progress_bar4 = view.findViewById(R.id.progress_bar4)
-        progressTextView4 = view.findViewById(R.id.text_view_progress4)
+        speedView4 = view.findViewById(R.id.speedView4)
+        speedView4.clearSections()
+        speedView4.addSections(
+            Section(0f, .2f, Color.BLUE, speedView4.dpTOpx(30f)),
+            Section(.2f, .8f, Color.GREEN, speedView4.dpTOpx(30f)),
+            Section(.8f, 1f, Color.RED, speedView4.dpTOpx(30f)),
+        )
         progressMaxText4 = view.findViewById(R.id.max4)
         progressMinText4 = view.findViewById(R.id.min4)
 
-        progress_bar5 = view.findViewById(R.id.progress_bar5)
-        progressTextView5 = view.findViewById(R.id.text_view_progress5)
+        speedView5 = view.findViewById(R.id.speedView5)
+        speedView5.clearSections()
+        speedView5.addSections(
+            Section(0f, .2f, Color.BLUE, speedView5.dpTOpx(30f)),
+            Section(.2f, .8f, Color.GREEN, speedView5.dpTOpx(30f)),
+            Section(.8f, 1f, Color.RED, speedView5.dpTOpx(30f)),
+        )
+
         progressMaxText5 = view.findViewById(R.id.max5)
         progressMinText5 = view.findViewById(R.id.min5)
 
-        progress_bar6 = view.findViewById(R.id.progress_bar6)
-        progressTextView6 = view.findViewById(R.id.text_view_progress6)
+        speedView6 = view.findViewById(R.id.speedView6)
+        speedView6.clearSections()
+        speedView6.addSections(
+            Section(0f, .2f, Color.BLUE, speedView6.dpTOpx(30f)),
+            Section(.2f, .8f, Color.GREEN, speedView6.dpTOpx(30f)),
+            Section(.8f, 1f, Color.RED, speedView6.dpTOpx(30f)),
+        )
         progressMaxText6 = view.findViewById(R.id.max6)
         progressMinText6 = view.findViewById(R.id.min6)
 
@@ -110,7 +142,7 @@ class MainFragment : Fragment() {
         user_key = Loginkey.getUserKey(mainActivity).toInt()
 
         try {
-            mSocket = IO.socket("http://211.184.227.81:8500")
+            mSocket = IO.socket("")
             Log.d("SOCKET", "Connection success : $mSocket")
 
         } catch (e: URISyntaxException) {
@@ -137,23 +169,17 @@ class MainFragment : Fragment() {
                 // Stuff that updates the UI
 
                 // 소켓에서 받은 데이터를 넣는 곳
-                progress_bar1.progress = data.Tc.toInt()
-                progressTextView1.text = "${data.Tc}"
+                speedView1.realSpeedTo(data.Tc)
 
-                progress_bar2.progress = data.DO.toInt()
-                progressTextView2.text = "${data.DO}"
+                speedView2.realSpeedTo(data.DO)
 
-                progress_bar3.progress = data.pH.toInt()
-                progressTextView3.text = "${data.pH}"
+                speedView3.realSpeedTo(data.pH)
 
-                progress_bar4.progress = data.Sa.toInt()
-                progressTextView4.text = "${data.Sa}"
+                speedView4.realSpeedTo(data.Sa)
 
-                progress_bar5.progress = data.ORP.toInt()
-                progressTextView5.text = "${data.ORP}"
+                speedView5.realSpeedTo(data.ORP)
 
-                progress_bar6.progress = data.TUR.toInt()
-                progressTextView6.text = "${data.TUR}"
+                speedView6.realSpeedTo(data.TUR)
 
             })
 
@@ -199,52 +225,52 @@ class MainFragment : Fragment() {
                     Log.d("main_Sensor_OG", "${result!!.result}")
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
-                    progressMaxText.text = result!!.result.Tc_high.toString() + "℃"
+                    progressMaxText.text = result.result.Tc_high.toString() + "℃"
                     progressMinText.text = result.result.Tc_low.toString() + "℃"
 
                     // 측정되는 최소값과 최대값
-                    progress_bar1.max = result.result.Tc_high.toInt() + 15
-                    progress_bar1.min = result.result.Tc_low.toInt() - 15
+                    speedView1.maxSpeed = result.result.Tc_high + 5
+                    speedView1.minSpeed = 0.00f
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText2.text = result.result.DO_high.toString()
                     progressMinText2.text = result.result.DO_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    progress_bar2.max = 40
-                    progress_bar2.min = 0
+                    speedView2.maxSpeed = result.result.DO_high + 5
+                    speedView2.minSpeed = 0.00f
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText3.text = result.result.pH_high.toString()
                     progressMinText3.text = result.result.pH_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    progress_bar3.max = 40
-                    progress_bar3.min = 0
+                    speedView3.maxSpeed = result.result.pH_high + 5
+                    speedView3.minSpeed = 0.00f
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText4.text = result.result.Sa_high.toString()
                     progressMinText4.text = result.result.Sa_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    progress_bar4.max = 40
-                    progress_bar4.min = 0
+                    speedView4.maxSpeed = result.result.Sa_high + 5
+                    speedView4.minSpeed = 0.00f
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText5.text = result.result.ORP_high.toString()
                     progressMinText5.text = result.result.ORP_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    progress_bar5.max = 300
-                    progress_bar5.min = 0
+                    speedView5.maxSpeed = result.result.ORP_high + 50
+                    speedView5.minSpeed = result.result.ORP_low - 25
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText6.text = result.result.TUR_high.toString()
                     progressMinText6.text = result.result.TUR_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    progress_bar6.max = 40
-                    progress_bar6.min = 0
+                    speedView6.maxSpeed = result.result.TUR_high + 5
+                    speedView6.minSpeed = 0.00f
 
                 }
             }
