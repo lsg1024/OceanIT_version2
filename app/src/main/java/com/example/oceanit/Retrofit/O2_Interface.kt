@@ -38,5 +38,10 @@ interface O2_Interface {
         @Header("user_key") user_key: Int?,
     ) : Call<companyDTO>
 
+    @POST("api/user/logout")
+    fun logout(
+        @Header("user_key") user_key: Int?,
+        @Header("user_token") user_token : String
+    ) : Call<logoutDTO>
 
 }

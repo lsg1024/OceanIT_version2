@@ -1,7 +1,7 @@
 package com.example.oceanit
 
-import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,22 +10,20 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.example.oceanit.DTO.SensorDTO
-import com.example.oceanit.DTO.Sensor_Body
-import com.example.oceanit.DTO.Sensor_CG_DTO
-import com.example.oceanit.DTO.companyDTO
+import com.example.oceanit.DTO.*
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
 import com.google.android.material.slider.RangeSlider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.DecimalFormat
+
 
 // 자유롭게 변경하고 버튼을 누르면 edittext 값들을 서버로 전송
 // 페이지에 들어왔을 때 onCreateView에서 서버에 저장된 값을 불러온다
@@ -62,6 +60,9 @@ class SettingFragment : Fragment() {
     lateinit var num6_2: EditText
 
     lateinit var name : TextView
+    lateinit var addr : TextView
+    lateinit var tel : TextView
+    lateinit var ceo : TextView
     lateinit var button: Button
 
     var num : Float = 0F
@@ -72,17 +73,9 @@ class SettingFragment : Fragment() {
     val call by lazy { Retrofit2.getInstance() }
 
     private var user_key : Int = 0
+    private var user_token : String = ""
 
     lateinit var mainActivity: MainActivity
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,6 +86,9 @@ class SettingFragment : Fragment() {
 
         // 회사 이미지 받아오기 서버에서
         name = view.findViewById(R.id.name)
+        addr = view.findViewById(R.id.addr)
+        tel = view.findViewById(R.id.tel)
+        ceo = view.findViewById(R.id.ceo)
         // 설정 완료 후 확인 버튼
         button = view.findViewById(R.id.setb)
 
@@ -125,28 +121,11 @@ class SettingFragment : Fragment() {
         num6_2 = view.findViewById(R.id.num6_2)
         logout_btn = view.findViewById(R.id.logout_btn)
 
-        logout_btn.setOnClickListener {
-            Loginkey.removeKey(mainActivity)
-            Toast.makeText(mainActivity, "로그아웃 성공", Toast.LENGTH_LONG).show()
-
-            // 앱 종료 후 재시작
-            val packageManager = (context as MainActivity).packageManager
-            val intent = packageManager.getLaunchIntentForPackage((context as MainActivity).packageName)
-            val componentName = intent!!.component
-            val mainIntent = Intent.makeRestartActivityTask(componentName)
-            (context as MainActivity).startActivity(mainIntent)
-            Runtime.getRuntime().exit(0)
-        }
-
-        return view
-    }
-
-    override fun onStart() {
-        super.onStart()
-
         mainActivity = context as MainActivity
 
         user_key = Loginkey.getUserKey(mainActivity).toInt()
+        user_token = Loginkey.getTokenKey(mainActivity)
+        Log.d("user_token_get", user_token)
 
         call?.company(user_key)?.enqueue(object : Callback<companyDTO>{
 
@@ -157,7 +136,10 @@ class SettingFragment : Fragment() {
                     Log.d("company_name", "$result")
 
                     // 회사 이름 textViewd에 넣어주기
-                    name.text = result!!.result.fishery
+                    name.text = result!!.result.company
+                    addr.text = result.result.addr
+                    tel.text = result.result.tel
+                    ceo.text = result.result.ceo
 
                 }
             }
@@ -177,22 +159,23 @@ class SettingFragment : Fragment() {
                 if (response.isSuccessful) {
 
                     val result : SensorDTO? = response.body()
+                    val mFormat = DecimalFormat("0.00")
 
                     Log.d("Sensor_value", "$result")
 
                     // 데이터 EditText에 저장
                     num1_1.setText(num1_1.text.toString() + result!!.result.Tc_low.toString())
                     num1_2.setText(num1_2.text.toString() + result.result.Tc_high.toString())
-                    // 키보드 입력 값을 받아오고 슬라이더 모양 변화
+//                     키보드 입력 값을 받아오고 슬라이더 모양 변화
                     keyborad(num1_1, num1_2)
                     // 최대 측량 범위
-                    rangeSlider.valueFrom = 0f
+                    rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low - 10).toFloat()
                     // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
-                    rangeSlider.valueTo = 40f
+                    rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 10).toFloat()
                     // 슬라이더 움직일때 조절되는 단위
                     rangeSlider.stepSize = 0.01f
                     // 서버에서 지정된 사용자의 min max 값 받아오기
-                    rangeSlider.setValues(result.result.Tc_low, result.result.Tc_high)
+                    rangeSlider.setValues(mFormat.format(result.result.Tc_low).toFloat(), mFormat.format(result.result.Tc_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
 
@@ -202,10 +185,10 @@ class SettingFragment : Fragment() {
 
                     keyborad(num2_1, num2_2)
 
-                    rangeSlider2.valueFrom = 0f
-                    rangeSlider2.valueTo = 40f
+                    rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 10).toFloat()
+                    rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 10).toFloat()
                     rangeSlider2.stepSize = 0.01f
-                    rangeSlider2.setValues(result.result.DO_low, result.result.DO_high)
+                    rangeSlider2.setValues(mFormat.format(result.result.DO_low).toFloat(), mFormat.format(result.result.DO_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
 
@@ -215,10 +198,10 @@ class SettingFragment : Fragment() {
 
                     keyborad(num3_1, num3_2)
 
-                    rangeSlider3.valueFrom = 0f
-                    rangeSlider3.valueTo = 40f
+                    rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 10).toFloat()
+                    rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 10).toFloat()
                     rangeSlider3.stepSize = 0.01f
-                    rangeSlider3.setValues(result.result.pH_low, result.result.pH_high)
+                    rangeSlider3.setValues(mFormat.format(result.result.pH_low).toFloat(), mFormat.format(result.result.pH_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
 
@@ -228,10 +211,10 @@ class SettingFragment : Fragment() {
 
                     keyborad(num4_1, num4_2)
 
-                    rangeSlider4.valueFrom = 0f
-                    rangeSlider4.valueTo = 40f
+                    rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 10).toFloat()
+                    rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 10).toFloat()
                     rangeSlider4.stepSize = 0.01f
-                    rangeSlider4.setValues(result.result.Sa_low, result.result.Sa_high)
+                    rangeSlider4.setValues(mFormat.format(result.result.Sa_low).toFloat(), mFormat.format(result.result.Sa_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
 
@@ -240,10 +223,10 @@ class SettingFragment : Fragment() {
 
                     keyborad(num5_1, num5_2)
 
-                    rangeSlider5.valueFrom = 0f
-                    rangeSlider5.valueTo = 300f
+                    rangeSlider5.valueFrom = mFormat.format(result.result.ORP_low - 80).toFloat()
+                    rangeSlider5.valueTo = mFormat.format(result.result.ORP_high + 80).toFloat()
                     rangeSlider5.stepSize = 0.01f
-                    rangeSlider5.setValues(result.result.ORP_low, result.result.ORP_high)
+                    rangeSlider5.setValues(mFormat.format(result.result.ORP_low).toFloat(), mFormat.format(result.result.ORP_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
 
@@ -252,10 +235,10 @@ class SettingFragment : Fragment() {
 
                     keyborad(num6_1, num6_2)
 
-                    rangeSlider6.valueFrom = 0f
-                    rangeSlider6.valueTo = 40f
+                    rangeSlider6.valueFrom = mFormat.format(result.result.TUR_low - 5).toFloat()
+                    rangeSlider6.valueTo = mFormat.format(result.result.TUR_high + 10).toFloat()
                     rangeSlider6.stepSize = 0.01f
-                    rangeSlider6.setValues(result.result.TUR_low, result.result.TUR_high)
+                    rangeSlider6.setValues(mFormat.format(result.result.TUR_low).toFloat(), mFormat.format(result.result.TUR_high).toFloat())
 
                 }
             }
@@ -266,11 +249,141 @@ class SettingFragment : Fragment() {
 
         })
 
+        logout_btn.setOnClickListener {
+            call?.logout(user_key, user_token)!!.enqueue(object : Callback<logoutDTO>{
+                override fun onResponse(call: Call<logoutDTO>, response: Response<logoutDTO>) {
+                    if (response.isSuccessful){
+                        val result : logoutDTO? = response.body()
+
+                        result!!.result.user_token
+                        result.result.user_key
+                    }
+
+                }
+
+                override fun onFailure(call: Call<logoutDTO>, t: Throwable) {
+                    Log.d("logout", "${t.message}")
+                }
+
+            })
+            Loginkey.removeKey(mainActivity)
+            Loginkey.removeTokenKey(mainActivity)
+            Log.d("remove_date", "${Loginkey.getUserKey(mainActivity)}" + "\n${Loginkey.getTokenKey(mainActivity)}")
+            Toast.makeText(mainActivity, "로그아웃 성공", Toast.LENGTH_LONG).show()
+
+            // 앱 종료 후 재시작
+            val packageManager = (context as MainActivity).packageManager
+            val intent = packageManager.getLaunchIntentForPackage((context as MainActivity).packageName)
+            val componentName = intent!!.component
+            val mainIntent = Intent.makeRestartActivityTask(componentName)
+            (context as MainActivity).startActivity(mainIntent)
+            Runtime.getRuntime().exit(0)
+        }
+
+        return view
     }
 
     override fun onResume() {
 
         super.onResume()
+
+        fun change_value(){
+            call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
+
+                override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
+                    if (response.isSuccessful) {
+
+                        val result : SensorDTO? = response.body()
+                        val mFormat = DecimalFormat("0.00")
+
+                        Log.d("Sensor_value", "$result")
+
+                        // 데이터 EditText에 저장
+                        num1_1.setText(num1_1.text.toString() + result!!.result.Tc_low.toString())
+                        num1_2.setText(num1_2.text.toString() + result.result.Tc_high.toString())
+//                     키보드 입력 값을 받아오고 슬라이더 모양 변화
+                        keyborad(num1_1, num1_2)
+                        // 최대 측량 범위
+                        rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low - 10).toFloat()
+                        // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
+                        rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 10).toFloat()
+                        // 슬라이더 움직일때 조절되는 단위
+                        rangeSlider.stepSize = 0.01f
+                        // 서버에서 지정된 사용자의 min max 값 받아오기
+                        rangeSlider.setValues(mFormat.format(result.result.Tc_low).toFloat(), mFormat.format(result.result.Tc_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                        // 데이터 EditText에 저장
+                        num2_1.setText(num2_1.text.toString() + result.result.DO_low.toString())
+                        num2_2.setText(num2_2.text.toString() + result.result.DO_high.toString())
+
+                        keyborad(num2_1, num2_2)
+
+                        rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 10).toFloat()
+                        rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 10).toFloat()
+                        rangeSlider2.stepSize = 0.01f
+                        rangeSlider2.setValues(mFormat.format(result.result.DO_low).toFloat(), mFormat.format(result.result.DO_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                        // 데이터 EditText에 저장
+                        num3_1.setText(num3_1.text.toString() + result.result.pH_low.toString())
+                        num3_2.setText(num3_2.text.toString() + result.result.pH_high.toString())
+
+                        keyborad(num3_1, num3_2)
+
+                        rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 10).toFloat()
+                        rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 10).toFloat()
+                        rangeSlider3.stepSize = 0.01f
+                        rangeSlider3.setValues(mFormat.format(result.result.pH_low).toFloat(), mFormat.format(result.result.pH_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                        // 데이터 EditText에 저장
+                        num4_1.setText(num4_1.text.toString() + result.result.Sa_low.toString())
+                        num4_2.setText(num4_2.text.toString() + result.result.Sa_high.toString())
+
+                        keyborad(num4_1, num4_2)
+
+                        rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 10).toFloat()
+                        rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 10).toFloat()
+                        rangeSlider4.stepSize = 0.01f
+                        rangeSlider4.setValues(mFormat.format(result.result.Sa_low).toFloat(), mFormat.format(result.result.Sa_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                        num5_1.setText(num5_1.text.toString() + result.result.ORP_low.toString())
+                        num5_2.setText(num5_2.text.toString() + result.result.ORP_high.toString())
+
+                        keyborad(num5_1, num5_2)
+
+                        rangeSlider5.valueFrom = mFormat.format(result.result.ORP_low - 80).toFloat()
+                        rangeSlider5.valueTo = mFormat.format(result.result.ORP_high + 80).toFloat()
+                        rangeSlider5.stepSize = 0.01f
+                        rangeSlider5.setValues(mFormat.format(result.result.ORP_low).toFloat(), mFormat.format(result.result.ORP_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                        num6_1.setText(num6_1.text.toString() + result.result.TUR_low.toString())
+                        num6_2.setText(num6_2.text.toString() + result.result.TUR_high.toString())
+
+                        keyborad(num6_1, num6_2)
+
+                        rangeSlider6.valueFrom = mFormat.format(result.result.TUR_low - 5).toFloat()
+                        rangeSlider6.valueTo = mFormat.format(result.result.TUR_high + 10).toFloat()
+                        rangeSlider6.stepSize = 0.01f
+                        rangeSlider6.setValues(mFormat.format(result.result.TUR_low).toFloat(), mFormat.format(result.result.TUR_high).toFloat())
+
+                    }
+                }
+
+                override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
+                    Log.d("Sensor_value", "${t.message}")
+                }
+
+            })
+        }
 
         mainActivity = context as MainActivity
 
@@ -312,6 +425,7 @@ class SettingFragment : Fragment() {
 
                         Toast.makeText(context, "서버에 변경된 데이터를 전송했습니다", Toast.LENGTH_SHORT).show()
 
+                        change_value()
                     }
                 }
 
@@ -325,6 +439,7 @@ class SettingFragment : Fragment() {
             })
 
         }
+
 
         // 바 움직이면서 min max 값
         rangeSlider.addOnSliderTouchListener(range_Listner(num1_1, num1_2, rangeSlider))

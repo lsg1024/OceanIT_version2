@@ -1,17 +1,23 @@
 package com.example.oceanit
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
+import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
 import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.DTO.companyDTO
 import com.example.oceanit.Retrofit.Loginkey
@@ -62,6 +68,22 @@ class MainFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     lateinit var main_name : TextView
 
+    lateinit var blink_text1 : ConstraintLayout
+    lateinit var blink_text2 : TextView
+    lateinit var blink_text3 : TextView
+    lateinit var blink_text4 : TextView
+    lateinit var blink_text5 : TextView
+    lateinit var blink_text6 : TextView
+
+    lateinit var topText1 : TextView
+    lateinit var topText2 : TextView
+    lateinit var topText3 : TextView
+    lateinit var topText4 : TextView
+    lateinit var topText5 : TextView
+    lateinit var topText6 : TextView
+
+    lateinit var socket_data: Array<Sensor_data>
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +91,20 @@ class MainFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_main, container, false)
+
+        blink_text1= view.findViewById(R.id.blink_text1)
+        blink_text2  = view.findViewById(R.id.blink_text2)
+        blink_text3 = view.findViewById(R.id.blink_text3)
+        blink_text4 = view.findViewById(R.id.blink_text4)
+        blink_text5 = view.findViewById(R.id.blink_text5)
+        blink_text6 = view.findViewById(R.id.blink_text6)
+
+        topText1 = view.findViewById(R.id.textview7)
+        topText2 = view.findViewById(R.id.textview9)
+        topText3= view.findViewById(R.id.textview11)
+        topText4 = view.findViewById(R.id.textview13)
+        topText5 = view.findViewById(R.id.textview15)
+        topText6 = view.findViewById(R.id.textview17)
 
         main_name = view.findViewById(R.id.main_name)
 
@@ -141,50 +177,6 @@ class MainFragment : Fragment() {
 
         user_key = Loginkey.getUserKey(mainActivity).toInt()
 
-        try {
-            mSocket = IO.socket("")
-            Log.d("SOCKET", "Connection success : $mSocket")
-
-        } catch (e: URISyntaxException) {
-                e.printStackTrace()
-        }
-
-        mSocket.connect()
-
-        mSocket.on(Socket.EVENT_CONNECT) { arg: Array<Any?>? ->
-            mSocket.emit("join", gson.toJson(Join_Data(room = user_key)))
-            Log.d("Socket_join", "입장")
-        }
-
-        mSocket.on("sensor_update", Emitter.Listener { args ->
-
-            Log.d("Socket_on", "arg data $args")
-
-            val data = gson.fromJson(args[0].toString(), Sensor_data::class.java)
-
-            Log.d("Socket_on", "gson.fromJson ${data.pH}")
-
-
-            mainActivity.runOnUiThread(Runnable(){
-                // Stuff that updates the UI
-
-                // 소켓에서 받은 데이터를 넣는 곳
-                speedView1.realSpeedTo(data.Tc)
-
-                speedView2.realSpeedTo(data.DO)
-
-                speedView3.realSpeedTo(data.pH)
-
-                speedView4.realSpeedTo(data.Sa)
-
-                speedView5.realSpeedTo(data.ORP)
-
-                speedView6.realSpeedTo(data.TUR)
-
-            })
-
-        })
-
         return view
 
     }
@@ -201,7 +193,7 @@ class MainFragment : Fragment() {
                     Log.d("company_name", "$result")
 
                     // 회사 이름 textViewd에 넣어주기
-                    main_name.text = result!!.result.fishery
+                    main_name.text = result!!.result.company
 
                 }
             }
@@ -217,6 +209,7 @@ class MainFragment : Fragment() {
         // 사용자에게 보이는 시점에 호출된다
         call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO>{
 
+            @SuppressLint("ResourceAsColor")
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
                 if (response.isSuccessful) {
@@ -272,6 +265,111 @@ class MainFragment : Fragment() {
                     speedView6.maxSpeed = result.result.TUR_high + 5
                     speedView6.minSpeed = 0.00f
 
+                    try {
+                        mSocket = IO.socket("")
+                        Log.d("SOCKET", "Connection success : $mSocket")
+
+                    } catch (e: URISyntaxException) {
+                        e.printStackTrace()
+                    }
+
+
+                    mSocket.connect()
+
+                    mSocket.on(Socket.EVENT_CONNECT) { arg: Array<Any?>? ->
+                        mSocket.emit("join", gson.toJson(Join_Data(room = user_key)))
+                        Log.d("Socket_join", "입장 - before")
+                    }
+
+
+
+                    mSocket.on("sensor_before", Emitter.Listener { args ->
+
+                        Log.d("Socket_on", "arg before data $args")
+
+                        // 형식없는 [{ }] json 형식을 array 형태로 반환해준다
+                        socket_data = gson.fromJson(args[0].toString(), Array<Sensor_data>::class.java)
+
+                        Log.d("Socket_on", "before data ${socket_data.size}")
+                        Log.d("Socket_data[0]", "before data ${socket_data[0].Tc}")
+
+                        mainActivity.runOnUiThread(Runnable {
+                            // Stuff that updates the UI
+
+                            if (socket_data[0].Tc.toInt() > result.result.Tc_high.toInt()){
+                                blink_text1.setBackgroundResource(R.drawable.red_edge)
+                            } else if (socket_data[0].Tc.toInt() < result.result.Tc_low.toInt()) {
+                                blink_text1.setBackgroundResource(R.drawable.blue_edge)
+                            } else {
+                                blink_text1.setBackgroundResource(R.drawable.lime_edge)
+                            }
+
+                            if (socket_data[0].DO.toInt() > result.result.DO_high.toInt()){
+                                blink_text2.setBackgroundResource(R.drawable.red_edge)
+                            } else if (socket_data[0].DO.toInt() < result.result.DO_low.toInt()) {
+                                blink_text2.setBackgroundResource(R.drawable.blue_edge)
+                            } else {
+                                blink_text2.setBackgroundResource(R.drawable.lime_edge)
+                            }
+
+                            if (socket_data[0].pH.toInt() > result.result.pH_high.toInt()){
+                                blink_text3.setBackgroundResource(R.drawable.red_edge)
+                            } else if (socket_data[0].Tc.toInt() < result.result.pH_low.toInt()) {
+                                blink_text3.setBackgroundResource(R.drawable.blue_edge)
+                            } else {
+                                blink_text3.setBackgroundResource(R.drawable.lime_edge)
+                            }
+
+                            if (socket_data[0].Sa.toInt() > result.result.Sa_high.toInt()){
+                                blink_text4.setBackgroundResource(R.drawable.red_edge)
+                            } else if (socket_data[0].Tc.toInt() < result.result.Sa_low.toInt()) {
+                                blink_text4.setBackgroundResource(R.drawable.blue_edge)
+                            } else {
+                                blink_text4.setBackgroundResource(R.drawable.lime_edge)
+                            }
+
+                            if (socket_data[0].ORP.toInt() > result.result.ORP_high.toInt()){
+                                blink_text5.setBackgroundResource(R.drawable.red_edge)
+                            } else if (socket_data[0].Tc.toInt() < result.result.ORP_low.toInt()) {
+                                blink_text5.setBackgroundResource(R.drawable.blue_edge)
+                            } else {
+                                blink_text5.setBackgroundResource(R.drawable.lime_edge)
+                            }
+
+                            if (socket_data[0].TUR.toInt() > result.result.TUR_high.toInt()){
+                                blink_text6.setBackgroundResource(R.drawable.red_edge)
+                            } else if (socket_data[0].Tc.toInt() < result.result.TUR_low.toInt()) {
+                                blink_text6.setBackgroundResource(R.drawable.blue_edge)
+                            } else {
+                                blink_text6.setBackgroundResource(R.drawable.lime_edge)
+                            }
+
+                            topText1.text = socket_data[0].Tc.toString()
+                            topText2.text = socket_data[0].DO.toString()
+                            topText3.text = socket_data[0].pH.toString()
+                            topText4.text = socket_data[0].Sa.toString()
+                            topText5.text = socket_data[0].ORP.toString()
+                            topText6.text = socket_data[0].TUR.toString()
+
+                            // 소켓에서 받은 데이터를 넣는 곳
+                            speedView1.realSpeedTo(socket_data[0].Tc)
+
+                            speedView2.realSpeedTo(socket_data[0].DO)
+
+                            speedView3.realSpeedTo(socket_data[0].pH)
+
+                            speedView4.realSpeedTo(socket_data[0].Sa)
+
+                            speedView5.realSpeedTo(socket_data[0].ORP)
+
+                            speedView6.realSpeedTo(socket_data[0].TUR)
+
+                            mSocket.close()
+
+                        })
+
+                    })
+
                 }
             }
 
@@ -279,6 +377,179 @@ class MainFragment : Fragment() {
                 Log.d("progress", "${t.message}")
             }
         })
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val handler = Handler()
+        handler.postDelayed(Runnable {
+
+            call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO>{
+
+                @SuppressLint("ResourceAsColor")
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
+                    if (response.isSuccessful) {
+                        val result: SensorDTO? = response.body()
+
+                        Log.d("main_Sensor_OG", "${result!!.result}")
+
+                        // 이걸 수정하면 max min -> 서버에서 받아오기
+                        progressMaxText.text = result.result.Tc_high.toString() + "℃"
+                        progressMinText.text = result.result.Tc_low.toString() + "℃"
+
+                        // 측정되는 최소값과 최대값
+                        speedView1.maxSpeed = result.result.Tc_high + 5
+                        speedView1.minSpeed = 0.00f
+
+                        // 이걸 수정하면 max min -> 서버에서 받아오기
+                        progressMaxText2.text = result.result.DO_high.toString()
+                        progressMinText2.text = result.result.DO_low.toString()
+
+                        // 측정되는 최소값과 최대값
+                        speedView2.maxSpeed = result.result.DO_high + 5
+                        speedView2.minSpeed = 0.00f
+
+                        // 이걸 수정하면 max min -> 서버에서 받아오기
+                        progressMaxText3.text = result.result.pH_high.toString()
+                        progressMinText3.text = result.result.pH_low.toString()
+
+                        // 측정되는 최소값과 최대값
+                        speedView3.maxSpeed = result.result.pH_high + 5
+                        speedView3.minSpeed = 0.00f
+
+                        // 이걸 수정하면 max min -> 서버에서 받아오기
+                        progressMaxText4.text = result.result.Sa_high.toString()
+                        progressMinText4.text = result.result.Sa_low.toString()
+
+                        // 측정되는 최소값과 최대값
+                        speedView4.maxSpeed = result.result.Sa_high + 5
+                        speedView4.minSpeed = 0.00f
+
+                        // 이걸 수정하면 max min -> 서버에서 받아오기
+                        progressMaxText5.text = result.result.ORP_high.toString()
+                        progressMinText5.text = result.result.ORP_low.toString()
+
+                        // 측정되는 최소값과 최대값
+                        speedView5.maxSpeed = result.result.ORP_high + 50
+                        speedView5.minSpeed = result.result.ORP_low - 25
+
+                        // 이걸 수정하면 max min -> 서버에서 받아오기
+                        progressMaxText6.text = result.result.TUR_high.toString()
+                        progressMinText6.text = result.result.TUR_low.toString()
+
+                        // 측정되는 최소값과 최대값
+                        speedView6.maxSpeed = result.result.TUR_high + 5
+                        speedView6.minSpeed = 0.00f
+                    }
+                }
+                override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
+                    Log.d("progress", "${t.message}")
+                }
+            })
+
+            try {
+                mSocket = IO.socket("")
+                Log.d("SOCKET", "Connection success : $mSocket")
+
+            } catch (e: URISyntaxException) {
+                e.printStackTrace()
+            }
+
+            mSocket.connect()
+
+            mSocket.on(Socket.EVENT_CONNECT) { arg: Array<Any?>? ->
+                mSocket.emit("join", gson.toJson(Join_Data(room = user_key)))
+                Log.d("Socket_join", "입장 - update")
+            }
+
+            mSocket.on("sensor_update", Emitter.Listener { args ->
+
+            Log.d("Socket_on", "arg data $args")
+
+            val data = gson.fromJson(args[0].toString(), Sensor_data::class.java)
+
+            Log.d("Socket_on", "gson.fromJson ${data.pH}")
+
+
+            mainActivity.runOnUiThread(Runnable {
+                // Stuff that updates the UI
+
+                if (data.Tc.toInt() > speedView1.maxSpeed.toInt() ){
+                    blink_text1.setBackgroundResource(R.drawable.red_edge)
+                } else if (data.Tc.toInt() < speedView1.minSpeed.toInt()) {
+                    blink_text1.setBackgroundResource(R.drawable.blue_edge)
+                } else {
+                    blink_text1.setBackgroundResource(R.drawable.lime_edge)
+                }
+
+                if (data.DO.toInt() > speedView2.maxSpeed.toInt()){
+                    blink_text2.setBackgroundResource(R.drawable.red_edge)
+                } else if (data.DO.toInt() < speedView2.minSpeed.toInt()) {
+                    blink_text2.setBackgroundResource(R.drawable.blue_edge)
+                } else {
+                    blink_text2.setBackgroundResource(R.drawable.lime_edge)
+                }
+
+                if (data.pH.toInt() > speedView3.maxSpeed.toInt()){
+                    blink_text3.setBackgroundResource(R.drawable.red_edge)
+                } else if (data.Tc.toInt() < speedView3.minSpeed.toInt()) {
+                    blink_text3.setBackgroundResource(R.drawable.blue_edge)
+                } else {
+                    blink_text3.setBackgroundResource(R.drawable.lime_edge)
+                }
+
+                if (data.Sa.toInt() > speedView4.maxSpeed.toInt()){
+                    blink_text4.setBackgroundResource(R.drawable.red_edge)
+                } else if (data.Tc.toInt() < speedView4.minSpeed.toInt()) {
+                    blink_text4.setBackgroundResource(R.drawable.blue_edge)
+                } else {
+                    blink_text4.setBackgroundResource(R.drawable.lime_edge)
+                }
+
+                if (data.ORP.toInt() > speedView5.maxSpeed.toInt()){
+                    blink_text5.setBackgroundResource(R.drawable.red_edge)
+                } else if (data.Tc.toInt() < speedView5.minSpeed.toInt()) {
+                    blink_text5.setBackgroundResource(R.drawable.blue_edge)
+                } else {
+                    blink_text5.setBackgroundResource(R.drawable.lime_edge)
+                }
+
+                if (data.TUR.toInt() > speedView6.maxSpeed.toInt()){
+                    blink_text6.setBackgroundResource(R.drawable.red_edge)
+                } else if (data.Tc.toInt() < speedView6.minSpeed.toInt()) {
+                    blink_text6.setBackgroundResource(R.drawable.blue_edge)
+                } else {
+                    blink_text6.setBackgroundResource(R.drawable.lime_edge)
+                }
+
+                // 소켓에서 받은 데이터를 넣는 곳
+                speedView1.realSpeedTo(data.Tc)
+
+                speedView2.realSpeedTo(data.DO)
+
+                speedView3.realSpeedTo(data.pH)
+
+                speedView4.realSpeedTo(data.Sa)
+
+                speedView5.realSpeedTo(data.ORP)
+
+                speedView6.realSpeedTo(data.TUR)
+
+                topText1.text = data.Tc.toString()
+                topText2.text = data.DO.toString()
+                topText3.text = data.pH.toString()
+                topText4.text = data.Sa.toString()
+                topText5.text = data.ORP.toString()
+                topText6.text = data.TUR.toString()
+
+            })
+
+        })
+
+        }, 2000)
 
     }
 

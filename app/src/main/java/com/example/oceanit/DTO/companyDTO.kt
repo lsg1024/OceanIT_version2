@@ -8,6 +8,14 @@ data class companyDTO(
 )
 
 data class company_name(
-    @SerializedName("fishery")
-    val fishery : String
+    @SerializedName("user_key")
+    val user_key : Int,
+    @SerializedName("company")
+    val company : String,
+    @SerializedName("addr")
+    val addr : String,
+    @SerializedName("tel")
+    val tel : String,
+    @SerializedName("ceo")
+    val ceo : String
 )

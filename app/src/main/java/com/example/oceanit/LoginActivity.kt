@@ -7,6 +7,7 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.oceanit.DTO.LoginDTO
 import com.example.oceanit.DTO.LoginData
@@ -39,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
 
             // Get new FCM registration token
             token = task.result.toString()
-
             // Log
             Log.d("토큰", token)
 
@@ -63,16 +63,20 @@ class LoginActivity : AppCompatActivity() {
                             Log.d("Login_Log", "$result")
 
                             Loginkey.setUserKey(this@LoginActivity, result!!.result.user_key!!.toInt())
+                            Loginkey.setTokenKey(this@LoginActivity, token)
 
                             Log.d("Login_key", "${result.result.user_key!!.toInt()}")
+                            Log.d("setTokenKey", "${token}")
 
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
                             startActivity(intent)
                             finish()
                         }
                     }
 
                     override fun onFailure(call: Call<LoginDTO>, t: Throwable) {
+                        Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_LONG).show()
                         Log.d("Login_Log", "${t.message}")
                     }
 
@@ -83,6 +87,7 @@ class LoginActivity : AppCompatActivity() {
             Log.d("Login_key", "응답 ${Loginkey.getUserKey(this@LoginActivity)}")
 
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
             startActivity(intent)
             finish()
 
