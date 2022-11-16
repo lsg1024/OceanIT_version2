@@ -804,7 +804,7 @@
                         app:sv_startDegree="180"
                         app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
-                        app:sv_unit="pH"
+                        app:sv_unit="ph"
                         app:sv_withTremble="false">
 
                     </com.github.anastr.speedviewlib.SpeedView>
@@ -924,7 +924,7 @@
                         app:sv_startDegree="180"
                         app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
-                        app:sv_unit="mV"
+                        app:sv_unit="ppt"
                         app:sv_withTremble="false">
 
                     </com.github.anastr.speedviewlib.SpeedView>
@@ -1044,7 +1044,7 @@
                         app:sv_startDegree="180"
                         app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
-                        app:sv_unit="ppt"
+                        app:sv_unit="mV"
                         app:sv_withTremble="false">
 
                     </com.github.anastr.speedviewlib.SpeedView>
