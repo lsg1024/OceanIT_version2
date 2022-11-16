@@ -541,10 +541,10 @@
                         app:sv_minSpeed="0.00"
                         app:sv_speedTextColor="#fa5252"
                         app:sv_speedTextFormat="FLOAT"
-                        app:sv_speedTextPadding="80dp"
-                        app:sv_speedTextSize="30dp"
+                        app:sv_speedTextPadding="50dp"
+                        app:sv_speedTextSize="50dp"
                         app:sv_startDegree="180"
-                        app:sv_textSize="20dp"
+                        app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
                         app:sv_unit="℃"
                         app:sv_withTremble="false">
@@ -675,15 +675,17 @@
                         app:sv_indicatorColor="#52bafa"
                         app:sv_indicatorWidth="8dp"
                         app:sv_minSpeed="0.00"
+                        app:sv_textSize="15dp"
                         app:sv_speedTextColor="#52bafa"
                         app:sv_speedTextFormat="FLOAT"
-                        app:sv_speedTextPadding="80dp"
-                        app:sv_speedTextSize="30dp"
+                        app:sv_speedTextPadding="50dp"
+                        app:sv_speedTextSize="50dp"
                         app:sv_startDegree="180"
-                        app:sv_textSize="20dp"
                         app:sv_tickNumber="6"
                         app:sv_unit="mg/L"
-                        app:sv_withTremble="false"></com.github.anastr.speedviewlib.SpeedView>
+                        app:sv_withTremble="false">
+
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -794,15 +796,18 @@
                         app:sv_indicatorColor="#665d54"
                         app:sv_indicatorWidth="8dp"
                         app:sv_minSpeed="0.00"
+                        app:sv_unitTextSize="15dp"
                         app:sv_speedTextColor="#665d54"
                         app:sv_speedTextFormat="FLOAT"
-                        app:sv_speedTextPadding="80dp"
-                        app:sv_speedTextSize="30dp"
+                        app:sv_speedTextPadding="50dp"
+                        app:sv_speedTextSize="50dp"
                         app:sv_startDegree="180"
-                        app:sv_textSize="20dp"
+                        app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
                         app:sv_unit="pH"
-                        app:sv_withTremble="false"></com.github.anastr.speedviewlib.SpeedView>
+                        app:sv_withTremble="false">
+
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -914,13 +919,15 @@
                         app:sv_minSpeed="0.00"
                         app:sv_speedTextColor="#3c8f70"
                         app:sv_speedTextFormat="FLOAT"
-                        app:sv_speedTextPadding="80dp"
-                        app:sv_speedTextSize="30dp"
+                        app:sv_speedTextPadding="50dp"
+                        app:sv_speedTextSize="50dp"
                         app:sv_startDegree="180"
-                        app:sv_textSize="20dp"
+                        app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
                         app:sv_unit="mV"
-                        app:sv_withTremble="false"></com.github.anastr.speedviewlib.SpeedView>
+                        app:sv_withTremble="false">
+
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1032,13 +1039,15 @@
                         app:sv_minSpeed="0.00"
                         app:sv_speedTextColor="#fa9852"
                         app:sv_speedTextFormat="FLOAT"
-                        app:sv_speedTextPadding="80dp"
-                        app:sv_speedTextSize="30dp"
+                        app:sv_speedTextPadding="50dp"
+                        app:sv_speedTextSize="50dp"
                         app:sv_startDegree="180"
-                        app:sv_textSize="20dp"
+                        app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
                         app:sv_unit="ppt"
-                        app:sv_withTremble="false"></com.github.anastr.speedviewlib.SpeedView>
+                        app:sv_withTremble="false">
+
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1151,13 +1160,15 @@
                         app:sv_minSpeed="0.00"
                         app:sv_speedTextColor="#71548c"
                         app:sv_speedTextFormat="FLOAT"
-                        app:sv_speedTextPadding="80dp"
-                        app:sv_speedTextSize="30dp"
+                        app:sv_speedTextPadding="50dp"
+                        app:sv_speedTextSize="50dp"
                         app:sv_startDegree="180"
-                        app:sv_textSize="20dp"
+                        app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
-                        app:sv_unit="℃"
-                        app:sv_withTremble="false"></com.github.anastr.speedviewlib.SpeedView>
+                        app:sv_unit="TUR"
+                        app:sv_withTremble="false">
+
+                    </com.github.anastr.speedviewlib.SpeedView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

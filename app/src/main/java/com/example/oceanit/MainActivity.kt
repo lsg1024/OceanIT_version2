@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
                 2 -> {
                     tab.setIcon(R.drawable.set)
-                    tab.text = "셋팅"
+                    tab.text = "설정"
                 }
             }
         }.attach()

@@ -1,5 +1,7 @@
 package com.example.oceanit
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,13 +21,16 @@ import com.example.oceanit.Socket_File.Join_Data
 import com.example.oceanit.Socket_File.Sensor_data
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.MPPointF
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -34,6 +39,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URISyntaxException
+import java.text.DecimalFormat
 import java.util.*
 
 
@@ -146,46 +152,48 @@ class GraphFragment : Fragment() {
 
             Log.d("Socket_on", "before data ${socket_data.size}")
 
-            for (i in 0 until socket_data.size - 1) {
-
-                fun data1(): ArrayList<Entry> {
-                    dataList1.add(Entry(i.toFloat(), socket_data[i].Tc))
-                    Log.d("Socket_on2", "before data ${socket_data[i].Tc}")
-                    return dataList1
-                }
-
-                fun data2(): ArrayList<Entry> {
-                    dataList2.add(Entry(i.toFloat(), socket_data[i].DO))
-                    return dataList2
-                }
-
-                fun data3(): ArrayList<Entry> {
-                    dataList3.add(Entry(i.toFloat(), socket_data[i].pH))
-                    return dataList3
-                }
-
-                fun data4(): ArrayList<Entry> {
-                    dataList4.add(Entry(i.toFloat(), socket_data[i].Sa))
-                    return dataList4
-                }
-
-                fun data5(): ArrayList<Entry> {
-                    dataList5.add(Entry(i.toFloat(), socket_data[i].ORP))
-                    return dataList5
-                }
-
-                fun data6(): ArrayList<Entry> {
-                    dataList6.add(Entry(i.toFloat(), socket_data[i].TUR))
-                    return dataList6
-                }
-                data1()
-                data2()
-                data3()
-                data4()
-                data5()
-                data6()
+            fun data1(i: Int, j : Int): ArrayList<Entry> {
+                dataList1.add(Entry(i.toFloat(), socket_data[j].Tc))
+                Log.d("Socket_on2", "before data ${socket_data[j].Tc}")
+                return dataList1
             }
 
+            fun data2(i: Int, j : Int): ArrayList<Entry> {
+                dataList2.add(Entry(i.toFloat(), socket_data[j].DO))
+                return dataList2
+            }
+
+            fun data3(i: Int, j : Int): ArrayList<Entry> {
+                dataList3.add(Entry(i.toFloat(), socket_data[j].pH))
+                return dataList3
+            }
+
+            fun data4(i: Int, j : Int): ArrayList<Entry> {
+                dataList4.add(Entry(i.toFloat(), socket_data[j].Sa))
+                return dataList4
+            }
+
+            fun data5(i: Int, j : Int): ArrayList<Entry> {
+                dataList5.add(Entry(i.toFloat(), socket_data[j].ORP))
+                return dataList5
+            }
+
+            fun data6(i: Int, j : Int): ArrayList<Entry> {
+                dataList6.add(Entry(i.toFloat(), socket_data[j].TUR))
+                return dataList6
+            }
+
+            for (i in 0 until socket_data.size-1) {
+                val j = socket_data.size-1
+                data1(i, j-i)
+                data2(i,j-i)
+                data3(i,j-i)
+                data4(i,j-i)
+                data5(i,j-i)
+                data6(i,j-i)
+            }
+
+            Log.d("dataList1", "${dataList1.reversed()}")
 
             val lineDataSet1 = LineDataSet(dataList1, "수온")
             val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
@@ -193,6 +201,13 @@ class GraphFragment : Fragment() {
             val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
             val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
             val lineDataSet6 = LineDataSet(dataList6, "탁도(TUR)")
+
+//            val lineDataSet1 = LineDataSet(dataList1.reversed(), "수온")
+//            val lineDataSet2 = LineDataSet(dataList2.reversed(), "산소(mg/L)")
+//            val lineDataSet3 = LineDataSet(dataList3.reversed(), "pH(pH)")
+//            val lineDataSet4 = LineDataSet(dataList4.reversed(), "염도(ppt)")
+//            val lineDataSet5 = LineDataSet(dataList5.reversed(), "OPR(mV)")
+//            val lineDataSet6 = LineDataSet(dataList6.reversed(), "탁도(TUR)")
 
             mainActivity.runOnUiThread {
                 kotlin.run {
@@ -269,13 +284,13 @@ class GraphFragment : Fragment() {
             chart5.axisRight.isEnabled = false
             yAxis.enableGridDashedLine(10f, 10f, 0f)
             // axis range
-            yAxis.axisMaximum = 400f
-            yAxis.axisMinimum = 0f
+            yAxis.axisMaximum = 500f
+            yAxis.axisMinimum = 100f
             val yAxis2: YAxis = chart6.axisLeft
             chart5.axisRight.isEnabled = false
             yAxis2.enableGridDashedLine(10f, 10f, 0f)
             // axis range
-            yAxis2.axisMaximum = 20f
+            yAxis2.axisMaximum = 6000f
             yAxis2.axisMinimum = 0f
 
             mSocket.close()
@@ -347,46 +362,76 @@ class GraphFragment : Fragment() {
                                 Log.d("Socket_on", "before data ${socket_data.size}")
                                 Log.d("Socket_on_date", "before data ${socket_data[0].date}")
 
-                                fun data1(i: Int): ArrayList<Entry> {
-                                    dataList1.add(Entry(i.toFloat(), socket_data[i].Tc))
-                                    Log.d("Socket_on2", "before data ${socket_data[i].Tc}")
+                                fun data1(i: Int, j : Int): ArrayList<Entry> {
+                                    dataList1.add(Entry(i.toFloat(), socket_data[j].Tc))
+                                    Log.d("Socket_on2", "before data ${socket_data[j].Tc}")
                                     return dataList1
                                 }
 
-                                fun data2(i: Int): ArrayList<Entry> {
-                                    dataList2.add(Entry(i.toFloat(), socket_data[i].DO))
+                                fun data2(i: Int, j : Int): ArrayList<Entry> {
+                                    dataList2.add(Entry(i.toFloat(), socket_data[j].DO))
                                     return dataList2
                                 }
 
-                                fun data3(i: Int): ArrayList<Entry> {
-                                    dataList3.add(Entry(i.toFloat(), socket_data[i].pH))
+                                fun data3(i: Int, j : Int): ArrayList<Entry> {
+                                    dataList3.add(Entry(i.toFloat(), socket_data[j].pH))
                                     return dataList3
                                 }
 
-                                fun data4(i: Int): ArrayList<Entry> {
-                                    dataList4.add(Entry(i.toFloat(), socket_data[i].Sa))
+                                fun data4(i: Int, j : Int): ArrayList<Entry> {
+                                    dataList4.add(Entry(i.toFloat(), socket_data[j].Sa))
                                     return dataList4
                                 }
 
-                                fun data5(i: Int): ArrayList<Entry> {
-                                    dataList5.add(Entry(i.toFloat(), socket_data[i].ORP))
+                                fun data5(i: Int, j : Int): ArrayList<Entry> {
+                                    dataList5.add(Entry(i.toFloat(), socket_data[j].ORP))
                                     return dataList5
                                 }
 
-                                fun data6(i: Int): ArrayList<Entry> {
-                                    dataList6.add(Entry(i.toFloat(), socket_data[i].TUR))
+                                fun data6(i: Int, j : Int): ArrayList<Entry> {
+                                    dataList6.add(Entry(i.toFloat(), socket_data[j].TUR))
                                     return dataList6
                                 }
 
-                                for (i in 0 until socket_data.size - 1) {
+                                val marker = MyMarkerView(mainActivity, R.layout.custom_marker_view)
+                                marker.chartView = chart
+                                chart.setMarker(marker)
 
-                                    data1(i)
-                                    data2(i)
-                                    data3(i)
-                                    data4(i)
-                                    data5(i)
-                                    data6(i)
+                                marker.chartView = chart2
+                                chart2.setMarker(marker)
+
+                                marker.chartView = chart3
+                                chart3.setMarker(marker)
+
+                                marker.chartView = chart4
+                                chart4.setMarker(marker)
+
+                                marker.chartView = chart5
+                                chart5.setMarker(marker)
+
+                                marker.chartView = chart6
+                                chart6.setMarker(marker)
+
+                                for (i in 0 until socket_data.size-1) {
+                                    val j = socket_data.size-1
+                                    data1(i, j-i)
+                                    data2(i,j-i)
+                                    data3(i,j-i)
+                                    data4(i,j-i)
+                                    data5(i,j-i)
+                                    data6(i,j-i)
+//                                    day_date(chart, i)
+//                                    mv.setChartView(socket_data[i].date)
                                 }
+
+//                                val labels = ArrayList<String>()
+//                                for (i in 0 until dataList1.size) {
+//                                    labels.add(dateList[i])
+//                                }
+
+
+
+//                                chart.setMarker(mv)
 
                                 val lineDataSet1 = LineDataSet(dataList1, "수온")
                                 val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
@@ -394,6 +439,13 @@ class GraphFragment : Fragment() {
                                 val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
                                 val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
                                 val lineDataSet6 = LineDataSet(dataList6, "탁도(TUR)")
+
+//                                val lineDataSet1 = LineDataSet(dataList1.reversed(), "수온")
+//                                val lineDataSet2 = LineDataSet(dataList2.reversed(), "산소(mg/L)")
+//                                val lineDataSet3 = LineDataSet(dataList3.reversed(), "pH(pH)")
+//                                val lineDataSet4 = LineDataSet(dataList4.reversed(), "염도(ppt)")
+//                                val lineDataSet5 = LineDataSet(dataList5.reversed(), "OPR(mV)")
+//                                val lineDataSet6 = LineDataSet(dataList6.reversed(), "탁도(TUR)")
 
                                 //1. 데이터 셋 만들기
                                 createSet(lineDataSet1)
@@ -508,17 +560,8 @@ class GraphFragment : Fragment() {
                                 chart5.axisRight.isEnabled = false
                                 yAxis2.enableGridDashedLine(10f, 10f, 0f)
                                 // axis range
-                                yAxis2.axisMaximum = 20f
-                                yAxis2.axisMinimum = -5f
-
-                                class ScoreCustomFormatter : ValueFormatter() {
-                                    override fun getFormattedValue(value: Float): String {
-
-                                        val date = socket_data[0].date
-                                        Log.d("data_socket", "${socket_data[0].date}")
-                                        return date[0].toString()
-                                    }
-                                }
+                                yAxis2.axisMaximum = 6000f
+                                yAxis2.axisMinimum = 0f
 
                             })
                         })
@@ -536,6 +579,7 @@ class GraphFragment : Fragment() {
                         chart4.invalidate()
                         chart5.invalidate()
                         chart6.invalidate()
+                        chart.onTouchListener
 
                     }, 2000)
                 }
@@ -549,6 +593,38 @@ class GraphFragment : Fragment() {
             }
 
         })
+
+    }
+
+    @SuppressLint("ViewConstructor")
+    inner class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context, layoutResource) {
+        private val tvContent: TextView = findViewById(R.id.tvContent)
+
+
+        // runs every time the MarkerView is redrawn, can be used to update the
+        // content (user-interface)
+        override fun refreshContent(e: Entry, highlight: Highlight) {
+
+            val mFormat = DecimalFormat("0")
+
+            if (e is CandleEntry) {
+                tvContent.text = "17"
+
+            } else {
+
+                for (i in (mFormat.format(e.x).toInt()) until socket_data.size){
+
+                    val j = socket_data.size - 1
+                    tvContent.text = "${(socket_data[j - mFormat.format(e.x).toInt()].date)}"
+                }
+
+            }
+            super.refreshContent(e, highlight)
+        }
+
+        override fun getOffset(): MPPointF {
+            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
+        }
 
     }
 
@@ -570,8 +646,8 @@ class GraphFragment : Fragment() {
         // horizontal grid lines
         yAxis.enableGridDashedLine(10f, 10f, 0f)
         // axis range
-        yAxis.axisMaximum = 50f
-        yAxis.axisMinimum = 0f
+        yAxis.axisMaximum = 40f
+        yAxis.axisMinimum = -10f
 
     }
 
@@ -593,7 +669,8 @@ class GraphFragment : Fragment() {
         set_chart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             setDrawGridLines(false)
-
+            axisMaximum = 18.5f
+            axisMinimum = -0.5f
 
         }
 
@@ -622,20 +699,6 @@ class GraphFragment : Fragment() {
         }
         return set
     }
-
-
-//    class TimeAxisValueFormat : IndexAxisValueFormatter() {
-//
-//        override fun getFormattedValue(value: Float): String {
-//
-//            // Float(min) -> Date
-//            var valueToMinutes = TimeUnit.MINUTES.toMillis(value.toLong())
-//            var timeMimutes = Date(valueToMinutes)
-//            var formatMinutes = SimpleDateFormat("HH:mm")
-//
-//            return formatMinutes.format(timeMimutes)
-//        }
-//    }
 
     // Fragment 새로고침
     fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {

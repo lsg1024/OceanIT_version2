@@ -216,57 +216,68 @@ class MainFragment : Fragment() {
                     val result : SensorDTO? = response.body()
 
                     Log.d("main_Sensor_OG", "${result!!.result}")
-
+                    var value_number : Float = 0f
+                    fun value_num(max : Float, min : Float): Float {
+                        value_number = max - min
+                        value_number /= 3
+                        return value_number
+                    }
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText.text = result.result.Tc_high.toString() + "℃"
                     progressMinText.text = result.result.Tc_low.toString() + "℃"
 
+                    value_num(result.result.Tc_high , result.result.Tc_low)
                     // 측정되는 최소값과 최대값
-                    speedView1.maxSpeed = result.result.Tc_high + 5
-                    speedView1.minSpeed = 0.00f
+                    speedView1.maxSpeed = result.result.Tc_high + value_number
+                    speedView1.minSpeed = result.result.Tc_low - value_number
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText2.text = result.result.DO_high.toString()
                     progressMinText2.text = result.result.DO_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    speedView2.maxSpeed = result.result.DO_high + 5
-                    speedView2.minSpeed = 0.00f
+                    value_num(result.result.DO_high,result.result.DO_low)
+                    speedView2.maxSpeed = result.result.DO_high + value_number
+                    speedView2.minSpeed = result.result.DO_low - value_number
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText3.text = result.result.pH_high.toString()
                     progressMinText3.text = result.result.pH_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    speedView3.maxSpeed = result.result.pH_high + 5
-                    speedView3.minSpeed = 0.00f
+                    value_num(result.result.pH_high, result.result.pH_low)
+                    speedView3.maxSpeed = result.result.pH_high + value_number
+                    speedView3.minSpeed = result.result.pH_low - value_number
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText4.text = result.result.Sa_high.toString()
                     progressMinText4.text = result.result.Sa_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    speedView4.maxSpeed = result.result.Sa_high + 5
-                    speedView4.minSpeed = 0.00f
+                    value_num(result.result.Sa_high,result.result.Sa_low)
+                    speedView4.maxSpeed = result.result.Sa_high + value_number
+                    speedView4.minSpeed = result.result.Sa_low - value_number
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText5.text = result.result.ORP_high.toString()
                     progressMinText5.text = result.result.ORP_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    speedView5.maxSpeed = result.result.ORP_high + 50
-                    speedView5.minSpeed = result.result.ORP_low - 25
+                    value_num(result.result.ORP_high, result.result.ORP_low)
+                    speedView5.maxSpeed = result.result.ORP_high + value_number
+                    speedView5.minSpeed = result.result.ORP_low - value_number
 
                     // 이걸 수정하면 max min -> 서버에서 받아오기
                     progressMaxText6.text = result.result.TUR_high.toString()
                     progressMinText6.text = result.result.TUR_low.toString()
 
                     // 측정되는 최소값과 최대값
-                    speedView6.maxSpeed = result.result.TUR_high + 5
-                    speedView6.minSpeed = 0.00f
+                    value_num(result.result.TUR_high, result.result.TUR_low)
+                    speedView6.maxSpeed = result.result.TUR_high + value_number
+                    speedView6.minSpeed = result.result.TUR_low - value_number
 
                     try {
-                        mSocket = IO.socket("")
+                        mSocket = IO.socket("http://211.184.227.81:8500")
                         Log.d("SOCKET", "Connection success : $mSocket")
 
                     } catch (e: URISyntaxException) {
@@ -314,7 +325,7 @@ class MainFragment : Fragment() {
 
                             if (socket_data[0].pH.toInt() > result.result.pH_high.toInt()){
                                 blink_text3.setBackgroundResource(R.drawable.red_edge)
-                            } else if (socket_data[0].Tc.toInt() < result.result.pH_low.toInt()) {
+                            } else if (socket_data[0].pH.toInt() < result.result.pH_low.toInt()) {
                                 blink_text3.setBackgroundResource(R.drawable.blue_edge)
                             } else {
                                 blink_text3.setBackgroundResource(R.drawable.lime_edge)
@@ -322,7 +333,7 @@ class MainFragment : Fragment() {
 
                             if (socket_data[0].Sa.toInt() > result.result.Sa_high.toInt()){
                                 blink_text4.setBackgroundResource(R.drawable.red_edge)
-                            } else if (socket_data[0].Tc.toInt() < result.result.Sa_low.toInt()) {
+                            } else if (socket_data[0].Sa.toInt() < result.result.Sa_low.toInt()) {
                                 blink_text4.setBackgroundResource(R.drawable.blue_edge)
                             } else {
                                 blink_text4.setBackgroundResource(R.drawable.lime_edge)
@@ -330,7 +341,7 @@ class MainFragment : Fragment() {
 
                             if (socket_data[0].ORP.toInt() > result.result.ORP_high.toInt()){
                                 blink_text5.setBackgroundResource(R.drawable.red_edge)
-                            } else if (socket_data[0].Tc.toInt() < result.result.ORP_low.toInt()) {
+                            } else if (socket_data[0].ORP.toInt() < result.result.ORP_low.toInt()) {
                                 blink_text5.setBackgroundResource(R.drawable.blue_edge)
                             } else {
                                 blink_text5.setBackgroundResource(R.drawable.lime_edge)
@@ -338,7 +349,7 @@ class MainFragment : Fragment() {
 
                             if (socket_data[0].TUR.toInt() > result.result.TUR_high.toInt()){
                                 blink_text6.setBackgroundResource(R.drawable.red_edge)
-                            } else if (socket_data[0].Tc.toInt() < result.result.TUR_low.toInt()) {
+                            } else if (socket_data[0].TUR.toInt() < result.result.TUR_low.toInt()) {
                                 blink_text6.setBackgroundResource(R.drawable.blue_edge)
                             } else {
                                 blink_text6.setBackgroundResource(R.drawable.lime_edge)
@@ -396,53 +407,65 @@ class MainFragment : Fragment() {
 
                         Log.d("main_Sensor_OG", "${result!!.result}")
 
+                        var value_number : Float = 0f
+                        fun value_num(max : Float, min : Float): Float {
+                            value_number = max - min
+                            value_number /= 3
+                            return value_number
+                        }
                         // 이걸 수정하면 max min -> 서버에서 받아오기
                         progressMaxText.text = result.result.Tc_high.toString() + "℃"
                         progressMinText.text = result.result.Tc_low.toString() + "℃"
 
+                        value_num(result.result.Tc_high , result.result.Tc_low)
                         // 측정되는 최소값과 최대값
-                        speedView1.maxSpeed = result.result.Tc_high + 5
-                        speedView1.minSpeed = 0.00f
+                        speedView1.maxSpeed = result.result.Tc_high + value_number
+                        speedView1.minSpeed = result.result.Tc_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
                         progressMaxText2.text = result.result.DO_high.toString()
                         progressMinText2.text = result.result.DO_low.toString()
 
                         // 측정되는 최소값과 최대값
-                        speedView2.maxSpeed = result.result.DO_high + 5
-                        speedView2.minSpeed = 0.00f
+                        value_num(result.result.DO_high,result.result.DO_low)
+                        speedView2.maxSpeed = result.result.DO_high + value_number
+                        speedView2.minSpeed = result.result.DO_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
                         progressMaxText3.text = result.result.pH_high.toString()
                         progressMinText3.text = result.result.pH_low.toString()
 
                         // 측정되는 최소값과 최대값
-                        speedView3.maxSpeed = result.result.pH_high + 5
-                        speedView3.minSpeed = 0.00f
+                        value_num(result.result.pH_high, result.result.pH_low)
+                        speedView3.maxSpeed = result.result.pH_high + value_number
+                        speedView3.minSpeed = result.result.pH_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
                         progressMaxText4.text = result.result.Sa_high.toString()
                         progressMinText4.text = result.result.Sa_low.toString()
 
                         // 측정되는 최소값과 최대값
-                        speedView4.maxSpeed = result.result.Sa_high + 5
-                        speedView4.minSpeed = 0.00f
+                        value_num(result.result.Sa_high,result.result.Sa_low)
+                        speedView4.maxSpeed = result.result.Sa_high + value_number
+                        speedView4.minSpeed = result.result.Sa_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
                         progressMaxText5.text = result.result.ORP_high.toString()
                         progressMinText5.text = result.result.ORP_low.toString()
 
                         // 측정되는 최소값과 최대값
-                        speedView5.maxSpeed = result.result.ORP_high + 50
-                        speedView5.minSpeed = result.result.ORP_low - 25
+                        value_num(result.result.ORP_high, result.result.ORP_low)
+                        speedView5.maxSpeed = result.result.ORP_high + value_number
+                        speedView5.minSpeed = result.result.ORP_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
                         progressMaxText6.text = result.result.TUR_high.toString()
                         progressMinText6.text = result.result.TUR_low.toString()
 
                         // 측정되는 최소값과 최대값
-                        speedView6.maxSpeed = result.result.TUR_high + 5
-                        speedView6.minSpeed = 0.00f
+                        value_num(result.result.TUR_high, result.result.TUR_low)
+                        speedView6.maxSpeed = result.result.TUR_high + value_number
+                        speedView6.minSpeed = result.result.TUR_low - value_number
                     }
                 }
                 override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
@@ -495,7 +518,7 @@ class MainFragment : Fragment() {
 
                 if (data.pH.toInt() > speedView3.maxSpeed.toInt()){
                     blink_text3.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.Tc.toInt() < speedView3.minSpeed.toInt()) {
+                } else if (data.pH.toInt() < speedView3.minSpeed.toInt()) {
                     blink_text3.setBackgroundResource(R.drawable.blue_edge)
                 } else {
                     blink_text3.setBackgroundResource(R.drawable.lime_edge)
@@ -503,7 +526,7 @@ class MainFragment : Fragment() {
 
                 if (data.Sa.toInt() > speedView4.maxSpeed.toInt()){
                     blink_text4.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.Tc.toInt() < speedView4.minSpeed.toInt()) {
+                } else if (data.Sa.toInt() < speedView4.minSpeed.toInt()) {
                     blink_text4.setBackgroundResource(R.drawable.blue_edge)
                 } else {
                     blink_text4.setBackgroundResource(R.drawable.lime_edge)
@@ -511,7 +534,7 @@ class MainFragment : Fragment() {
 
                 if (data.ORP.toInt() > speedView5.maxSpeed.toInt()){
                     blink_text5.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.Tc.toInt() < speedView5.minSpeed.toInt()) {
+                } else if (data.ORP.toInt() < speedView5.minSpeed.toInt()) {
                     blink_text5.setBackgroundResource(R.drawable.blue_edge)
                 } else {
                     blink_text5.setBackgroundResource(R.drawable.lime_edge)
@@ -519,7 +542,7 @@ class MainFragment : Fragment() {
 
                 if (data.TUR.toInt() > speedView6.maxSpeed.toInt()){
                     blink_text6.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.Tc.toInt() < speedView6.minSpeed.toInt()) {
+                } else if (data.TUR.toInt() < speedView6.minSpeed.toInt()) {
                     blink_text6.setBackgroundResource(R.drawable.blue_edge)
                 } else {
                     blink_text6.setBackgroundResource(R.drawable.lime_edge)
