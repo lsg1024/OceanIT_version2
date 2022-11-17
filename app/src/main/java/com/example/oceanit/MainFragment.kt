@@ -34,6 +34,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URISyntaxException
+import kotlin.math.ceil
 
 
 class MainFragment : Fragment() {
@@ -277,7 +278,7 @@ class MainFragment : Fragment() {
                     speedView6.minSpeed = result.result.TUR_low - value_number
 
                     try {
-                        mSocket = IO.socket("http://211.184.227.81:8500")
+                        mSocket = IO.socket("")
                         Log.d("SOCKET", "Connection success : $mSocket")
 
                     } catch (e: URISyntaxException) {
@@ -407,42 +408,50 @@ class MainFragment : Fragment() {
 
                         Log.d("main_Sensor_OG", "${result!!.result}")
 
-                        var value_number : Float = 0f
+                        var value_number = 0f
                         fun value_num(max : Float, min : Float): Float {
-                            value_number = max - min
-                            value_number /= 3
+                            if (max != 0F && min != 0f){
+                                value_number = max - (min*min)/min
+                                value_number /= 3
+                                Log.d("value_number", "$value_number")
+                            } else {
+                                value_number = max - (min*min)/1
+                                value_number /= 3
+                            }
+
                             return value_number
                         }
                         // 이걸 수정하면 max min -> 서버에서 받아오기
                         progressMaxText.text = result.result.Tc_high.toString() + "℃"
                         progressMinText.text = result.result.Tc_low.toString() + "℃"
 
-                        value_num(result.result.Tc_high , result.result.Tc_low)
+                        value_num(result.result.Tc_high, result.result.Tc_low)
                         // 측정되는 최소값과 최대값
                         speedView1.maxSpeed = result.result.Tc_high + value_number
                         speedView1.minSpeed = result.result.Tc_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
-                        progressMaxText2.text = result.result.DO_high.toString()
-                        progressMinText2.text = result.result.DO_low.toString()
+                        progressMaxText2.text = result.result.DO_high.toString() + "mg/L"
+                        progressMinText2.text = result.result.DO_low.toString() + "mg/L"
 
                         // 측정되는 최소값과 최대값
                         value_num(result.result.DO_high,result.result.DO_low)
                         speedView2.maxSpeed = result.result.DO_high + value_number
                         speedView2.minSpeed = result.result.DO_low - value_number
 
+
                         // 이걸 수정하면 max min -> 서버에서 받아오기
-                        progressMaxText3.text = result.result.pH_high.toString()
-                        progressMinText3.text = result.result.pH_low.toString()
+                        progressMaxText3.text = result.result.pH_high.toString() + "ph"
+                        progressMinText3.text = result.result.pH_low.toString() + "ph"
 
                         // 측정되는 최소값과 최대값
-                        value_num(result.result.pH_high, result.result.pH_low)
+                        value_num(result.result.pH_high,result.result.pH_low)
                         speedView3.maxSpeed = result.result.pH_high + value_number
                         speedView3.minSpeed = result.result.pH_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
-                        progressMaxText4.text = result.result.Sa_high.toString()
-                        progressMinText4.text = result.result.Sa_low.toString()
+                        progressMaxText4.text = result.result.Sa_high.toString() + "ppt"
+                        progressMinText4.text = result.result.Sa_low.toString() + "ppt"
 
                         // 측정되는 최소값과 최대값
                         value_num(result.result.Sa_high,result.result.Sa_low)
@@ -450,17 +459,17 @@ class MainFragment : Fragment() {
                         speedView4.minSpeed = result.result.Sa_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
-                        progressMaxText5.text = result.result.ORP_high.toString()
-                        progressMinText5.text = result.result.ORP_low.toString()
+                        progressMaxText5.text = result.result.ORP_high.toString() + "mV"
+                        progressMinText5.text = result.result.ORP_low.toString() + "mV"
 
                         // 측정되는 최소값과 최대값
-                        value_num(result.result.ORP_high, result.result.ORP_low)
+                        value_num(result.result.ORP_high,result.result.ORP_low)
                         speedView5.maxSpeed = result.result.ORP_high + value_number
                         speedView5.minSpeed = result.result.ORP_low - value_number
 
                         // 이걸 수정하면 max min -> 서버에서 받아오기
-                        progressMaxText6.text = result.result.TUR_high.toString()
-                        progressMinText6.text = result.result.TUR_low.toString()
+                        progressMaxText6.text = result.result.TUR_high.toString() + "NTU"
+                        progressMinText6.text = result.result.TUR_low.toString()+ "NTU"
 
                         // 측정되는 최소값과 최대값
                         value_num(result.result.TUR_high, result.result.TUR_low)

@@ -168,11 +168,11 @@ class SettingFragment : Fragment() {
                     keyborad(num1_1)
                     keyborad(num1_2)
                     // 최대 측량 범위
-                    rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low - 30).toFloat()
+                    rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low).toFloat() - 10
                     // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
-                    rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 30).toFloat()
+                    rangeSlider.valueTo = mFormat.format(result!!.result.Tc_high).toFloat() + 10
                     // 슬라이더 움직일때 조절되는 단위
-                    rangeSlider.stepSize = 0.01f
+                    rangeSlider.stepSize = 0f
                     // 서버에서 지정된 사용자의 min max 값 받아오기
                     rangeSlider.setValues(mFormat.format(result.result.Tc_low).toFloat(), mFormat.format(result.result.Tc_high).toFloat())
 
@@ -185,9 +185,9 @@ class SettingFragment : Fragment() {
                     keyborad(num2_1)
                     keyborad(num2_2)
 
-                    rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 30).toFloat()
-                    rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 30).toFloat()
-                    rangeSlider2.stepSize = 0.01f
+                    rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 10).toFloat()
+                    rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 10).toFloat()
+                    rangeSlider2.stepSize = 0f
                     rangeSlider2.setValues(mFormat.format(result.result.DO_low).toFloat(), mFormat.format(result.result.DO_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -199,9 +199,9 @@ class SettingFragment : Fragment() {
                     keyborad(num3_1)
                     keyborad(num3_2)
 
-                    rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 30).toFloat()
-                    rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 30).toFloat()
-                    rangeSlider3.stepSize = 0.01f
+                    rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 10).toFloat()
+                    rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 10).toFloat()
+                    rangeSlider3.stepSize = 0f
                     rangeSlider3.setValues(mFormat.format(result.result.pH_low).toFloat(), mFormat.format(result.result.pH_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -213,9 +213,9 @@ class SettingFragment : Fragment() {
                     keyborad(num4_1)
                     keyborad(num4_2)
 
-                    rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 30).toFloat()
-                    rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 30).toFloat()
-                    rangeSlider4.stepSize = 0.01f
+                    rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 10).toFloat()
+                    rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 10).toFloat()
+                    rangeSlider4.stepSize = 0f
                     rangeSlider4.setValues(mFormat.format(result.result.Sa_low).toFloat(), mFormat.format(result.result.Sa_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -228,7 +228,7 @@ class SettingFragment : Fragment() {
 
                     rangeSlider5.valueFrom = mFormat.format(result.result.ORP_low - 100).toFloat()
                     rangeSlider5.valueTo = mFormat.format(result.result.ORP_high + 100).toFloat()
-                    rangeSlider5.stepSize = 0.01f
+                    rangeSlider5.stepSize = 0f
                     rangeSlider5.setValues(mFormat.format(result.result.ORP_low).toFloat(), mFormat.format(result.result.ORP_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -241,7 +241,7 @@ class SettingFragment : Fragment() {
 
                     rangeSlider6.valueFrom = mFormat.format(result.result.TUR_low - 500).toFloat()
                     rangeSlider6.valueTo = mFormat.format(result.result.TUR_high + 500).toFloat()
-                    rangeSlider6.stepSize = 0.01f
+                    rangeSlider6.stepSize = 0f
                     rangeSlider6.setValues(mFormat.format(result.result.TUR_low).toFloat(), mFormat.format(result.result.TUR_high).toFloat())
 
                 }
@@ -304,7 +304,7 @@ class SettingFragment : Fragment() {
 
                         val result : SensorDTO? = response.body()
 
-                        // 이유는 알 수 없지만 String format을 이용하면 seekbar가 터진다
+                        // 이유는 알 수 없지만 String format을 이용하면 seekbar 소수점 표시 가능
                         val mFormat = DecimalFormat("#.##")
 
                         Log.d("Sensor_value", "$result")
@@ -316,11 +316,11 @@ class SettingFragment : Fragment() {
                         keyborad(num1_1)
                         keyborad(num1_2)
                         // 최대 측량 범위
-                        rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low - 30).toFloat()
+                        rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low - 10).toFloat()
                         // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
-                        rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 30).toFloat()
+                        rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 10).toFloat()
                         // 슬라이더 움직일때 조절되는 단위
-                        rangeSlider.stepSize = 0.01f
+                        rangeSlider.stepSize = 0f
                         // 서버에서 지정된 사용자의 min max 값 받아오기
                         rangeSlider.setValues(mFormat.format(result.result.Tc_low).toFloat(), mFormat.format(result.result.Tc_high).toFloat())
 
@@ -333,9 +333,9 @@ class SettingFragment : Fragment() {
                         keyborad(num2_1)
                         keyborad(num2_2)
 
-                        rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 30).toFloat()
-                        rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 30).toFloat()
-                        rangeSlider2.stepSize = 0.01f
+                        rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 10).toFloat()
+                        rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 10).toFloat()
+                        rangeSlider2.stepSize = 0f
                         rangeSlider2.setValues(mFormat.format(result.result.DO_low).toFloat(), mFormat.format(result.result.DO_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -347,9 +347,9 @@ class SettingFragment : Fragment() {
                         keyborad(num3_1)
                         keyborad(num3_2)
 
-                        rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 30).toFloat()
-                        rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 30).toFloat()
-                        rangeSlider3.stepSize = 0.01f
+                        rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 10).toFloat()
+                        rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 10).toFloat()
+                        rangeSlider3.stepSize = 0f
                         rangeSlider3.setValues(mFormat.format(result.result.pH_low).toFloat(), mFormat.format(result.result.pH_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -361,9 +361,9 @@ class SettingFragment : Fragment() {
                         keyborad(num4_1)
                         keyborad(num4_2)
 
-                        rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 30).toFloat()
-                        rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 30).toFloat()
-                        rangeSlider4.stepSize = 0.01f
+                        rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 10).toFloat()
+                        rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 10).toFloat()
+                        rangeSlider4.stepSize = 0f
                         rangeSlider4.setValues(mFormat.format(result.result.Sa_low).toFloat(), mFormat.format(result.result.Sa_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -374,9 +374,9 @@ class SettingFragment : Fragment() {
                         keyborad(num5_1)
                         keyborad(num5_2)
 
-                        rangeSlider5.valueFrom = mFormat.format(result.result.ORP_low - 200).toFloat()
-                        rangeSlider5.valueTo = mFormat.format(result.result.ORP_high + 200).toFloat()
-                        rangeSlider5.stepSize = 0.01f
+                        rangeSlider5.valueFrom = mFormat.format(result.result.ORP_low - 100).toFloat()
+                        rangeSlider5.valueTo = mFormat.format(result.result.ORP_high + 100).toFloat()
+                        rangeSlider5.stepSize = 0f
                         rangeSlider5.setValues(mFormat.format(result.result.ORP_low).toFloat(), mFormat.format(result.result.ORP_high).toFloat())
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -389,7 +389,7 @@ class SettingFragment : Fragment() {
 
                         rangeSlider6.valueFrom = mFormat.format(result.result.TUR_low - 500).toFloat()
                         rangeSlider6.valueTo = mFormat.format(result.result.TUR_high + 500).toFloat()
-                        rangeSlider6.stepSize = 0.01f
+                        rangeSlider6.stepSize = 0f
                         rangeSlider6.setValues(mFormat.format(result.result.TUR_low).toFloat(), mFormat.format(result.result.TUR_high).toFloat())
 
                     }

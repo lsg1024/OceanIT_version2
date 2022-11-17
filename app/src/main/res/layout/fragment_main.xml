@@ -1165,7 +1165,7 @@
                         app:sv_startDegree="180"
                         app:sv_textSize="15dp"
                         app:sv_tickNumber="6"
-                        app:sv_unit="TUR"
+                        app:sv_unit="NTU"
                         app:sv_withTremble="false">
 
                     </com.github.anastr.speedviewlib.SpeedView>
