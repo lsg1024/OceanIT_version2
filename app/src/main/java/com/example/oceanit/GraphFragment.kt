@@ -129,7 +129,7 @@ class GraphFragment : Fragment() {
         val dataList6 = ArrayList<Entry>()
 
         try {
-            mSocket = IO.socket("")
+            mSocket = IO.socket("http://211.184.227.81:8500")
             Log.d("SOCKET", "Connection success : $mSocket")
 
         } catch (e: URISyntaxException) {
@@ -201,13 +201,6 @@ class GraphFragment : Fragment() {
             val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
             val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
             val lineDataSet6 = LineDataSet(dataList6, "탁도(TUR)")
-
-//            val lineDataSet1 = LineDataSet(dataList1.reversed(), "수온")
-//            val lineDataSet2 = LineDataSet(dataList2.reversed(), "산소(mg/L)")
-//            val lineDataSet3 = LineDataSet(dataList3.reversed(), "pH(pH)")
-//            val lineDataSet4 = LineDataSet(dataList4.reversed(), "염도(ppt)")
-//            val lineDataSet5 = LineDataSet(dataList5.reversed(), "OPR(mV)")
-//            val lineDataSet6 = LineDataSet(dataList6.reversed(), "탁도(TUR)")
 
             mainActivity.runOnUiThread {
                 kotlin.run {
@@ -335,7 +328,7 @@ class GraphFragment : Fragment() {
                         mainActivity.runOnUiThread(Runnable {
 
                             try {
-                                mSocket = IO.socket("")
+                                mSocket = IO.socket("http://211.184.227.81:8500")
                                 Log.d("SOCKET", "Connection success : $mSocket")
 
                             } catch (e: URISyntaxException) {

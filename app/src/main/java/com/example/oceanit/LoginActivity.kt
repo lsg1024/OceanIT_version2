@@ -36,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
             if (!task.isSuccessful) {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
+            } else {
+                Log.d("token_error", "token_error")
             }
 
             // Get new FCM registration token

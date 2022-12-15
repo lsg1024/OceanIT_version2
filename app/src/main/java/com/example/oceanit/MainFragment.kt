@@ -278,7 +278,7 @@ class MainFragment : Fragment() {
                     speedView6.minSpeed = result.result.TUR_low - value_number
 
                     try {
-                        mSocket = IO.socket("")
+                        mSocket = IO.socket("http://211.184.227.81:8500")
                         Log.d("SOCKET", "Connection success : $mSocket")
 
                     } catch (e: URISyntaxException) {
@@ -483,7 +483,7 @@ class MainFragment : Fragment() {
             })
 
             try {
-                mSocket = IO.socket("")
+                mSocket = IO.socket("http://211.184.227.81:8500")
                 Log.d("SOCKET", "Connection success : $mSocket")
 
             } catch (e: URISyntaxException) {
@@ -499,14 +499,14 @@ class MainFragment : Fragment() {
 
             mSocket.on("sensor_update", Emitter.Listener { args ->
 
-            Log.d("Socket_on", "arg data $args")
-
-            val data = gson.fromJson(args[0].toString(), Sensor_data::class.java)
-
-            Log.d("Socket_on", "gson.fromJson ${data.pH}")
+                Log.d("Socket_on", "arg data $args")
 
 
-            mainActivity.runOnUiThread(Runnable {
+                val data = gson.fromJson(args[0].toString(), Sensor_data::class.java)
+
+                Log.d("Socket_on", "gson.fromJson ${data.pH}")
+
+                mainActivity.runOnUiThread(Runnable {
                 // Stuff that updates the UI
 
                 if (data.Tc.toInt() > speedView1.maxSpeed.toInt() ){
