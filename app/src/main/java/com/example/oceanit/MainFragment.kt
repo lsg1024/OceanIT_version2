@@ -216,6 +216,7 @@ class MainFragment : Fragment() {
                 if (response.isSuccessful) {
                     val result : SensorDTO? = response.body()
 
+                    // 임계치 설정을 하게되면 색 경계선에 값을 넣어주기 위한 계산 식 함수
                     Log.d("main_Sensor_OG", "${result!!.result}")
                     var value_number : Float = 0f
                     fun value_num(max : Float, min : Float): Float {

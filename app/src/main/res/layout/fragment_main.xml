@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainFragment"
-    android:background="@color/primary_light">
+    android:background="#B5C7D6">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/white_edge"
-                android:backgroundTint="#7281C1"
+                android:backgroundTint="#4F5881"
                 android:elevation="20dp"
                 app:cardCornerRadius="15dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="5px"
                         android:layout_marginTop="10dp"
-                        android:background="@color/colorGray"
+                        android:background="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textview1" />
@@ -538,7 +538,6 @@
                         app:sv_indicator="NormalSmallIndicator"
                         app:sv_indicatorColor="#fa5252"
                         app:sv_indicatorWidth="8dp"
-                        app:sv_minSpeed="0.00"
                         app:sv_speedTextColor="#fa5252"
                         app:sv_speedTextFormat="FLOAT"
                         app:sv_speedTextPadding="50dp"

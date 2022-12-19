@@ -75,5 +75,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation 'com.github.anastr:speedviewlib:1.6.0'
+
+    // folding-cell 라이브러리
+    implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
 }
 apply plugin: 'com.google.gms.google-services'
