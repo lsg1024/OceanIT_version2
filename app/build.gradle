@@ -74,6 +74,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
 
+    // speedview 라이브러리
     implementation 'com.github.anastr:speedviewlib:1.6.0'
 
     // folding-cell 라이브러리

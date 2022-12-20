@@ -1,7 +1,6 @@
 package com.example.oceanit
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -10,13 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.DTO.companyDTO
@@ -27,14 +22,15 @@ import com.example.oceanit.Socket_File.Sensor_data
 import com.github.anastr.speedviewlib.SpeedView
 import com.github.anastr.speedviewlib.components.Section
 import com.google.gson.Gson
+import com.ramotion.foldingcell.FoldingCell
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URISyntaxException
-import kotlin.math.ceil
 
 
 class MainFragment : Fragment() {
@@ -69,7 +65,7 @@ class MainFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     lateinit var main_name : TextView
 
-    lateinit var blink_text1 : ConstraintLayout
+    lateinit var blink_text1 : TextView
     lateinit var blink_text2 : TextView
     lateinit var blink_text3 : TextView
     lateinit var blink_text4 : TextView
@@ -85,6 +81,13 @@ class MainFragment : Fragment() {
 
     lateinit var socket_data: Array<Sensor_data>
 
+    lateinit var fc : FoldingCell
+    lateinit var fc2 : FoldingCell
+    lateinit var fc3 : FoldingCell
+    lateinit var fc4 : FoldingCell
+    lateinit var fc5 : FoldingCell
+    lateinit var fc6 : FoldingCell
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,6 +96,13 @@ class MainFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
+        fc = view.findViewById<View>(R.id.folding_cell) as FoldingCell
+        fc2 = view.findViewById<View>(R.id.folding_cell2) as FoldingCell
+        fc3 = view.findViewById<View>(R.id.folding_cell3) as FoldingCell
+        fc4 = view.findViewById<View>(R.id.folding_cell4) as FoldingCell
+        fc5 = view.findViewById<View>(R.id.folding_cell5) as FoldingCell
+        fc6 = view.findViewById<View>(R.id.folding_cell6) as FoldingCell
+
         blink_text1= view.findViewById(R.id.blink_text1)
         blink_text2  = view.findViewById(R.id.blink_text2)
         blink_text3 = view.findViewById(R.id.blink_text3)
@@ -100,12 +110,12 @@ class MainFragment : Fragment() {
         blink_text5 = view.findViewById(R.id.blink_text5)
         blink_text6 = view.findViewById(R.id.blink_text6)
 
-        topText1 = view.findViewById(R.id.textview7)
-        topText2 = view.findViewById(R.id.textview9)
-        topText3= view.findViewById(R.id.textview11)
-        topText4 = view.findViewById(R.id.textview13)
-        topText5 = view.findViewById(R.id.textview15)
-        topText6 = view.findViewById(R.id.textview17)
+        topText1 = view.findViewById(R.id.topText1)
+        topText2 = view.findViewById(R.id.topText2)
+        topText3= view.findViewById(R.id.topText3)
+        topText4 = view.findViewById(R.id.topText4)
+        topText5 = view.findViewById(R.id.topText5)
+        topText6 = view.findViewById(R.id.topText6)
 
         main_name = view.findViewById(R.id.main_name)
 
@@ -391,6 +401,24 @@ class MainFragment : Fragment() {
             }
         })
 
+        fc.setOnClickListener {
+            fc.toggle(false)
+        }
+        fc2.setOnClickListener {
+            fc2.toggle(false)
+        }
+        fc3.setOnClickListener {
+            fc3.toggle(false)
+        }
+        fc4.setOnClickListener {
+            fc4.toggle(false)
+        }
+        fc5.setOnClickListener {
+            fc5.toggle(false)
+        }
+        fc6.setOnClickListener {
+            fc6.toggle(false)
+        }
     }
 
     override fun onResume() {
@@ -508,79 +536,79 @@ class MainFragment : Fragment() {
                 Log.d("Socket_on", "gson.fromJson ${data.pH}")
 
                 mainActivity.runOnUiThread(Runnable {
-                // Stuff that updates the UI
+                    // Stuff that updates the UI
 
-                if (data.Tc.toInt() > speedView1.maxSpeed.toInt() ){
-                    blink_text1.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.Tc.toInt() < speedView1.minSpeed.toInt()) {
-                    blink_text1.setBackgroundResource(R.drawable.blue_edge)
-                } else {
-                    blink_text1.setBackgroundResource(R.drawable.lime_edge)
-                }
+                    if (data.Tc.toInt() > speedView1.maxSpeed.toInt() ){
+                        blink_text1.setBackgroundResource(R.drawable.red_edge)
+                    } else if (data.Tc.toInt() < speedView1.minSpeed.toInt()) {
+                        blink_text1.setBackgroundResource(R.drawable.blue_edge)
+                    } else {
+                        blink_text1.setBackgroundResource(R.drawable.lime_edge)
+                    }
 
-                if (data.DO.toInt() > speedView2.maxSpeed.toInt()){
-                    blink_text2.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.DO.toInt() < speedView2.minSpeed.toInt()) {
-                    blink_text2.setBackgroundResource(R.drawable.blue_edge)
-                } else {
-                    blink_text2.setBackgroundResource(R.drawable.lime_edge)
-                }
+                    if (data.DO.toInt() > speedView2.maxSpeed.toInt()){
+                        blink_text2.setBackgroundResource(R.drawable.red_edge)
+                    } else if (data.DO.toInt() < speedView2.minSpeed.toInt()) {
+                        blink_text2.setBackgroundResource(R.drawable.blue_edge)
+                    } else {
+                        blink_text2.setBackgroundResource(R.drawable.lime_edge)
+                    }
 
-                if (data.pH.toInt() > speedView3.maxSpeed.toInt()){
-                    blink_text3.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.pH.toInt() < speedView3.minSpeed.toInt()) {
-                    blink_text3.setBackgroundResource(R.drawable.blue_edge)
-                } else {
-                    blink_text3.setBackgroundResource(R.drawable.lime_edge)
-                }
+                    if (data.pH.toInt() > speedView3.maxSpeed.toInt()){
+                        blink_text3.setBackgroundResource(R.drawable.red_edge)
+                    } else if (data.pH.toInt() < speedView3.minSpeed.toInt()) {
+                        blink_text3.setBackgroundResource(R.drawable.blue_edge)
+                    } else {
+                        blink_text3.setBackgroundResource(R.drawable.lime_edge)
+                    }
 
-                if (data.Sa.toInt() > speedView4.maxSpeed.toInt()){
-                    blink_text4.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.Sa.toInt() < speedView4.minSpeed.toInt()) {
-                    blink_text4.setBackgroundResource(R.drawable.blue_edge)
-                } else {
-                    blink_text4.setBackgroundResource(R.drawable.lime_edge)
-                }
+                    if (data.Sa.toInt() > speedView4.maxSpeed.toInt()){
+                        blink_text4.setBackgroundResource(R.drawable.red_edge)
+                    } else if (data.Sa.toInt() < speedView4.minSpeed.toInt()) {
+                        blink_text4.setBackgroundResource(R.drawable.blue_edge)
+                    } else {
+                        blink_text4.setBackgroundResource(R.drawable.lime_edge)
+                    }
 
-                if (data.ORP.toInt() > speedView5.maxSpeed.toInt()){
-                    blink_text5.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.ORP.toInt() < speedView5.minSpeed.toInt()) {
-                    blink_text5.setBackgroundResource(R.drawable.blue_edge)
-                } else {
-                    blink_text5.setBackgroundResource(R.drawable.lime_edge)
-                }
+                    if (data.ORP.toInt() > speedView5.maxSpeed.toInt()){
+                        blink_text5.setBackgroundResource(R.drawable.red_edge)
+                    } else if (data.ORP.toInt() < speedView5.minSpeed.toInt()) {
+                        blink_text5.setBackgroundResource(R.drawable.blue_edge)
+                    } else {
+                        blink_text5.setBackgroundResource(R.drawable.lime_edge)
+                    }
 
-                if (data.TUR.toInt() > speedView6.maxSpeed.toInt()){
-                    blink_text6.setBackgroundResource(R.drawable.red_edge)
-                } else if (data.TUR.toInt() < speedView6.minSpeed.toInt()) {
-                    blink_text6.setBackgroundResource(R.drawable.blue_edge)
-                } else {
-                    blink_text6.setBackgroundResource(R.drawable.lime_edge)
-                }
+                    if (data.TUR.toInt() > speedView6.maxSpeed.toInt()){
+                        blink_text6.setBackgroundResource(R.drawable.red_edge)
+                    } else if (data.TUR.toInt() < speedView6.minSpeed.toInt()) {
+                        blink_text6.setBackgroundResource(R.drawable.blue_edge)
+                    } else {
+                        blink_text6.setBackgroundResource(R.drawable.lime_edge)
+                    }
 
-                // 소켓에서 받은 데이터를 넣는 곳
-                speedView1.realSpeedTo(data.Tc)
+                    // 소켓에서 받은 데이터를 넣는 곳
+                    speedView1.realSpeedTo(1.1f)
 
-                speedView2.realSpeedTo(data.DO)
+                    speedView2.realSpeedTo(data.DO)
 
-                speedView3.realSpeedTo(data.pH)
+                    speedView3.realSpeedTo(data.pH)
 
-                speedView4.realSpeedTo(data.Sa)
+                    speedView4.realSpeedTo(data.Sa)
 
-                speedView5.realSpeedTo(data.ORP)
+                    speedView5.realSpeedTo(data.ORP)
 
-                speedView6.realSpeedTo(data.TUR)
+                    speedView6.realSpeedTo(data.TUR)
 
-                topText1.text = data.Tc.toString()
-                topText2.text = data.DO.toString()
-                topText3.text = data.pH.toString()
-                topText4.text = data.Sa.toString()
-                topText5.text = data.ORP.toString()
-                topText6.text = data.TUR.toString()
+                    topText1.text = data.Tc.toString()
+                    topText2.text = data.DO.toString()
+                    topText3.text = data.pH.toString()
+                    topText4.text = data.Sa.toString()
+                    topText5.text = data.ORP.toString()
+                    topText6.text = data.TUR.toString()
+
+                })
 
             })
-
-        })
 
         }, 2000)
 

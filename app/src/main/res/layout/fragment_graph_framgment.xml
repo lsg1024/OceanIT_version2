@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GraphFragment"
-    android:background="@color/primary_light">
+    android:background="#beebfd">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,8 +19,9 @@
                 android:id="@+id/linearLayoutCompat"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#354794"
+                android:background="#96DEF3"
                 android:gravity="center"
+                android:elevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -31,7 +32,9 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
+                    android:textSize="30dp"
+                    android:fontFamily="@font/juaregular"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/textView2"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -42,9 +45,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="양식장"
+                    android:textSize="30dp"
+                    android:fontFamily="@font/juaregular"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     app:layout_constraintBottom_toBottomOf="@+id/main_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +65,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/white"
-                android:elevation="20dp"
+                android:elevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
@@ -73,6 +78,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@color/white"
                 android:layout_marginTop="30dp"
+                android:elevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/LineChart" />
@@ -83,6 +89,7 @@
                 android:layout_height="250dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:elevation="5dp"
                 android:background="@color/white"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +103,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/white"
+                android:elevation="5dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +117,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@color/white"
                 android:layout_marginTop="30dp"
+                android:elevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/LineChart4" />
@@ -120,6 +129,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/white"
+                android:elevation="5dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -129,10 +139,9 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/linearlayout2"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
-                android:layout_marginTop="20dp"
-                android:background="@color/light_blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -140,13 +149,13 @@
 
                 <TextView
                     android:id="@+id/imageView"
-                    android:layout_width="120dp"
-                    android:layout_height="50dp"
+                    android:layout_width="60dp"
+                    android:layout_height="25dp"
                     android:layout_weight="0.5"
                     android:text="어업기술센터"
+                    android:fontFamily="@font/juaregular"
                     android:gravity="center"
-                    android:textSize="30dp"
-                    android:textStyle="bold"
+                    android:textSize="20dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -155,8 +164,8 @@
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="120dp"
-                    android:layout_height="50dp"
+                    android:layout_width="60dp"
+                    android:layout_height="25dp"
                     android:layout_weight="0.5"
                     android:src="@drawable/gb_logo"
                     app:layout_constraintEnd_toEndOf="parent"
