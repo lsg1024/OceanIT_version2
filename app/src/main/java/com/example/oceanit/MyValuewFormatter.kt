@@ -8,12 +8,7 @@ import java.text.DecimalFormat
 class MyValueFormatter : ValueFormatter() {
     private val mFormat = DecimalFormat("0.##")
 
-    override fun getFormattedValue(
-        value: Float,
-        entry: Entry,
-        dataSetIndex: Int,
-        viewPortHandler: ViewPortHandler
-    ): String {
+    override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int, viewPortHandler: ViewPortHandler): String {
 
         return mFormat.format(value)
     }

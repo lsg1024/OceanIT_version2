@@ -15,6 +15,7 @@ data class LoginData(
 
     @SerializedName("pw")
     val pw : String,
+
 )
 
 data class LoginResult(

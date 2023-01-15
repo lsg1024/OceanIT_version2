@@ -12,22 +12,20 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.example.oceanit.DTO.companyDTO
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
 import com.example.oceanit.Socket_File.Join_Data
 import com.example.oceanit.Socket_File.Sensor_data
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.MarkerView
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.components.*
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.MPPointF
@@ -41,6 +39,7 @@ import retrofit2.Response
 import java.net.URISyntaxException
 import java.text.DecimalFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class GraphFragment : Fragment() {
@@ -62,6 +61,8 @@ class GraphFragment : Fragment() {
     lateinit var mainActivity: MainActivity
 
     val call by lazy { Retrofit2.getInstance() }
+
+    val List_v : ArrayList<String> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -140,7 +141,7 @@ class GraphFragment : Fragment() {
         val mHandler = Handler(Looper.getMainLooper())
 
         // 차트 데이터 클릭시 나타날 아이콘
-        val marker = MyMarkerView(mainActivity, R.layout.custom_marker_view)
+//        val marker = MyMarkerView(mainActivity, R.layout.custom_marker_view)
 
         call?.company(user_key)?.enqueue(object : Callback<companyDTO> {
 
@@ -184,6 +185,16 @@ class GraphFragment : Fragment() {
                                 Log.d("Socket_on", "before data ${socket_data.size}")
                                 Log.d("Socket_on_date", "before data ${socket_data[0].date}")
 
+                                for (i in 0 until socket_data.size-1) {
+                                    val j = socket_data[i].date
+                                    val date = j.chunked(10)
+                                    List_v.add(date[1])
+                                }
+
+                                List_v.reverse()
+
+                                Log.d("List_v", "before data ${List_v +  List_v.size}")
+
                                 fun data1(i: Int, j : Int): ArrayList<Entry> {
                                     dataList1.add(Entry(i.toFloat(), socket_data[j].Tc))
                                     Log.d("Socket_on2", "before data ${socket_data[j].Tc}")
@@ -215,25 +226,26 @@ class GraphFragment : Fragment() {
                                     return dataList6
                                 }
 
-                                marker.chartView = chart
-                                chart.marker = marker
-
-                                marker.chartView = chart2
-                                chart2.marker = marker
-
-                                marker.chartView = chart3
-                                chart3.marker = marker
-
-                                marker.chartView = chart4
-                                chart4.marker = marker
-
-                                marker.chartView = chart5
-                                chart5.marker = marker
-
-                                marker.chartView = chart6
-                                chart6.marker = marker
+//                                marker.chartView = chart
+//                                chart.marker = marker
+//
+//                                marker.chartView = chart2
+//                                chart2.marker = marker
+//
+//                                marker.chartView = chart3
+//                                chart3.marker = marker
+//
+//                                marker.chartView = chart4
+//                                chart4.marker = marker
+//
+//                                marker.chartView = chart5
+//                                chart5.marker = marker
+//
+//                                marker.chartView = chart6
+//                                chart6.marker = marker
 
                                 for (i in 0 until socket_data.size-1) {
+                                    // 그래프 추출시 값이 역순으로 출력되야되므로 리벌스 시켜준다
                                     val j = socket_data.size-1
                                     data1(i, j-i)
                                     data2(i,j-i)
@@ -244,12 +256,12 @@ class GraphFragment : Fragment() {
 
                                 }
 
-                                val lineDataSet1 = LineDataSet(dataList1, "수온")
+                                val lineDataSet1 = LineDataSet(dataList1, "수온(℃)")
                                 val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
                                 val lineDataSet3 = LineDataSet(dataList3, "pH(pH)")
                                 val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
                                 val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
-                                val lineDataSet6 = LineDataSet(dataList6, "탁도(TUR)")
+                                val lineDataSet6 = LineDataSet(dataList6, "탁도(NTU)")
 
                                 //1. 데이터 셋 만들기
                                 createSet(lineDataSet1)
@@ -356,13 +368,13 @@ class GraphFragment : Fragment() {
                                 yAxis.enableGridDashedLine(10f, 10f, 0f)
                                 // axis range
                                 yAxis.axisMaximum = 600f
-                                yAxis.axisMinimum = 0f
+                                yAxis.axisMinimum = -100f
                                 val yAxis2: YAxis = chart6.axisLeft
                                 chart5.axisRight.isEnabled = false
                                 yAxis2.enableGridDashedLine(10f, 10f, 0f)
                                 // axis range
                                 yAxis2.axisMaximum = 6000f
-                                yAxis2.axisMinimum = 0f
+                                yAxis2.axisMinimum = -1000f
 
                                 chart.data = line_data1
                                 chart2.data = line_data2
@@ -395,36 +407,75 @@ class GraphFragment : Fragment() {
 
     }
 
-    @SuppressLint("ViewConstructor")
-    inner class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context, layoutResource) {
-        private val tvContent: TextView = findViewById(R.id.tvContent)
+    private fun chart_shape(set_chart: LineChart) {
 
-        // runs every time the MarkerView is redrawn, can be used to update the
-        // content (user-interface)
-        override fun refreshContent(e: Entry, highlight: Highlight) {
-
-            val mFormat = DecimalFormat("0")
-
-            if (e is CandleEntry) {
-                tvContent.text = "17"
-
-            } else {
-
-                for (i in (mFormat.format(e.x).toInt()) until socket_data.size){
-
-                    val j = socket_data.size - 1
-                    tvContent.text = "${(socket_data[j - mFormat.format(e.x).toInt()].date)}"
-                }
-
-            }
-            super.refreshContent(e, highlight)
+        mainActivity.runOnUiThread {
+            set_chart.animateX(1000)
+            set_chart.setTouchEnabled(true)
+            set_chart.setVisibleXRangeMaximum(3f)
+            set_chart.setPinchZoom(false)
+            set_chart.isDoubleTapToZoomEnabled = false
+            set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
+            set_chart.description = null
+            set_chart.isScaleXEnabled = false
+            set_chart.isScaleYEnabled = false
         }
 
-        override fun getOffset(): MPPointF {
-            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
+        set_chart.xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            setDrawGridLines(false)
+            axisMaximum = 18.5f
+            chart.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
+            chart2.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
+            chart3.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
+            chart4.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
+            chart5.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
+            chart6.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
+
+
+        }
+
+        set_chart.axisRight.apply {
+            setDrawGridLines(false)
+            setDrawLabels(false)
+            setDrawAxisLine(false)
         }
 
     }
+
+    // 차트 클릭 이벤트에서 클릭했을 때 나오는 아이콘 format 형식 지정해줌
+//    @SuppressLint("ViewConstructor")
+//    inner class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context, layoutResource) {
+//        private val tvContent: TextView = findViewById(R.id.tvContent)
+//
+//        // runs every time the MarkerView is redrawn, can be used to update the
+//        // content (user-interface)
+//        override fun refreshContent(e: Entry, highlight: Highlight) {
+//
+//            val mFormat = DecimalFormat("0")
+//
+//            if (e is CandleEntry) {
+//                tvContent.text = "17"
+//
+//            } else {
+//
+//                for (i in (mFormat.format(e.x).toInt()) until socket_data.size){
+//
+//                    val j = socket_data.size - 1
+//                    tvContent.text = (socket_data[j - mFormat.format(e.x).toInt()].date)
+//
+//                }
+//
+//
+//            }
+//            super.refreshContent(e, highlight)
+//        }
+//
+//        override fun getOffset(): MPPointF {
+//            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
+//        }
+//
+//    }
 
     private fun Custom_Legend(set_chart: LineChart) {
 
@@ -444,39 +495,8 @@ class GraphFragment : Fragment() {
         // horizontal grid lines
         yAxis.enableGridDashedLine(10f, 10f, 0f)
         // axis range
-        yAxis.axisMaximum = 40f
-        yAxis.axisMinimum = -10f
-
-    }
-
-    private fun chart_shape(set_chart: LineChart) {
-
-        mainActivity.runOnUiThread {
-            set_chart.animateX(1000)
-            set_chart.setTouchEnabled(true)
-            set_chart.setVisibleXRangeMaximum(5f)
-            set_chart.invalidate()
-            set_chart.setPinchZoom(false)
-            set_chart.isDoubleTapToZoomEnabled = false
-            set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
-            set_chart.description = null
-            set_chart.isScaleXEnabled = false
-            set_chart.isScaleYEnabled = false
-        }
-
-        set_chart.xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM
-            setDrawGridLines(false)
-            axisMaximum = 18.5f
-            axisMinimum = -0.5f
-
-        }
-
-        set_chart.axisRight.apply {
-            setDrawGridLines(false)
-            setDrawLabels(false)
-            setDrawAxisLine(false)
-        }
+        yAxis.axisMaximum = 80f
+        yAxis.axisMinimum = -20f
 
     }
 
