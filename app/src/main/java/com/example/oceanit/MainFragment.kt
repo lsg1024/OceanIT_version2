@@ -587,7 +587,7 @@ class MainFragment : Fragment() {
                     }
 
                     // 소켓에서 받은 데이터를 넣는 곳
-                    speedView1.realSpeedTo(1.1f)
+                    speedView1.realSpeedTo(data.Tc)
 
                     speedView2.realSpeedTo(data.DO)
 

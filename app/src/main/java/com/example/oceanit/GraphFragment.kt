@@ -226,6 +226,7 @@ class GraphFragment : Fragment() {
                                     return dataList6
                                 }
 
+                                // 차트 클릭 이벤트 ui에 추가
 //                                marker.chartView = chart
 //                                chart.marker = marker
 //
@@ -303,60 +304,28 @@ class GraphFragment : Fragment() {
                                 Custom_Legend(chart6)
 
                                 lineDataSet1.color = ContextCompat.getColor(mainActivity, R.color.red)
-                                lineDataSet1.setCircleColor(
-                                    ContextCompat.getColor(mainActivity, R.color.red)
-                                )
+                                lineDataSet1.setCircleColor(ContextCompat.getColor(mainActivity, R.color.red))
                                 // MaValueFormatter 클래스에서 포맷 형식을 불러와서 소수점을 잘라줬다
                                 line_data1.setValueFormatter(MyValueFormatter())
 
-                                lineDataSet2.color =
-                                    ContextCompat.getColor(mainActivity, R.color.primary)
-                                lineDataSet2.setCircleColor(
-                                    ContextCompat.getColor(
-                                        mainActivity,
-                                        R.color.primary
-                                    )
-                                )
+                                lineDataSet2.color = ContextCompat.getColor(mainActivity, R.color.primary)
+                                lineDataSet2.setCircleColor(ContextCompat.getColor(mainActivity, R.color.primary))
                                 line_data2.setValueFormatter(MyValueFormatter())
 
-                                lineDataSet3.color =
-                                    ContextCompat.getColor(mainActivity, R.color.brawn)
-                                lineDataSet3.setCircleColor(
-                                    ContextCompat.getColor(
-                                        mainActivity,
-                                        R.color.brawn
-                                    )
-                                )
+                                lineDataSet3.color = ContextCompat.getColor(mainActivity, R.color.brawn)
+                                lineDataSet3.setCircleColor(ContextCompat.getColor(mainActivity, R.color.brawn))
                                 line_data3.setValueFormatter(MyValueFormatter())
 
-                                lineDataSet4.color =
-                                    ContextCompat.getColor(mainActivity, R.color.light_grean)
-                                lineDataSet4.setCircleColor(
-                                    ContextCompat.getColor(
-                                        mainActivity,
-                                        R.color.light_grean
-                                    )
-                                )
+                                lineDataSet4.color = ContextCompat.getColor(mainActivity, R.color.light_grean)
+                                lineDataSet4.setCircleColor(ContextCompat.getColor(mainActivity, R.color.light_grean))
                                 line_data4.setValueFormatter(MyValueFormatter())
 
-                                lineDataSet5.color =
-                                    ContextCompat.getColor(mainActivity, R.color.colorAccent)
-                                lineDataSet5.setCircleColor(
-                                    ContextCompat.getColor(
-                                        mainActivity,
-                                        R.color.colorAccent
-                                    )
-                                )
+                                lineDataSet5.color = ContextCompat.getColor(mainActivity, R.color.colorAccent)
+                                lineDataSet5.setCircleColor(ContextCompat.getColor(mainActivity, R.color.colorAccent))
                                 line_data5.setValueFormatter(MyValueFormatter())
 
-                                lineDataSet6.color =
-                                    ContextCompat.getColor(mainActivity, R.color.purple_200)
-                                lineDataSet6.setCircleColor(
-                                    ContextCompat.getColor(
-                                        mainActivity,
-                                        R.color.purple_200
-                                    )
-                                )
+                                lineDataSet6.color = ContextCompat.getColor(mainActivity, R.color.purple_200)
+                                lineDataSet6.setCircleColor(ContextCompat.getColor(mainActivity, R.color.purple_200))
                                 line_data6.setValueFormatter(MyValueFormatter())
 
                                 chart_YAxis(chart)
@@ -367,7 +336,7 @@ class GraphFragment : Fragment() {
                                 chart5.axisRight.isEnabled = false
                                 yAxis.enableGridDashedLine(10f, 10f, 0f)
                                 // axis range
-                                yAxis.axisMaximum = 600f
+                                yAxis.axisMaximum = 1000f
                                 yAxis.axisMinimum = -100f
                                 val yAxis2: YAxis = chart6.axisLeft
                                 chart5.axisRight.isEnabled = false
