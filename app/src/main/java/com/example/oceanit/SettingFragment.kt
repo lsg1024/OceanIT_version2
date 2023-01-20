@@ -1,5 +1,6 @@
 package com.example.oceanit
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.getIntent
 import android.os.Bundle
@@ -153,6 +154,7 @@ class SettingFragment : Fragment() {
 
         call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
 
+            @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
                 if (response.isSuccessful) {
 
@@ -168,9 +170,9 @@ class SettingFragment : Fragment() {
                     keyborad(num1_1)
                     keyborad(num1_2)
                     // 최대 측량 범위
-                    rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low).toFloat() - 10
+                    rangeSlider.valueFrom = mFormat.format(result.result.Tc_low).toFloat() - 10
                     // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
-                    rangeSlider.valueTo = mFormat.format(result!!.result.Tc_high).toFloat() + 10
+                    rangeSlider.valueTo = mFormat.format(result.result.Tc_high).toFloat() + 10
                     // 슬라이더 움직일때 조절되는 단위
                     rangeSlider.stepSize = 0f
                     // 서버에서 지정된 사용자의 min max 값 받아오기
@@ -299,6 +301,7 @@ class SettingFragment : Fragment() {
 
             call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
 
+                @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
                     if (response.isSuccessful) {
 
@@ -316,7 +319,7 @@ class SettingFragment : Fragment() {
                         keyborad(num1_1)
                         keyborad(num1_2)
                         // 최대 측량 범위
-                        rangeSlider.valueFrom = mFormat.format(result!!.result.Tc_low - 10).toFloat()
+                        rangeSlider.valueFrom = mFormat.format(result.result.Tc_low - 10).toFloat()
                         // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
                         rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 10).toFloat()
                         // 슬라이더 움직일때 조절되는 단위

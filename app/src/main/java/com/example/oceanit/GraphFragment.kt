@@ -2,6 +2,7 @@ package com.example.oceanit
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.DTO.companyDTO
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
@@ -64,6 +67,27 @@ class GraphFragment : Fragment() {
 
     val List_v : ArrayList<String> = ArrayList()
 
+    var ll1 : LimitLine? = null
+    var ll2 : LimitLine? = null
+
+    var tcmax : Float? = null
+    var tcmin : Float? = null
+
+    var domax : Float? = null
+    var domin : Float? = null
+
+    var phmax : Float? = null
+    var phmin : Float? = null
+
+    var samax : Float? = null
+    var samin : Float? = null
+
+    var orpmax : Float? = null
+    var orpmin : Float? = null
+
+    var turmax : Float? = null
+    var turmin : Float? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -89,20 +113,47 @@ class GraphFragment : Fragment() {
             override fun onResponse(call: Call<companyDTO>, response: Response<companyDTO>) {
                 if (response.isSuccessful) {
                     val result: companyDTO? = response.body()
-
                     Log.d("company_name", "$result")
-
                     // 회사 이름 textViewd에 넣어주기
                     company_name.text = result!!.result.company
+                }
+            }
+            override fun onFailure(call: Call<companyDTO>, t: Throwable) {
+                Log.d("company_name", "${t.message}")
+            }
+
+        })
+
+        call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO>{
+            override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
+                if (response.isSuccessful){
+                    val re_data : SensorDTO = response.body()!!
+
+                    val data = re_data.result
+
+                    tcmax = data.Tc_high
+                    tcmin = data.Tc_low
+
+                    domax = data.DO_high
+                    domin = data.DO_low
+
+                    phmax = data.pH_high
+                    phmin = data.pH_low
+
+                    samax = data.Sa_high
+                    samin = data.Sa_low
+
+                    orpmax = data.ORP_high
+                    orpmin = data.ORP_low
+
+                    turmax = data.TUR_high
+                    turmin = data.TUR_low
 
                 }
             }
 
-
-            override fun onFailure(call: Call<companyDTO>, t: Throwable) {
-
-                Log.d("company_name", "${t.message}")
-
+            override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
+                Log.d("grap_value", "${t.message}")
             }
 
         })
@@ -177,18 +228,16 @@ class GraphFragment : Fragment() {
                                 Log.d("Socket_on", "arg before data $args")
 
                                 // 형식없는 [{ }] json 형식을 array 형태로 반환해준다
-                                socket_data = gson.fromJson(
-                                    args[0].toString(),
-                                    Array<Sensor_data>::class.java
-                                )
+                                socket_data = gson.fromJson(args[0].toString(), Array<Sensor_data>::class.java)
 
                                 Log.d("Socket_on", "before data ${socket_data.size}")
                                 Log.d("Socket_on_date", "before data ${socket_data[0].date}")
 
+                                // 리스트에 시간 정보를 넣는다
                                 for (i in 0 until socket_data.size-1) {
                                     val j = socket_data[i].date
-                                    val date = j.chunked(10)
-                                    List_v.add(date[1])
+                                    val date = j.chunked(2)
+                                    List_v.add(date[1]+date[2]+date[3]+date[4]+date[5]+date[6]+date[7])
                                 }
 
                                 List_v.reverse()
@@ -328,23 +377,68 @@ class GraphFragment : Fragment() {
                                 lineDataSet6.setCircleColor(ContextCompat.getColor(mainActivity, R.color.purple_200))
                                 line_data6.setValueFormatter(MyValueFormatter())
 
-                                chart_YAxis(chart)
-                                chart_YAxis(chart2)
-                                chart_YAxis(chart3)
-                                chart_YAxis(chart4)
+                                chart_YAxis(chart, domax!!, domin!!)
+                                chart_YAxis(chart2, domax!!, domin!!)
+                                chart_YAxis(chart3, phmax!!, phmin!!)
+                                chart_YAxis(chart4, samax!!, samin!!)
                                 val yAxis: YAxis = chart5.axisLeft
                                 chart5.axisRight.isEnabled = false
                                 yAxis.enableGridDashedLine(10f, 10f, 0f)
                                 // axis range
-                                yAxis.axisMaximum = 1000f
-                                yAxis.axisMinimum = -100f
+                                val ll3 = LimitLine(orpmax!!, "최대 임계치 $orpmax")
+                                val ll4  = LimitLine(orpmin!!, "최소 임계치 $orpmin")
+
+
+                                ll3.apply {
+                                    lineWidth = 2f
+                                    enableDashedLine(20f, 0f, 0f)
+                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+                                    textSize = 10f
+                                }
+                                ll4.apply {
+                                    lineWidth = 2f
+                                    lineColor = Color.BLUE
+                                    enableDashedLine(40f, 0f, 0f)
+                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
+                                    textSize = 10f
+                                }
+                                yAxis.setDrawLimitLinesBehindData(true)
+                                yAxis.addLimitLine(ll3)
+                                yAxis.addLimitLine(ll4)
+                                yAxis.axisMaximum = orpmax!! *3
+                                if (orpmin!! <= 250) {
+                                    yAxis.axisMinimum = -500f
+                                } else {
+                                    yAxis.axisMinimum = orpmin!! *-3
+                                }
                                 val yAxis2: YAxis = chart6.axisLeft
                                 chart5.axisRight.isEnabled = false
                                 yAxis2.enableGridDashedLine(10f, 10f, 0f)
                                 // axis range
-                                yAxis2.axisMaximum = 6000f
-                                yAxis2.axisMinimum = -1000f
-
+                                val ll5 = LimitLine(turmax!!, "최대 임계치 $turmax")
+                                val ll6  = LimitLine(turmin!!, "최소 임계치 $turmin")
+                                ll5.apply {
+                                    lineWidth = 2f
+                                    enableDashedLine(20f, 0f, 0f)
+                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+                                    textSize = 10f
+                                }
+                                ll6.apply {
+                                    lineWidth = 2f
+                                    lineColor = Color.BLUE
+                                    enableDashedLine(40f, 0f, 0f)
+                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
+                                    textSize = 10f
+                                }
+                                yAxis2.setDrawLimitLinesBehindData(true)
+                                yAxis2.addLimitLine(ll5)
+                                yAxis2.addLimitLine(ll6)
+                                yAxis2.axisMaximum = turmax!! * 2
+                                if (turmin!! <= 250) {
+                                    yAxis2.axisMinimum = -500f
+                                } else {
+                                    yAxis2.axisMinimum = turmin!! * -2
+                                }
                                 chart.data = line_data1
                                 chart2.data = line_data2
                                 chart3.data = line_data3
@@ -413,7 +507,7 @@ class GraphFragment : Fragment() {
     }
 
     // 차트 클릭 이벤트에서 클릭했을 때 나오는 아이콘 format 형식 지정해줌
-//    @SuppressLint("ViewConstructor")
+    @SuppressLint("ViewConstructor")
 //    inner class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context, layoutResource) {
 //        private val tvContent: TextView = findViewById(R.id.tvContent)
 //
@@ -430,12 +524,9 @@ class GraphFragment : Fragment() {
 //
 //                for (i in (mFormat.format(e.x).toInt()) until socket_data.size){
 //
-//                    val j = socket_data.size - 1
-//                    tvContent.text = (socket_data[j - mFormat.format(e.x).toInt()].date)
-//
+//                    val j = socket_data.size
+//                    tvContent.text = (socket_data[j - mFormat.format(e.x).toInt()-1].date)
 //                }
-//
-//
 //            }
 //            super.refreshContent(e, highlight)
 //        }
@@ -454,19 +545,49 @@ class GraphFragment : Fragment() {
         legend.textSize = 15f
     }
 
-    private fun chart_YAxis(set_chart: LineChart) {
+    private fun chart_YAxis(set_chart: LineChart, max_data:Float, min_data: Float) {
 
         val yAxis: YAxis = set_chart.axisLeft
 
         // disable dual axis (only use LEFT axis)
         set_chart.axisRight.isEnabled = false
-
         // horizontal grid lines
         yAxis.enableGridDashedLine(10f, 10f, 0f)
         // axis range
-        yAxis.axisMaximum = 80f
-        yAxis.axisMinimum = -20f
 
+        yAxis.axisMaximum = max_data * 3
+        if (min_data <= 20) {
+            yAxis.axisMinimum = -40f
+        } else {
+            yAxis.axisMinimum = min_data * -2
+        }
+
+        limitLine(max_data, min_data, yAxis)
+
+    }
+
+    private fun limitLine(max_data : Float, min_data : Float, yAxis: YAxis){
+        ll1 = LimitLine(max_data, "최대 임계치 $max_data")
+        ll2 = LimitLine(min_data, "최소 임계치 $min_data")
+
+        ll1?.apply {
+            lineWidth = 2f
+            enableDashedLine(20f, 0f, 0f)
+            labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+            textSize = 10f
+        }
+
+        ll2?.apply {
+            lineWidth = 2f
+            lineColor = Color.BLUE
+            enableDashedLine(40f, 0f, 0f)
+            labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
+            textSize = 10f
+        }
+
+        yAxis.setDrawLimitLinesBehindData(true)
+        yAxis.addLimitLine(ll1)
+        yAxis.addLimitLine(ll2)
     }
 
     private fun createSet(set: LineDataSet): LineDataSet {

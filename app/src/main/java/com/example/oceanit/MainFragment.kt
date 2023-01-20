@@ -31,6 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URISyntaxException
+import java.text.DecimalFormat
 
 
 class MainFragment : Fragment() {
@@ -87,6 +88,7 @@ class MainFragment : Fragment() {
     lateinit var fc4 : FoldingCell
     lateinit var fc5 : FoldingCell
     lateinit var fc6 : FoldingCell
+    val df = DecimalFormat("#.##")
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -375,17 +377,25 @@ class MainFragment : Fragment() {
                             topText6.text = socket_data[0].TUR.toString()
 
                             // 소켓에서 받은 데이터를 넣는 곳
-                            speedView1.realSpeedTo(socket_data[0].Tc)
 
-                            speedView2.realSpeedTo(socket_data[0].DO)
+                            // 기존에는 소수점이 1개이상 나오지 않고 처리 됬음 포멧처리를 통해 늘려줌
+                            speedView1.speedTextListener = {df.format(socket_data[0].Tc)}
+                            speedView1.realSpeedTo(df.format(socket_data[0].Tc).toFloat())
 
-                            speedView3.realSpeedTo(socket_data[0].pH)
+                            speedView2.speedTextListener = {df.format(socket_data[0].DO)}
+                            speedView2.realSpeedTo(df.format(socket_data[0].DO).toFloat())
 
-                            speedView4.realSpeedTo(socket_data[0].Sa)
+                            speedView3.speedTextListener = {df.format(socket_data[0].pH)}
+                            speedView3.realSpeedTo(df.format(socket_data[0].pH).toFloat())
 
-                            speedView5.realSpeedTo(socket_data[0].ORP)
+                            speedView4.speedTextListener = {df.format(socket_data[0].Sa)}
+                            speedView4.realSpeedTo(df.format(socket_data[0].Sa).toFloat())
 
-                            speedView6.realSpeedTo(socket_data[0].TUR)
+                            speedView5.speedTextListener = {df.format(socket_data[0].ORP)}
+                            speedView5.realSpeedTo(df.format(socket_data[0].ORP).toFloat())
+
+                            speedView6.speedTextListener = {df.format(socket_data[0].TUR)}
+                            speedView6.realSpeedTo(df.format(socket_data[0].TUR).toFloat())
 
                             mSocket.close()
 
@@ -587,16 +597,22 @@ class MainFragment : Fragment() {
                     }
 
                     // 소켓에서 받은 데이터를 넣는 곳
+                    speedView1.speedTextListener = {df.format(data.Tc)}
                     speedView1.realSpeedTo(data.Tc)
 
+                    speedView2.speedTextListener = {df.format(data.DO)}
                     speedView2.realSpeedTo(data.DO)
 
+                    speedView3.speedTextListener = {df.format(data.pH)}
                     speedView3.realSpeedTo(data.pH)
 
+                    speedView4.speedTextListener = {df.format(data.Sa)}
                     speedView4.realSpeedTo(data.Sa)
 
+                    speedView5.speedTextListener = {df.format(data.ORP)}
                     speedView5.realSpeedTo(data.ORP)
 
+                    speedView6.speedTextListener = {df.format(data.TUR)}
                     speedView6.realSpeedTo(data.TUR)
 
                     topText1.text = data.Tc.toString()
@@ -607,12 +623,7 @@ class MainFragment : Fragment() {
                     topText6.text = data.TUR.toString()
 
                 })
-
             })
-
         }, 2000)
-
     }
-
-
 }
