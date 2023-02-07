@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.DTO.companyDTO
+import com.example.oceanit.DTO.grap_DTO
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
 import com.example.oceanit.Socket_File.Join_Data
@@ -188,285 +189,221 @@ class GraphFragment : Fragment() {
         val dataList5 = ArrayList<Entry>()
         val dataList6 = ArrayList<Entry>()
 
-        // 차트에서 데이터 처리하는 시간과 그려주는 시간을 주기위해 지연시간을 줌
-        val mHandler = Handler(Looper.getMainLooper())
+        call?.grap(user_key)?.enqueue(object : Callback<grap_DTO> {
+            override fun onResponse(call: Call<grap_DTO>, response: Response<grap_DTO>) {
+            if (response.isSuccessful){
+                val grap = response.body()!!.result
 
-        // 차트 데이터 클릭시 나타날 아이콘
-//        val marker = MyMarkerView(mainActivity, R.layout.custom_marker_view)
-
-        call?.company(user_key)?.enqueue(object : Callback<companyDTO> {
-
-            override fun onResponse(call: Call<companyDTO>, response: Response<companyDTO>) {
-                if (response.isSuccessful) {
-                    val result: companyDTO? = response.body()
-
-                    Log.d("company_name", "$result")
-
-                    // 회사 이름 textViewd에 넣어주기
-                    company_name.text = result!!.result.company
-
-                    mHandler.postDelayed({
-                        mainActivity.runOnUiThread(Runnable {
-
-                            try {
-                                mSocket = IO.socket("http://211.184.227.81:8500")
-                                Log.d("SOCKET", "Connection success : $mSocket")
-
-                            } catch (e: URISyntaxException) {
-                                e.printStackTrace()
-                            }
-//
-                            mSocket.connect()
-
-                            mSocket.on(Socket.EVENT_CONNECT) { arg: Array<Any?>? ->
-                                mSocket.emit("join", gson.toJson(Join_Data(room = user_key)))
-                                Log.d("Socket_join", "입장")
-                            }
-
-                            mSocket.on("sensor_before", Emitter.Listener { args ->
-
-                                Log.d("Socket_on", "arg before data $args")
-
-                                // 형식없는 [{ }] json 형식을 array 형태로 반환해준다
-                                socket_data = gson.fromJson(args[0].toString(), Array<Sensor_data>::class.java)
-
-                                Log.d("Socket_on", "before data ${socket_data.size}")
-                                Log.d("Socket_on_date", "before data ${socket_data[0].date}")
-
-                                // 리스트에 시간 정보를 넣는다
-                                for (i in 0 until socket_data.size-1) {
-                                    val j = socket_data[i].date
-                                    val date = j.chunked(2)
-                                    List_v.add(date[1]+date[2]+date[3]+date[4]+date[5]+date[6]+date[7])
-                                }
-
-                                List_v.reverse()
-
-                                Log.d("List_v", "before data ${List_v +  List_v.size}")
-
-                                fun data1(i: Int, j : Int): ArrayList<Entry> {
-                                    dataList1.add(Entry(i.toFloat(), socket_data[j].Tc))
-                                    Log.d("Socket_on2", "before data ${socket_data[j].Tc}")
-                                    return dataList1
-                                }
-
-                                fun data2(i: Int, j : Int): ArrayList<Entry> {
-                                    dataList2.add(Entry(i.toFloat(), socket_data[j].DO))
-                                    return dataList2
-                                }
-
-                                fun data3(i: Int, j : Int): ArrayList<Entry> {
-                                    dataList3.add(Entry(i.toFloat(), socket_data[j].pH))
-                                    return dataList3
-                                }
-
-                                fun data4(i: Int, j : Int): ArrayList<Entry> {
-                                    dataList4.add(Entry(i.toFloat(), socket_data[j].Sa))
-                                    return dataList4
-                                }
-
-                                fun data5(i: Int, j : Int): ArrayList<Entry> {
-                                    dataList5.add(Entry(i.toFloat(), socket_data[j].ORP))
-                                    return dataList5
-                                }
-
-                                fun data6(i: Int, j : Int): ArrayList<Entry> {
-                                    dataList6.add(Entry(i.toFloat(), socket_data[j].TUR))
-                                    return dataList6
-                                }
-
-                                // 차트 클릭 이벤트 ui에 추가
-//                                marker.chartView = chart
-//                                chart.marker = marker
-//
-//                                marker.chartView = chart2
-//                                chart2.marker = marker
-//
-//                                marker.chartView = chart3
-//                                chart3.marker = marker
-//
-//                                marker.chartView = chart4
-//                                chart4.marker = marker
-//
-//                                marker.chartView = chart5
-//                                chart5.marker = marker
-//
-//                                marker.chartView = chart6
-//                                chart6.marker = marker
-
-                                for (i in 0 until socket_data.size-1) {
-                                    // 그래프 추출시 값이 역순으로 출력되야되므로 리벌스 시켜준다
-                                    val j = socket_data.size-1
-                                    data1(i, j-i)
-                                    data2(i,j-i)
-                                    data3(i,j-i)
-                                    data4(i,j-i)
-                                    data5(i,j-i)
-                                    data6(i,j-i)
-
-                                }
-
-                                val lineDataSet1 = LineDataSet(dataList1, "수온(℃)")
-                                val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
-                                val lineDataSet3 = LineDataSet(dataList3, "pH(pH)")
-                                val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
-                                val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
-                                val lineDataSet6 = LineDataSet(dataList6, "탁도(NTU)")
-
-                                //1. 데이터 셋 만들기
-                                createSet(lineDataSet1)
-                                createSet(lineDataSet2)
-                                createSet(lineDataSet3)
-                                createSet(lineDataSet4)
-                                createSet(lineDataSet5)
-                                createSet(lineDataSet6)
-
-                                //2. 리스트에 데이터셋 추가
-                                dataSets1.add(lineDataSet1)
-                                dataSets2.add(lineDataSet2)
-                                dataSets3.add(lineDataSet3)
-                                dataSets4.add(lineDataSet4)
-                                dataSets5.add(lineDataSet5)
-                                dataSets6.add(lineDataSet6)
-
-                                //3. 라인 데이터에 리스트 추가
-                                line_data1 = LineData(dataSets1)
-                                line_data2 = LineData(dataSets2)
-                                line_data3 = LineData(dataSets3)
-                                line_data4 = LineData(dataSets4)
-                                line_data5 = LineData(dataSets5)
-                                line_data6 = LineData(dataSets6)
-
-
-                                chart_shape(chart)
-                                chart_shape(chart2)
-                                chart_shape(chart3)
-                                chart_shape(chart4)
-                                chart_shape(chart5)
-                                chart_shape(chart6)
-
-                                Custom_Legend(chart)
-                                Custom_Legend(chart2)
-                                Custom_Legend(chart3)
-                                Custom_Legend(chart4)
-                                Custom_Legend(chart5)
-                                Custom_Legend(chart6)
-
-                                lineDataSet1.color = ContextCompat.getColor(mainActivity, R.color.red)
-                                lineDataSet1.setCircleColor(ContextCompat.getColor(mainActivity, R.color.red))
-                                // MaValueFormatter 클래스에서 포맷 형식을 불러와서 소수점을 잘라줬다
-                                line_data1.setValueFormatter(MyValueFormatter())
-
-                                lineDataSet2.color = ContextCompat.getColor(mainActivity, R.color.primary)
-                                lineDataSet2.setCircleColor(ContextCompat.getColor(mainActivity, R.color.primary))
-                                line_data2.setValueFormatter(MyValueFormatter())
-
-                                lineDataSet3.color = ContextCompat.getColor(mainActivity, R.color.brawn)
-                                lineDataSet3.setCircleColor(ContextCompat.getColor(mainActivity, R.color.brawn))
-                                line_data3.setValueFormatter(MyValueFormatter())
-
-                                lineDataSet4.color = ContextCompat.getColor(mainActivity, R.color.light_grean)
-                                lineDataSet4.setCircleColor(ContextCompat.getColor(mainActivity, R.color.light_grean))
-                                line_data4.setValueFormatter(MyValueFormatter())
-
-                                lineDataSet5.color = ContextCompat.getColor(mainActivity, R.color.colorAccent)
-                                lineDataSet5.setCircleColor(ContextCompat.getColor(mainActivity, R.color.colorAccent))
-                                line_data5.setValueFormatter(MyValueFormatter())
-
-                                lineDataSet6.color = ContextCompat.getColor(mainActivity, R.color.purple_200)
-                                lineDataSet6.setCircleColor(ContextCompat.getColor(mainActivity, R.color.purple_200))
-                                line_data6.setValueFormatter(MyValueFormatter())
-
-                                chart_YAxis(chart, domax!!, domin!!)
-                                chart_YAxis(chart2, domax!!, domin!!)
-                                chart_YAxis(chart3, phmax!!, phmin!!)
-                                chart_YAxis(chart4, samax!!, samin!!)
-                                val yAxis: YAxis = chart5.axisLeft
-                                chart5.axisRight.isEnabled = false
-                                yAxis.enableGridDashedLine(10f, 10f, 0f)
-                                // axis range
-                                val ll3 = LimitLine(orpmax!!, "최대 임계치 $orpmax")
-                                val ll4  = LimitLine(orpmin!!, "최소 임계치 $orpmin")
-
-
-                                ll3.apply {
-                                    lineWidth = 2f
-                                    enableDashedLine(20f, 0f, 0f)
-                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
-                                    textSize = 10f
-                                }
-                                ll4.apply {
-                                    lineWidth = 2f
-                                    lineColor = Color.BLUE
-                                    enableDashedLine(40f, 0f, 0f)
-                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
-                                    textSize = 10f
-                                }
-                                yAxis.setDrawLimitLinesBehindData(true)
-                                yAxis.addLimitLine(ll3)
-                                yAxis.addLimitLine(ll4)
-                                yAxis.axisMaximum = orpmax!! *3
-                                if (orpmin!! <= 250) {
-                                    yAxis.axisMinimum = -500f
-                                } else {
-                                    yAxis.axisMinimum = orpmin!! *-3
-                                }
-                                val yAxis2: YAxis = chart6.axisLeft
-                                chart5.axisRight.isEnabled = false
-                                yAxis2.enableGridDashedLine(10f, 10f, 0f)
-                                // axis range
-                                val ll5 = LimitLine(turmax!!, "최대 임계치 $turmax")
-                                val ll6  = LimitLine(turmin!!, "최소 임계치 $turmin")
-                                ll5.apply {
-                                    lineWidth = 2f
-                                    enableDashedLine(20f, 0f, 0f)
-                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
-                                    textSize = 10f
-                                }
-                                ll6.apply {
-                                    lineWidth = 2f
-                                    lineColor = Color.BLUE
-                                    enableDashedLine(40f, 0f, 0f)
-                                    labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
-                                    textSize = 10f
-                                }
-                                yAxis2.setDrawLimitLinesBehindData(true)
-                                yAxis2.addLimitLine(ll5)
-                                yAxis2.addLimitLine(ll6)
-                                yAxis2.axisMaximum = turmax!! * 2
-                                if (turmin!! <= 250) {
-                                    yAxis2.axisMinimum = -500f
-                                } else {
-                                    yAxis2.axisMinimum = turmin!! * -2
-                                }
-                                chart.data = line_data1
-                                chart2.data = line_data2
-                                chart3.data = line_data3
-                                chart4.data = line_data4
-                                chart5.data = line_data5
-                                chart6.data = line_data6
-                            })
-                        })
-
-                        chart.invalidate()
-                        chart2.invalidate()
-                        chart3.invalidate()
-                        chart4.invalidate()
-                        chart5.invalidate()
-                        chart6.invalidate()
-
-                    }, 1500)
+                // 리스트에 시간 정보를 넣는다
+                for (i in 0 until grap.size) {
+                    val j = grap[i].date
+                    val date = j.chunked(2)
+                    List_v.add(date[1] + date[2] + date[3] + date[4] + date[5] + date[6] + date[7])
                 }
+
+
+                fun data1(i: Int, j: Int): ArrayList<Entry> {
+                    dataList1.add(Entry(i.toFloat(), grap[j].Tc))
+                    Log.d("data_List", "before data ${grap[j].Tc}")
+                    return dataList1
+                }
+
+                fun data2(i: Int, j: Int): ArrayList<Entry> {
+                    dataList2.add(Entry(i.toFloat(), grap[j].DO))
+                    return dataList2
+                }
+
+                fun data3(i: Int, j: Int): ArrayList<Entry> {
+                    dataList3.add(Entry(i.toFloat(), grap[j].pH))
+                    return dataList3
+                }
+
+                fun data4(i: Int, j: Int): ArrayList<Entry> {
+                    dataList4.add(Entry(i.toFloat(), grap[j].Sa))
+                    return dataList4
+                }
+
+                fun data5(i: Int, j: Int): ArrayList<Entry> {
+                    dataList5.add(Entry(i.toFloat(), grap[j].ORP))
+                    return dataList5
+                }
+
+                fun data6(i: Int, j: Int): ArrayList<Entry> {
+                    dataList6.add(Entry(i.toFloat(), grap[j].TUR))
+                    return dataList6
+                }
+
+                for (i in 0 until grap.size) {
+                    // 그래프 추출시 값이 역순으로 출력되야되므로 리벌스 시켜준다
+                    val j = grap.size - 1
+                    data1(i, j - i)
+                    data2(i, j - i)
+                    data3(i, j - i)
+                    data4(i, j - i)
+                    data5(i, j - i)
+                    data6(i, j - i)
+
+                }
+
+                List_v.reverse()
+
+                val lineDataSet1 = LineDataSet(dataList1, "수온(℃)")
+                val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
+                val lineDataSet3 = LineDataSet(dataList3, "pH(pH)")
+                val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
+                val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
+                val lineDataSet6 = LineDataSet(dataList6, "탁도(NTU)")
+
+                //1. 데이터 셋 만들기
+                createSet(lineDataSet1)
+                createSet(lineDataSet2)
+                createSet(lineDataSet3)
+                createSet(lineDataSet4)
+                createSet(lineDataSet5)
+                createSet(lineDataSet6)
+                //2. 리스트에 데이터셋 추가
+                dataSets1.add(lineDataSet1)
+                dataSets2.add(lineDataSet2)
+                dataSets3.add(lineDataSet3)
+                dataSets4.add(lineDataSet4)
+                dataSets5.add(lineDataSet5)
+                dataSets6.add(lineDataSet6)
+
+                //3. 라인 데이터에 리스트 추가
+                line_data1 = LineData(dataSets1)
+                line_data2 = LineData(dataSets2)
+                line_data3 = LineData(dataSets3)
+                line_data4 = LineData(dataSets4)
+                line_data5 = LineData(dataSets5)
+                line_data6 = LineData(dataSets6)
+
+                chart_shape(chart)
+                chart_shape(chart2)
+                chart_shape(chart3)
+                chart_shape(chart4)
+                chart_shape(chart5)
+                chart_shape(chart6)
+
+                Custom_Legend(chart)
+                Custom_Legend(chart2)
+                Custom_Legend(chart3)
+                Custom_Legend(chart4)
+                Custom_Legend(chart5)
+                Custom_Legend(chart6)
+
+                lineDataSet1.color = ContextCompat.getColor(mainActivity, R.color.red)
+                lineDataSet1.setCircleColor(
+                    ContextCompat.getColor(
+                        mainActivity,
+                        R.color.red
+                    )
+                )
+                // MaValueFormatter 클래스에서 포맷 형식을 불러와서 소수점을 잘라줬다
+                line_data1.setValueFormatter(MyValueFormatter())
+
+                lineDataSet2.color =
+                    ContextCompat.getColor(mainActivity, R.color.primary)
+                lineDataSet2.setCircleColor(
+                    ContextCompat.getColor(
+                        mainActivity,
+                        R.color.primary
+                    )
+                )
+                line_data2.setValueFormatter(MyValueFormatter())
+
+                lineDataSet3.color = ContextCompat.getColor(mainActivity, R.color.brawn)
+                lineDataSet3.setCircleColor(
+                    ContextCompat.getColor(
+                        mainActivity,
+                        R.color.brawn
+                    )
+                )
+                line_data3.setValueFormatter(MyValueFormatter())
+
+                lineDataSet4.color =
+                    ContextCompat.getColor(mainActivity, R.color.light_grean)
+                lineDataSet4.setCircleColor(
+                    ContextCompat.getColor(
+                        mainActivity,
+                        R.color.light_grean
+                    )
+                )
+                line_data4.setValueFormatter(MyValueFormatter())
+
+                lineDataSet5.color =
+                    ContextCompat.getColor(mainActivity, R.color.colorAccent)
+                lineDataSet5.setCircleColor(
+                    ContextCompat.getColor(
+                        mainActivity,
+                        R.color.colorAccent
+                    )
+                )
+                line_data5.setValueFormatter(MyValueFormatter())
+
+                lineDataSet6.color =
+                    ContextCompat.getColor(mainActivity, R.color.purple_200)
+                lineDataSet6.setCircleColor(
+                    ContextCompat.getColor(
+                        mainActivity,
+                        R.color.purple_200
+                    )
+                )
+                line_data6.setValueFormatter(MyValueFormatter())
+
+                chart_YAxis(chart, tcmax!!, tcmin!!)
+                chart_YAxis(chart2, domax!!, domin!!)
+                chart_YAxis(chart3, phmax!!, phmin!!)
+                chart_YAxis(chart4, samax!!, samin!!)
+                val yAxis: YAxis = chart5.axisLeft
+                chart5.axisRight.isEnabled = false
+                yAxis.enableGridDashedLine(10f, 10f, 0f)
+
+                yAxis.axisMaximum = orpmax!! * 2
+                if (orpmin!! <= 250) {
+                    yAxis.axisMinimum = -500f
+                } else {
+                    yAxis.axisMinimum = orpmin!! * -2
+                }
+
+                val yAxis2: YAxis = chart6.axisLeft
+                chart5.axisRight.isEnabled = false
+                yAxis2.enableGridDashedLine(10f, 10f, 0f)
+
+                yAxis2.axisMaximum = turmax!! * 2
+                if (turmin!! <= 250) {
+                    yAxis2.axisMinimum = -500f
+                } else {
+                    yAxis2.axisMinimum = turmin!! * -2
+                }
+
+                chart.data = line_data1
+                chart2.data = line_data2
+                chart3.data = line_data3
+                chart4.data = line_data4
+                chart5.data = line_data5
+                chart6.data = line_data6
+
+                chart.invalidate()
+                chart.setVisibleXRangeMaximum(3f)
+                chart2.invalidate()
+                chart2.setVisibleXRangeMaximum(3f)
+                chart3.invalidate()
+                chart3.setVisibleXRangeMaximum(3f)
+                chart4.invalidate()
+                chart4.setVisibleXRangeMaximum(3f)
+                chart5.invalidate()
+                chart5.setVisibleXRangeMaximum(3f)
+                chart6.invalidate()
+                chart6.setVisibleXRangeMaximum(3f)
+
             }
+        }
 
+            override fun onFailure(call: Call<grap_DTO>, t: Throwable) {
+                Log.d("grap_do", "${t.message}")
+        }
 
-            override fun onFailure(call: Call<companyDTO>, t: Throwable) {
-
-                Log.d("company_name", "${t.message}")
-
-            }
-
-        })
+    })
 
     }
 
@@ -478,7 +415,7 @@ class GraphFragment : Fragment() {
             set_chart.setVisibleXRangeMaximum(3f)
             set_chart.setPinchZoom(false)
             set_chart.isDoubleTapToZoomEnabled = false
-            set_chart.setExtraOffsets(8f, 16f, 8f, 16f)
+            set_chart.setExtraOffsets(8f, 16f, 45f, 8f)
             set_chart.description = null
             set_chart.isScaleXEnabled = false
             set_chart.isScaleYEnabled = false
@@ -487,7 +424,6 @@ class GraphFragment : Fragment() {
         set_chart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             setDrawGridLines(false)
-            axisMaximum = 18.5f
             chart.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
             chart2.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
             chart3.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
@@ -562,7 +498,7 @@ class GraphFragment : Fragment() {
             yAxis.axisMinimum = min_data * -2
         }
 
-        limitLine(max_data, min_data, yAxis)
+//        limitLine(max_data, min_data, yAxis)
 
     }
 
@@ -609,6 +545,5 @@ class GraphFragment : Fragment() {
     }
 
 }
-
 
 

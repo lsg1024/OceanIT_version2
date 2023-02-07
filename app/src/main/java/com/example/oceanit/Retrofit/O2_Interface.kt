@@ -44,4 +44,8 @@ interface O2_Interface {
         @Header("token") user_token : String
     ) : Call<logoutDTO>
 
+    @GET("api/sensor/log/graph_tick")
+    fun grap(
+        @Header("user_key") user_key: Int?
+    ): Call<grap_DTO>
 }
