@@ -55,13 +55,33 @@ class GraphFragment : Fragment() {
     lateinit var chart5: LineChart
     lateinit var chart6: LineChart
 
+    var line_data1 : LineData? = null
+    var line_data2 : LineData? = null
+    var line_data3 : LineData? = null
+    var line_data4 : LineData? = null
+    var line_data5 : LineData? = null
+    var line_data6 : LineData? = null
+
+
+    // 데이터 넣는 데이터 셋
+    val dataSets1 = ArrayList<ILineDataSet>()
+    val dataSets2 = ArrayList<ILineDataSet>()
+    val dataSets3 = ArrayList<ILineDataSet>()
+    val dataSets4 = ArrayList<ILineDataSet>()
+    val dataSets5 = ArrayList<ILineDataSet>()
+    val dataSets6 = ArrayList<ILineDataSet>()
+
+    // 어디선가 가져온 데이터를 리스트에 넣는데
+    val dataList1 = ArrayList<Entry>()
+    val dataList2 = ArrayList<Entry>()
+    val dataList3 = ArrayList<Entry>()
+    val dataList4 = ArrayList<Entry>()
+    val dataList5 = ArrayList<Entry>()
+    val dataList6 = ArrayList<Entry>()
+
     var user_key: Int = 0
-    lateinit var socket_data: Array<Sensor_data>
     lateinit var company_name: TextView
 
-    private val gson = Gson()
-
-    lateinit var mSocket: Socket
     lateinit var mainActivity: MainActivity
 
     val call by lazy { Retrofit2.getInstance() }
@@ -165,30 +185,6 @@ class GraphFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        var line_data1 : LineData
-        var line_data2 : LineData
-        var line_data3 : LineData
-        var line_data4 : LineData
-        var line_data5 : LineData
-        var line_data6 : LineData
-
-
-        // 데이터 넣는 데이터 셋
-        val dataSets1 = ArrayList<ILineDataSet>()
-        val dataSets2 = ArrayList<ILineDataSet>()
-        val dataSets3 = ArrayList<ILineDataSet>()
-        val dataSets4 = ArrayList<ILineDataSet>()
-        val dataSets5 = ArrayList<ILineDataSet>()
-        val dataSets6 = ArrayList<ILineDataSet>()
-
-        // 어디선가 가져온 데이터를 리스트에 넣는데
-        val dataList1 = ArrayList<Entry>()
-        val dataList2 = ArrayList<Entry>()
-        val dataList3 = ArrayList<Entry>()
-        val dataList4 = ArrayList<Entry>()
-        val dataList5 = ArrayList<Entry>()
-        val dataList6 = ArrayList<Entry>()
-
         call?.grap(user_key)?.enqueue(object : Callback<grap_DTO> {
             override fun onResponse(call: Call<grap_DTO>, response: Response<grap_DTO>) {
             if (response.isSuccessful){
@@ -200,7 +196,6 @@ class GraphFragment : Fragment() {
                     val date = j.chunked(2)
                     List_v.add(date[1] + date[2] + date[3] + date[4] + date[5] + date[6] + date[7])
                 }
-
 
                 fun data1(i: Int, j: Int): ArrayList<Entry> {
                     dataList1.add(Entry(i.toFloat(), grap[j].Tc))
@@ -291,54 +286,11 @@ class GraphFragment : Fragment() {
                 Custom_Legend(chart5)
                 Custom_Legend(chart6)
 
-                lineDataSet1.color = ContextCompat.getColor(mainActivity, R.color.red)
-                lineDataSet1.setCircleColor(
-                    ContextCompat.getColor(
-                        mainActivity,
-                        R.color.red
-                    )
-                )
-                // MaValueFormatter 클래스에서 포맷 형식을 불러와서 소수점을 잘라줬다
-                line_data1.setValueFormatter(MyValueFormatter())
-
-                lineDataSet2.color =
-                    ContextCompat.getColor(mainActivity, R.color.primary)
-                lineDataSet2.setCircleColor(
-                    ContextCompat.getColor(
-                        mainActivity,
-                        R.color.primary
-                    )
-                )
-                line_data2.setValueFormatter(MyValueFormatter())
-
-                lineDataSet3.color = ContextCompat.getColor(mainActivity, R.color.brawn)
-                lineDataSet3.setCircleColor(
-                    ContextCompat.getColor(
-                        mainActivity,
-                        R.color.brawn
-                    )
-                )
-                line_data3.setValueFormatter(MyValueFormatter())
-
-                lineDataSet4.color =
-                    ContextCompat.getColor(mainActivity, R.color.light_grean)
-                lineDataSet4.setCircleColor(
-                    ContextCompat.getColor(
-                        mainActivity,
-                        R.color.light_grean
-                    )
-                )
-                line_data4.setValueFormatter(MyValueFormatter())
-
-                lineDataSet5.color =
-                    ContextCompat.getColor(mainActivity, R.color.colorAccent)
-                lineDataSet5.setCircleColor(
-                    ContextCompat.getColor(
-                        mainActivity,
-                        R.color.colorAccent
-                    )
-                )
-                line_data5.setValueFormatter(MyValueFormatter())
+                setDataSetProperties(lineDataSet1, R.color.red)
+                setDataSetProperties(lineDataSet2, R.color.primary)
+                setDataSetProperties(lineDataSet3, R.color.brawn)
+                setDataSetProperties(lineDataSet4, R.color.light_grean)
+                setDataSetProperties(lineDataSet5, R.color.colorAccent)
 
                 lineDataSet6.color =
                     ContextCompat.getColor(mainActivity, R.color.purple_200)
@@ -348,7 +300,7 @@ class GraphFragment : Fragment() {
                         R.color.purple_200
                     )
                 )
-                line_data6.setValueFormatter(MyValueFormatter())
+                line_data6!!.setValueFormatter(MyValueFormatter())
 
                 chart_YAxis(chart, tcmax!!, tcmin!!)
                 chart_YAxis(chart2, domax!!, domin!!)
@@ -442,37 +394,6 @@ class GraphFragment : Fragment() {
 
     }
 
-    // 차트 클릭 이벤트에서 클릭했을 때 나오는 아이콘 format 형식 지정해줌
-    @SuppressLint("ViewConstructor")
-//    inner class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context, layoutResource) {
-//        private val tvContent: TextView = findViewById(R.id.tvContent)
-//
-//        // runs every time the MarkerView is redrawn, can be used to update the
-//        // content (user-interface)
-//        override fun refreshContent(e: Entry, highlight: Highlight) {
-//
-//            val mFormat = DecimalFormat("0")
-//
-//            if (e is CandleEntry) {
-//                tvContent.text = "17"
-//
-//            } else {
-//
-//                for (i in (mFormat.format(e.x).toInt()) until socket_data.size){
-//
-//                    val j = socket_data.size
-//                    tvContent.text = (socket_data[j - mFormat.format(e.x).toInt()-1].date)
-//                }
-//            }
-//            super.refreshContent(e, highlight)
-//        }
-//
-//        override fun getOffset(): MPPointF {
-//            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
-//        }
-//
-//    }
-
     private fun Custom_Legend(set_chart: LineChart) {
 
         val legend: Legend = set_chart.legend
@@ -498,32 +419,6 @@ class GraphFragment : Fragment() {
             yAxis.axisMinimum = min_data * -2
         }
 
-//        limitLine(max_data, min_data, yAxis)
-
-    }
-
-    private fun limitLine(max_data : Float, min_data : Float, yAxis: YAxis){
-        ll1 = LimitLine(max_data, "최대 임계치 $max_data")
-        ll2 = LimitLine(min_data, "최소 임계치 $min_data")
-
-        ll1?.apply {
-            lineWidth = 2f
-            enableDashedLine(20f, 0f, 0f)
-            labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
-            textSize = 10f
-        }
-
-        ll2?.apply {
-            lineWidth = 2f
-            lineColor = Color.BLUE
-            enableDashedLine(40f, 0f, 0f)
-            labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
-            textSize = 10f
-        }
-
-        yAxis.setDrawLimitLinesBehindData(true)
-        yAxis.addLimitLine(ll1)
-        yAxis.addLimitLine(ll2)
     }
 
     private fun createSet(set: LineDataSet): LineDataSet {
@@ -542,6 +437,12 @@ class GraphFragment : Fragment() {
 
         }
         return set
+    }
+
+    private fun setDataSetProperties(lineDataSet: LineDataSet, color: Int){
+        lineDataSet.color = ContextCompat.getColor(mainActivity, color)
+        lineDataSet.setCircleColor(ContextCompat.getColor(mainActivity, color))
+        lineDataSet.valueFormatter = MyValueFormatter()
     }
 
 }
