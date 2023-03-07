@@ -197,50 +197,17 @@ class GraphFragment : Fragment() {
                     List_v.add(date[1] + date[2] + date[3] + date[4] + date[5] + date[6] + date[7])
                 }
 
-                fun data1(i: Int, j: Int): ArrayList<Entry> {
-                    dataList1.add(Entry(i.toFloat(), grap[j].Tc))
-                    Log.d("data_List", "before data ${grap[j].Tc}")
-                    return dataList1
-                }
-
-                fun data2(i: Int, j: Int): ArrayList<Entry> {
-                    dataList2.add(Entry(i.toFloat(), grap[j].DO))
-                    return dataList2
-                }
-
-                fun data3(i: Int, j: Int): ArrayList<Entry> {
-                    dataList3.add(Entry(i.toFloat(), grap[j].pH))
-                    return dataList3
-                }
-
-                fun data4(i: Int, j: Int): ArrayList<Entry> {
-                    dataList4.add(Entry(i.toFloat(), grap[j].Sa))
-                    return dataList4
-                }
-
-                fun data5(i: Int, j: Int): ArrayList<Entry> {
-                    dataList5.add(Entry(i.toFloat(), grap[j].ORP))
-                    return dataList5
-                }
-
-                fun data6(i: Int, j: Int): ArrayList<Entry> {
-                    dataList6.add(Entry(i.toFloat(), grap[j].TUR))
-                    return dataList6
-                }
+                List_v.reverse()
 
                 for (i in 0 until grap.size) {
-                    // 그래프 추출시 값이 역순으로 출력되야되므로 리벌스 시켜준다
                     val j = grap.size - 1
-                    data1(i, j - i)
-                    data2(i, j - i)
-                    data3(i, j - i)
-                    data4(i, j - i)
-                    data5(i, j - i)
-                    data6(i, j - i)
-
+                    addDataToList(i, j - i, dataList1, grap[j].Tc)
+                    addDataToList(i, j - i, dataList2, grap[j].DO)
+                    addDataToList(i, j - i, dataList3, grap[j].pH)
+                    addDataToList(i, j - i, dataList4, grap[j].Sa)
+                    addDataToList(i, j - i, dataList5, grap[j].ORP)
+                    addDataToList(i, j - i, dataList6, grap[j].TUR)
                 }
-
-                List_v.reverse()
 
                 val lineDataSet1 = LineDataSet(dataList1, "수온(℃)")
                 val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
@@ -291,16 +258,7 @@ class GraphFragment : Fragment() {
                 setDataSetProperties(lineDataSet3, R.color.brawn)
                 setDataSetProperties(lineDataSet4, R.color.light_grean)
                 setDataSetProperties(lineDataSet5, R.color.colorAccent)
-
-                lineDataSet6.color =
-                    ContextCompat.getColor(mainActivity, R.color.purple_200)
-                lineDataSet6.setCircleColor(
-                    ContextCompat.getColor(
-                        mainActivity,
-                        R.color.purple_200
-                    )
-                )
-                line_data6!!.setValueFormatter(MyValueFormatter())
+                setDataSetProperties(lineDataSet6, R.color.purple_200)
 
                 chart_YAxis(chart, tcmax!!, tcmin!!)
                 chart_YAxis(chart2, domax!!, domin!!)
@@ -318,7 +276,7 @@ class GraphFragment : Fragment() {
                 }
 
                 val yAxis2: YAxis = chart6.axisLeft
-                chart5.axisRight.isEnabled = false
+                chart6.axisRight.isEnabled = false
                 yAxis2.enableGridDashedLine(10f, 10f, 0f)
 
                 yAxis2.axisMaximum = turmax!! * 2
@@ -350,13 +308,10 @@ class GraphFragment : Fragment() {
 
             }
         }
-
             override fun onFailure(call: Call<grap_DTO>, t: Throwable) {
                 Log.d("grap_do", "${t.message}")
-        }
-
-    })
-
+            }
+        })
     }
 
     private fun chart_shape(set_chart: LineChart) {
@@ -376,14 +331,7 @@ class GraphFragment : Fragment() {
         set_chart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             setDrawGridLines(false)
-            chart.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
-            chart2.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
-            chart3.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
-            chart4.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
-            chart5.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
-            chart6.xAxis.valueFormatter = IndexAxisValueFormatter(List_v)
-
-
+            valueFormatter = IndexAxisValueFormatter(List_v)
         }
 
         set_chart.axisRight.apply {
@@ -391,38 +339,29 @@ class GraphFragment : Fragment() {
             setDrawLabels(false)
             setDrawAxisLine(false)
         }
-
     }
 
     private fun Custom_Legend(set_chart: LineChart) {
-
         val legend: Legend = set_chart.legend
-
         legend.formSize = 10f
         legend.textSize = 15f
     }
 
     private fun chart_YAxis(set_chart: LineChart, max_data:Float, min_data: Float) {
 
-        val yAxis: YAxis = set_chart.axisLeft
-
-        // disable dual axis (only use LEFT axis)
         set_chart.axisRight.isEnabled = false
-        // horizontal grid lines
-        yAxis.enableGridDashedLine(10f, 10f, 0f)
-        // axis range
-
-        yAxis.axisMaximum = max_data * 3
-        if (min_data <= 20) {
-            yAxis.axisMinimum = -40f
-        } else {
-            yAxis.axisMinimum = min_data * -2
+        set_chart.axisLeft.apply {
+            enableGridDashedLine(10f, 10f, 0f)
+            axisMaximum = max_data * 3
+            if (min_data <= 20) {
+                axisMinimum = -40f
+            } else {
+                axisMinimum = min_data * -2
+            }
         }
-
     }
 
     private fun createSet(set: LineDataSet): LineDataSet {
-
 
         set.apply {
             axisDependency = YAxis.AxisDependency.LEFT
@@ -434,7 +373,6 @@ class GraphFragment : Fragment() {
             fillAlpha = 0
             fillColor = getColor(R.color.white)
             setDrawValues(true)
-
         }
         return set
     }
@@ -443,6 +381,10 @@ class GraphFragment : Fragment() {
         lineDataSet.color = ContextCompat.getColor(mainActivity, color)
         lineDataSet.setCircleColor(ContextCompat.getColor(mainActivity, color))
         lineDataSet.valueFormatter = MyValueFormatter()
+    }
+
+    fun addDataToList(i: Int, j: Int, data: ArrayList<Entry>, value: Float){
+        data.add(Entry(i.toFloat(), value))
     }
 
 }
