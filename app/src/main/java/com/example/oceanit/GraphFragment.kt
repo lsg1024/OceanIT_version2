@@ -88,9 +88,6 @@ class GraphFragment : Fragment() {
 
     val List_v : ArrayList<String> = ArrayList()
 
-    var ll1 : LimitLine? = null
-    var ll2 : LimitLine? = null
-
     var tcmax : Float? = null
     var tcmin : Float? = null
 
@@ -388,5 +385,3 @@ class GraphFragment : Fragment() {
     }
 
 }
-
-
