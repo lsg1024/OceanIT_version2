@@ -1,9 +1,8 @@
-package com.example.oceanit
+package com.example.oceanit.View
 
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -11,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.oceanit.DTO.LoginDTO
 import com.example.oceanit.DTO.LoginData
+import com.example.oceanit.R
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
 import com.google.android.gms.tasks.OnCompleteListener

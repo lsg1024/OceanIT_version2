@@ -1,4 +1,4 @@
-package com.example.oceanit
+package com.example.oceanit.View
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -11,10 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.oceanit.DTO.SensorDTO
 import com.example.oceanit.DTO.companyDTO
+import com.example.oceanit.R
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
 import com.example.oceanit.Socket_File.Join_Data
@@ -26,7 +26,6 @@ import com.ramotion.foldingcell.FoldingCell
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
