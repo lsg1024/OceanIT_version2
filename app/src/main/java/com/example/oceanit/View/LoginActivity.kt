@@ -64,16 +64,22 @@ class LoginActivity : AppCompatActivity() {
 
                             Log.d("Login_Log", "$result")
 
-                            Loginkey.setUserKey(this@LoginActivity, result!!.result.user_key!!.toInt())
-                            Loginkey.setTokenKey(this@LoginActivity, token)
+                            if (result?.result?.user_key != null) {
+                                Loginkey.setUserKey(this@LoginActivity, result!!.result.user_key!!.toInt())
+                                Loginkey.setTokenKey(this@LoginActivity, token)
 
-                            Log.d("Login_key", "${result.result.user_key!!.toInt()}")
-                            Log.d("setTokenKey", "${token}")
+                                Log.d("Login_key", "${result.result.user_key!!.toInt()}")
+                                Log.d("setTokenKey", token)
 
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
-                            startActivity(intent)
-                            finish()
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                Toast.makeText(this@LoginActivity, "아이디 또는 비밀번호가 잘못되었습니다", Toast.LENGTH_SHORT).show()
+                                Log.d("Login_Log", "user_key null")
+                            }
+
                         }
                     }
 
