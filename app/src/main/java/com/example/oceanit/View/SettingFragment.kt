@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -66,6 +67,8 @@ class SettingFragment : Fragment() {
     lateinit var ceo : TextView
     lateinit var button: Button
 
+    lateinit var constraint : ConstraintLayout
+
     var number1: String = ""
     lateinit var logout_btn : Button
 
@@ -119,6 +122,8 @@ class SettingFragment : Fragment() {
         num5_2 = view.findViewById(R.id.num5_2)
         num6_2 = view.findViewById(R.id.num6_2)
         logout_btn = view.findViewById(R.id.logout_btn)
+
+        constraint = view.findViewById(R.id.constraint)
 
         mainActivity = context as MainActivity
 
@@ -290,6 +295,11 @@ class SettingFragment : Fragment() {
             Runtime.getRuntime().exit(0)
         }
 
+        constraint.setOnClickListener {
+            val intent = Intent(context, WebcctvView::class.java)
+            startActivity(intent)
+        }
+
         return view
     }
 
@@ -405,17 +415,9 @@ class SettingFragment : Fragment() {
             })
         }
 
-        mainActivity = context as MainActivity
-
         // 데이터 입력하는 값 수조 / 서버에서 수조 이름 받아오기 / 데이터 스크롤 + EditText 값 변경
 
         user_key = Loginkey.getUserKey(mainActivity).toInt()
-
-//        fun Ed_number(numb:EditText, fnum : Float){
-//            val num = numb.text.toString().toFloat()
-//            mFormat.format(num)
-//            fnum <= num
-//        }
 
         button.setOnClickListener{
 
@@ -513,7 +515,6 @@ class SettingFragment : Fragment() {
 
         }
 
-
         // 바 움직이면서 min max 값
         rangeSlider.addOnSliderTouchListener(range_Listner(num1_1, num1_2, rangeSlider))
         rangeSlider2.addOnSliderTouchListener(range_Listner(num2_1, num2_2, rangeSlider2))
@@ -583,6 +584,7 @@ class SettingFragment : Fragment() {
     }
 
     // Fragment 새로고침
+    @SuppressLint("DetachAndAttachSameFragment")
     fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
         // 갱신되는거 확인
         Log.d("refresh", "refresh")

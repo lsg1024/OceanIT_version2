@@ -9,14 +9,14 @@ import androidx.activity.viewModels
 import com.example.oceanit.NetworkViewModel
 import com.example.oceanit.R
 
-class NewWorkCheck : AppCompatActivity() {
+class NetWorkCheck : AppCompatActivity() {
 
     private val viewModel: NetworkViewModel by viewModels()
     private lateinit var layoutDisconnected: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.networkcheck)
 
         layoutDisconnected = findViewById(R.id.layoutDisconnected)
 
@@ -27,7 +27,7 @@ class NewWorkCheck : AppCompatActivity() {
             if (isConnected) {
                 // 인터넷이 연결된 상태
                 layoutDisconnected.visibility = View.GONE
-                startActivity(Intent(this@NewWorkCheck, LoginActivity::class.java))
+                startActivity(Intent(this@NetWorkCheck, LoginActivity::class.java))
                 finish()
             } else {
                 layoutDisconnected.visibility = View.VISIBLE
