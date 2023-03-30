@@ -8,6 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import com.example.oceanit.DB.AppDatabase
+import com.example.oceanit.DB.User
 import com.example.oceanit.DTO.LoginDTO
 import com.example.oceanit.DTO.LoginData
 import com.example.oceanit.R
@@ -32,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
         val E_pw : EditText = findViewById(R.id.login_password)
         val loginB : Button = findViewById(R.id.login_button)
 
+        val db = AppDatabase.getDBInstance(this.applicationContext)
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -55,6 +60,10 @@ class LoginActivity : AppCompatActivity() {
                 // 로그인 아이디 패스워드 입력후 버튼 눌러서 전송
                 val id = E_id.text.toString()
                 val pw = E_pw.text.toString()
+
+                val user = User(loginId = id, loginPw = pw)
+                db!!.UserDao()!!.insert(user)
+
                 Log.d("Login_Log", "$id + $pw")
                 call?.login(token, LoginData(id, pw))?.enqueue(object : Callback<LoginDTO>{
 
@@ -65,16 +74,17 @@ class LoginActivity : AppCompatActivity() {
                             Log.d("Login_Log", "$result")
 
                             if (result?.result?.user_key != null) {
-                                Loginkey.setUserKey(this@LoginActivity, result!!.result.user_key!!.toInt())
+                                Loginkey.setUserKey(this@LoginActivity, result.result.user_key.toInt())
                                 Loginkey.setTokenKey(this@LoginActivity, token)
 
-                                Log.d("Login_key", "${result.result.user_key!!.toInt()}")
+                                Log.d("Login_key", "${result.result.user_key.toInt()}")
                                 Log.d("setTokenKey", token)
 
                                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
                                 startActivity(intent)
                                 finish()
+
                             } else {
                                 Toast.makeText(this@LoginActivity, "아이디 또는 비밀번호가 잘못되었습니다", Toast.LENGTH_SHORT).show()
                                 Log.d("Login_Log", "user_key null")
@@ -102,6 +112,4 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-
-
 }

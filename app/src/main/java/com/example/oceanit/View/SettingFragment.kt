@@ -307,113 +307,6 @@ class SettingFragment : Fragment() {
 
         super.onResume()
 
-        fun change_value(){
-
-            call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
-
-                @SuppressLint("SetTextI18n")
-                override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
-                    if (response.isSuccessful) {
-
-                        val result : SensorDTO? = response.body()
-
-                        // 이유는 알 수 없지만 String format을 이용하면 seekbar 소수점 표시 가능
-                        val mFormat = DecimalFormat("#.##")
-
-                        Log.d("Sensor_value", "$result")
-
-                        // 데이터 EditText에 저장
-                        num1_1.setText(num1_1.text.toString() + result!!.result.Tc_low.toString())
-                        num1_2.setText(num1_2.text.toString() + result.result.Tc_high.toString())
-//                     키보드 입력 값을 받아오고 슬라이더 모양 변화
-                        keyborad(num1_1)
-                        keyborad(num1_2)
-                        // 최대 측량 범위
-                        rangeSlider.valueFrom = mFormat.format(result.result.Tc_low - 10).toFloat()
-                        // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
-                        rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 10).toFloat()
-                        // 슬라이더 움직일때 조절되는 단위
-                        rangeSlider.stepSize = 0f
-                        // 서버에서 지정된 사용자의 min max 값 받아오기
-                        rangeSlider.setValues(mFormat.format(result.result.Tc_low).toFloat(), mFormat.format(result.result.Tc_high).toFloat())
-
-// ---------------------------------------------------------------------------------------------------- //
-
-                        // 데이터 EditText에 저장
-                        num2_1.setText(num2_1.text.toString() + result.result.DO_low.toString())
-                        num2_2.setText(num2_2.text.toString() + result.result.DO_high.toString())
-
-                        keyborad(num2_1)
-                        keyborad(num2_2)
-
-                        rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 10).toFloat()
-                        rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 10).toFloat()
-                        rangeSlider2.stepSize = 0f
-                        rangeSlider2.setValues(mFormat.format(result.result.DO_low).toFloat(), mFormat.format(result.result.DO_high).toFloat())
-
-// ---------------------------------------------------------------------------------------------------- //
-
-                        // 데이터 EditText에 저장
-                        num3_1.setText(num3_1.text.toString() + result.result.pH_low.toString())
-                        num3_2.setText(num3_2.text.toString() + result.result.pH_high.toString())
-
-                        keyborad(num3_1)
-                        keyborad(num3_2)
-
-                        rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 10).toFloat()
-                        rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 10).toFloat()
-                        rangeSlider3.stepSize = 0f
-                        rangeSlider3.setValues(mFormat.format(result.result.pH_low).toFloat(), mFormat.format(result.result.pH_high).toFloat())
-
-// ---------------------------------------------------------------------------------------------------- //
-
-                        // 데이터 EditText에 저장
-                        num4_1.setText(num4_1.text.toString() + result.result.Sa_low.toString())
-                        num4_2.setText(num4_2.text.toString() + result.result.Sa_high.toString())
-
-                        keyborad(num4_1)
-                        keyborad(num4_2)
-
-                        rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 10).toFloat()
-                        rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 10).toFloat()
-                        rangeSlider4.stepSize = 0f
-                        rangeSlider4.setValues(mFormat.format(result.result.Sa_low).toFloat(), mFormat.format(result.result.Sa_high).toFloat())
-
-// ---------------------------------------------------------------------------------------------------- //
-
-                        num5_1.setText(num5_1.text.toString() + result.result.ORP_low.toString())
-                        num5_2.setText(num5_2.text.toString() + result.result.ORP_high.toString())
-
-                        keyborad(num5_1)
-                        keyborad(num5_2)
-
-                        rangeSlider5.valueFrom = mFormat.format(result.result.ORP_low - 100).toFloat()
-                        rangeSlider5.valueTo = mFormat.format(result.result.ORP_high + 100).toFloat()
-                        rangeSlider5.stepSize = 0f
-                        rangeSlider5.setValues(mFormat.format(result.result.ORP_low).toFloat(), mFormat.format(result.result.ORP_high).toFloat())
-
-// ---------------------------------------------------------------------------------------------------- //
-
-                        num6_1.setText(num6_1.text.toString() + result.result.TUR_low.toString())
-                        num6_2.setText(num6_2.text.toString() + result.result.TUR_high.toString())
-
-                        keyborad(num6_1)
-                        keyborad(num6_2)
-
-                        rangeSlider6.valueFrom = mFormat.format(result.result.TUR_low - 500).toFloat()
-                        rangeSlider6.valueTo = mFormat.format(result.result.TUR_high + 500).toFloat()
-                        rangeSlider6.stepSize = 0f
-                        rangeSlider6.setValues(mFormat.format(result.result.TUR_low).toFloat(), mFormat.format(result.result.TUR_high).toFloat())
-
-                    }
-                }
-
-                override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
-                    Log.d("Sensor_value", "${t.message}")
-                }
-
-            })
-        }
 
         // 데이터 입력하는 값 수조 / 서버에서 수조 이름 받아오기 / 데이터 스크롤 + EditText 값 변경
 
@@ -460,7 +353,7 @@ class SettingFragment : Fragment() {
             var fnum6_2 = num6_2.text.toString().toFloat()
             fnum6_2 = mFormat.format(fnum6_2).toFloat()
 
-            Log.d("retrofit2_bbb", "${String.format("%.2f",fnum1_1)}")
+            Log.d("retrofit2_bbb", String.format("%.2f",fnum1_1))
 
             call?.Sensor_CG(user_key, Sensor_Body(
                 Tc_low = fnum1_1,
@@ -523,6 +416,114 @@ class SettingFragment : Fragment() {
         rangeSlider5.addOnSliderTouchListener(range_Listner(num5_1, num5_2, rangeSlider5))
         rangeSlider6.addOnSliderTouchListener(range_Listner(num6_1, num6_2, rangeSlider6))
 
+    }
+
+    fun change_value(){
+
+        call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
+
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(call: Call<SensorDTO>, response: Response<SensorDTO>) {
+                if (response.isSuccessful) {
+
+                    val result : SensorDTO? = response.body()
+
+                    // 이유는 알 수 없지만 String format을 이용하면 seekbar 소수점 표시 가능
+                    val mFormat = DecimalFormat("#.##")
+
+                    Log.d("Sensor_value", "$result")
+
+                    // 데이터 EditText에 저장
+                    num1_1.setText(num1_1.text.toString() + result!!.result.Tc_low.toString())
+                    num1_2.setText(num1_2.text.toString() + result.result.Tc_high.toString())
+//                     키보드 입력 값을 받아오고 슬라이더 모양 변화
+                    keyborad(num1_1)
+                    keyborad(num1_2)
+                    // 최대 측량 범위
+                    rangeSlider.valueFrom = mFormat.format(result.result.Tc_low - 10).toFloat()
+                    // 서버에서 보내준 max 값 + 10f 방식 이용도 가능 가변적인 변경
+                    rangeSlider.valueTo = mFormat.format(result.result.Tc_high + 10).toFloat()
+                    // 슬라이더 움직일때 조절되는 단위
+                    rangeSlider.stepSize = 0f
+                    // 서버에서 지정된 사용자의 min max 값 받아오기
+                    rangeSlider.setValues(mFormat.format(result.result.Tc_low).toFloat(), mFormat.format(result.result.Tc_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                    // 데이터 EditText에 저장
+                    num2_1.setText(num2_1.text.toString() + result.result.DO_low.toString())
+                    num2_2.setText(num2_2.text.toString() + result.result.DO_high.toString())
+
+                    keyborad(num2_1)
+                    keyborad(num2_2)
+
+                    rangeSlider2.valueFrom = mFormat.format(result.result.DO_low - 10).toFloat()
+                    rangeSlider2.valueTo = mFormat.format(result.result.DO_high + 10).toFloat()
+                    rangeSlider2.stepSize = 0f
+                    rangeSlider2.setValues(mFormat.format(result.result.DO_low).toFloat(), mFormat.format(result.result.DO_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                    // 데이터 EditText에 저장
+                    num3_1.setText(num3_1.text.toString() + result.result.pH_low.toString())
+                    num3_2.setText(num3_2.text.toString() + result.result.pH_high.toString())
+
+                    keyborad(num3_1)
+                    keyborad(num3_2)
+
+                    rangeSlider3.valueFrom = mFormat.format(result.result.pH_low - 10).toFloat()
+                    rangeSlider3.valueTo = mFormat.format(result.result.pH_high + 10).toFloat()
+                    rangeSlider3.stepSize = 0f
+                    rangeSlider3.setValues(mFormat.format(result.result.pH_low).toFloat(), mFormat.format(result.result.pH_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                    // 데이터 EditText에 저장
+                    num4_1.setText(num4_1.text.toString() + result.result.Sa_low.toString())
+                    num4_2.setText(num4_2.text.toString() + result.result.Sa_high.toString())
+
+                    keyborad(num4_1)
+                    keyborad(num4_2)
+
+                    rangeSlider4.valueFrom = mFormat.format(result.result.Sa_low - 10).toFloat()
+                    rangeSlider4.valueTo = mFormat.format(result.result.Sa_high + 10).toFloat()
+                    rangeSlider4.stepSize = 0f
+                    rangeSlider4.setValues(mFormat.format(result.result.Sa_low).toFloat(), mFormat.format(result.result.Sa_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                    num5_1.setText(num5_1.text.toString() + result.result.ORP_low.toString())
+                    num5_2.setText(num5_2.text.toString() + result.result.ORP_high.toString())
+
+                    keyborad(num5_1)
+                    keyborad(num5_2)
+
+                    rangeSlider5.valueFrom = mFormat.format(result.result.ORP_low - 100).toFloat()
+                    rangeSlider5.valueTo = mFormat.format(result.result.ORP_high + 100).toFloat()
+                    rangeSlider5.stepSize = 0f
+                    rangeSlider5.setValues(mFormat.format(result.result.ORP_low).toFloat(), mFormat.format(result.result.ORP_high).toFloat())
+
+// ---------------------------------------------------------------------------------------------------- //
+
+                    num6_1.setText(num6_1.text.toString() + result.result.TUR_low.toString())
+                    num6_2.setText(num6_2.text.toString() + result.result.TUR_high.toString())
+
+                    keyborad(num6_1)
+                    keyborad(num6_2)
+
+                    rangeSlider6.valueFrom = mFormat.format(result.result.TUR_low - 500).toFloat()
+                    rangeSlider6.valueTo = mFormat.format(result.result.TUR_high + 500).toFloat()
+                    rangeSlider6.stepSize = 0f
+                    rangeSlider6.setValues(mFormat.format(result.result.TUR_low).toFloat(), mFormat.format(result.result.TUR_high).toFloat())
+
+                }
+            }
+
+            override fun onFailure(call: Call<SensorDTO>, t: Throwable) {
+                Log.d("Sensor_value", "${t.message}")
+            }
+
+        })
     }
 
 
