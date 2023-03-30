@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.oceanit.DB.AppDatabase
 import com.example.oceanit.DTO.*
 import com.example.oceanit.R
 import com.example.oceanit.Retrofit.Loginkey
@@ -79,6 +80,7 @@ class SettingFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -126,6 +128,8 @@ class SettingFragment : Fragment() {
         constraint = view.findViewById(R.id.constraint)
 
         mainActivity = context as MainActivity
+
+        val db = AppDatabase.getDBInstance(mainActivity)
 
         user_key = Loginkey.getUserKey(mainActivity).toInt()
         user_token = Loginkey.getTokenKey(mainActivity)
@@ -283,6 +287,9 @@ class SettingFragment : Fragment() {
             })
             Loginkey.removeKey(mainActivity)
             Loginkey.removeTokenKey(mainActivity)
+            db!!.UserDao()!!.deleteAllUsers()
+            Log.d("romoveAll Data","${ db!!.UserDao()!!.getAll(1) }")
+
             Log.d("remove_date", "${Loginkey.getUserKey(mainActivity)}" + "\n${Loginkey.getTokenKey(mainActivity)}")
             Toast.makeText(mainActivity, "로그아웃 성공", Toast.LENGTH_LONG).show()
 

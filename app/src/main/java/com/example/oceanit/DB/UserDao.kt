@@ -11,8 +11,8 @@ interface UserDao {
     @Insert
     fun insert(user: User)
 
-    @Delete
-    fun userDelete(user: User?)
+    @Query("DELETE FROM user")
+    fun deleteAllUsers()
 
     @Update
     fun userUpdate(user: User?)
