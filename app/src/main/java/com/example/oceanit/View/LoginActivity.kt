@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
 import com.example.oceanit.DB.AppDatabase
 import com.example.oceanit.DB.User
 import com.example.oceanit.DTO.LoginDTO
@@ -26,17 +25,23 @@ class LoginActivity : AppCompatActivity() {
 
     val call by lazy { Retrofit2.getInstance() }
     var token : String =""
+    lateinit var E_id : EditText
+    lateinit var E_pw : EditText
+    lateinit var loginBtn : Button
+    lateinit var db : AppDatabase
+    var id : String = ""
+    var pw : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_activty)
 
-        val E_id : EditText = findViewById(R.id.login_id)
-        val E_pw : EditText = findViewById(R.id.login_password)
-        val loginB : Button = findViewById(R.id.login_button)
+        E_id = findViewById(R.id.login_id)
+        E_pw = findViewById(R.id.login_password)
+        loginBtn = findViewById(R.id.login_button)
+        db = AppDatabase.getDBInstance(this.applicationContext)!!
 
-        val db = AppDatabase.getDBInstance(this.applicationContext)
-
+//        파이어베이스 FCM 을 위한 디바이스 토큰 추출
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -56,53 +61,11 @@ class LoginActivity : AppCompatActivity() {
         if (Loginkey.getUserKey(this@LoginActivity).isEmpty()) {
             Log.d("Login_key", "key_data 없음")
 
-            loginB.setOnClickListener {
-                // 로그인 아이디 패스워드 입력후 버튼 눌러서 전송
-                val id = E_id.text.toString()
-                val pw = E_pw.text.toString()
-
-                val user = User(loginId = id, loginPw = pw)
-                db!!.UserDao()!!.insert(user)
-
-                Log.d("Login_Log", "$id + $pw")
-                call?.login(token, LoginData(id, pw))?.enqueue(object : Callback<LoginDTO>{
-
-                    override fun onResponse(call: Call<LoginDTO>, response: Response<LoginDTO>) {
-                        if (response.isSuccessful) {
-                            val result : LoginDTO? = response.body()
-
-                            Log.d("Login_Log", "$result")
-
-                            if (result?.result?.user_key != null) {
-                                Loginkey.setUserKey(this@LoginActivity, result.result.user_key.toInt())
-                                Loginkey.setTokenKey(this@LoginActivity, token)
-
-                                Log.d("Login_key", "${result.result.user_key.toInt()}")
-                                Log.d("setTokenKey", token)
-
-                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
-                                startActivity(intent)
-                                finish()
-
-                            } else {
-                                Toast.makeText(this@LoginActivity, "아이디 또는 비밀번호가 잘못되었습니다", Toast.LENGTH_SHORT).show()
-                                Log.d("Login_Log", "user_key null")
-                            }
-
-                        }
-                    }
-
-                    override fun onFailure(call: Call<LoginDTO>, t: Throwable) {
-                        Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_LONG).show()
-                        Log.d("Login_Log", "${t.message}")
-                    }
-
-                })
-            }
+            loginBtn.setOnClickListener {loginData()}
 
         } else {
             Log.d("Login_key", "응답 ${Loginkey.getUserKey(this@LoginActivity)}")
+            Log.d("DataBase 저장 완료", "${db.UserDao()!!.getUser(0)}")
 
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
@@ -110,6 +73,64 @@ class LoginActivity : AppCompatActivity() {
             finish()
 
         }
+    }
+    private fun loginData() {
+        // 로그인 아이디 패스워드 입력후 버튼 눌러서 전송
+        id = E_id.text.toString()
+        pw = E_pw.text.toString()
 
+        if (id.isEmpty() || pw.isEmpty()) {
+            showErrorMessage("아이디 또는 비밀번호를 입력하세요.")
+            return
+        }
+        login()
+    }
+
+
+    private fun login() {
+
+        val user = User(loginId = id, loginPw = pw)
+
+        call?.login(token, LoginData(E_id.text.toString(), E_pw.text.toString()))?.enqueue(object : Callback<LoginDTO>{
+
+            override fun onResponse(call: Call<LoginDTO>, response: Response<LoginDTO>) {
+                if (response.isSuccessful) {
+                    val result : LoginDTO? = response.body()
+
+                    Log.d("Login_Log", "$result")
+
+                    if (result?.result?.user_key != null) {
+                        Loginkey.setUserKey(this@LoginActivity, result.result.user_key.toInt())
+                        Loginkey.setTokenKey(this@LoginActivity, token)
+
+                        Log.d("Login_key", "${result.result.user_key.toInt()}")
+                        Log.d("setTokenKey", token)
+
+                        db.UserDao()!!.insert(user)
+                        Log.d("DataBase 저장 완료", "${db.UserDao()!!.getUser(0)}")
+
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_LONG).show()
+                        startActivity(intent)
+                        finish()
+
+                    } else {
+                        Toast.makeText(this@LoginActivity, "아이디 또는 비밀번호가 잘못되었습니다", Toast.LENGTH_SHORT).show()
+                        Log.d("Login_Log", "user_key null")
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<LoginDTO>, t: Throwable) {
+                Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_LONG).show()
+                Log.d("Login_Log", "${t.message}")
+            }
+
+        })
+    }
+
+    private fun showErrorMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

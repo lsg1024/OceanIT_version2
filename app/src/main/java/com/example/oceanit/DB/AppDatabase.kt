@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun UserDao(): UserDao?
 
@@ -18,7 +18,7 @@ abstract class AppDatabase : RoomDatabase() {
                 INSTANCE = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "DB_NAME"
+                    "User_data"
                 )
                     .allowMainThreadQueries()
                     .build()

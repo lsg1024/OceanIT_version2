@@ -1,13 +1,9 @@
 package com.example.oceanit.View
 
 import android.annotation.SuppressLint
-import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowManager
 import android.webkit.*
-import androidx.room.Room
 import com.example.oceanit.DB.AppDatabase
 import com.example.oceanit.R
 
@@ -31,8 +27,8 @@ class WebcctvView : AppCompatActivity() {
                 if (url == "http://211.184.227.81:8500/login") {
                     view.loadUrl(
                         "javascript:(function() { " +
-                                "document.getElementsByName('id')[0].value='" + "${db!!.UserDao()!!.getAll(1).loginId}';" +
-                                "document.getElementsByName('pw')[0].value='${db.UserDao()!!.getAll(1).loginPw}';" +
+                                "document.getElementsByName('id')[0].value='" + "${db!!.UserDao()!!.getUser(0).loginId}';" +
+                                "document.getElementsByName('pw')[0].value='${db.UserDao()!!.getUser(0).loginPw}';" +
                                 "document.forms[0].submit();" +
                                 "})()"
                     )

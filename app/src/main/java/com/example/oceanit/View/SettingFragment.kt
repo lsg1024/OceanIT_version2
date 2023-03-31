@@ -288,9 +288,9 @@ class SettingFragment : Fragment() {
             Loginkey.removeKey(mainActivity)
             Loginkey.removeTokenKey(mainActivity)
             db!!.UserDao()!!.deleteAllUsers()
-            Log.d("romoveAll Data","${ db!!.UserDao()!!.getAll(1) }")
+            Log.d("romoveAll Data","${ db.UserDao()!!.getAll() }")
 
-            Log.d("remove_date", "${Loginkey.getUserKey(mainActivity)}" + "\n${Loginkey.getTokenKey(mainActivity)}")
+            Log.d("remove_date", Loginkey.getUserKey(mainActivity) + "\n${Loginkey.getTokenKey(mainActivity)}")
             Toast.makeText(mainActivity, "로그아웃 성공", Toast.LENGTH_LONG).show()
 
             // 앱 종료 후 재시작
