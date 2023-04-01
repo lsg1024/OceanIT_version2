@@ -13,7 +13,6 @@ abstract class AppDatabase : RoomDatabase() {
         private var INSTANCE: AppDatabase? = null
         fun getDBInstance(context: Context): AppDatabase? {
 
-            //INSTANCE가 null이면 초기화
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
                     context.applicationContext,
