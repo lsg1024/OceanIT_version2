@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.MainFragment"
-    android:background="#dddddd">
+    android:background="#EFEFEF">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -1031,11 +1031,11 @@
 
                         <TextView
                             android:id="@+id/seconed_text5"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
                             android:background="#fa9852"
-                            android:gravity="center"
                             android:fontFamily="@font/juaregular"
+                            android:gravity="center"
                             android:text="ORP (mV)"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textColor="@color/white"

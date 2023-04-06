@@ -158,139 +158,155 @@ class GraphFragment : Fragment() {
 
         })
 
+
         return view
     }
 
     override fun onResume() {
         super.onResume()
 
+        dataList1.clear()
+        dataList2.clear()
+        dataList3.clear()
+        dataList4.clear()
+        dataList5.clear()
+        dataList6.clear()
+
+        dataSets1.clear()
+        dataSets2.clear()
+        dataSets3.clear()
+        dataSets4.clear()
+        dataSets5.clear()
+        dataSets6.clear()
+
         call?.grap(user_key)?.enqueue(object : Callback<grap_DTO> {
             override fun onResponse(call: Call<grap_DTO>, response: Response<grap_DTO>) {
-            if (response.isSuccessful){
-                val grap = response.body()!!.result
+                if (response.isSuccessful){
+                    val grap = response.body()!!.result
 
-                // 리스트에 시간 정보를 넣는다
-                for (i in 0 until grap.size) {
-                    val j = grap[i].date
-                    val date = j.chunked(2)
-                    List_v.add(date[1] + date[2] + date[3] + date[4] + date[5] + date[6] + date[7])
+                    // 리스트에 시간 정보를 넣는다
+                    for (i in 0 until grap.size) {
+                        val j = grap[i].date
+                        val date = j.chunked(2)
+                        List_v.add(date[1] + date[2] + date[3] + date[4] + date[5] + date[6] + date[7])
+                    }
+
+                    List_v.reverse()
+
+                    for (i in 0 until grap.size) {
+                        val j = grap.size - 1
+                        addDataToList(i, j - i, dataList1, grap[j].Tc)
+                        addDataToList(i, j - i, dataList2, grap[j].DO)
+                        addDataToList(i, j - i, dataList3, grap[j].pH)
+                        addDataToList(i, j - i, dataList4, grap[j].Sa)
+                        addDataToList(i, j - i, dataList5, grap[j].ORP)
+                        addDataToList(i, j - i, dataList6, grap[j].TUR)
+                    }
+
+                    val lineDataSet1 = LineDataSet(dataList1, "수온(℃)")
+                    val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
+                    val lineDataSet3 = LineDataSet(dataList3, "pH(pH)")
+                    val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
+                    val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
+                    val lineDataSet6 = LineDataSet(dataList6, "탁도(NTU)")
+
+                    //1. 데이터 셋 만들기
+                    createSet(lineDataSet1)
+                    createSet(lineDataSet2)
+                    createSet(lineDataSet3)
+                    createSet(lineDataSet4)
+                    createSet(lineDataSet5)
+                    createSet(lineDataSet6)
+                    //2. 리스트에 데이터셋 추가
+                    dataSets1.add(lineDataSet1)
+                    dataSets2.add(lineDataSet2)
+                    dataSets3.add(lineDataSet3)
+                    dataSets4.add(lineDataSet4)
+                    dataSets5.add(lineDataSet5)
+                    dataSets6.add(lineDataSet6)
+
+                    //3. 라인 데이터에 리스트 추가
+                    line_data1 = LineData(dataSets1)
+                    line_data2 = LineData(dataSets2)
+                    line_data3 = LineData(dataSets3)
+                    line_data4 = LineData(dataSets4)
+                    line_data5 = LineData(dataSets5)
+                    line_data6 = LineData(dataSets6)
+
+                    chart_shape(chart)
+                    chart_shape(chart2)
+                    chart_shape(chart3)
+                    chart_shape(chart4)
+                    chart_shape(chart5)
+                    chart_shape(chart6)
+
+                    Custom_Legend(chart)
+                    Custom_Legend(chart2)
+                    Custom_Legend(chart3)
+                    Custom_Legend(chart4)
+                    Custom_Legend(chart5)
+                    Custom_Legend(chart6)
+
+                    setDataSetProperties(lineDataSet1, R.color.red)
+                    setDataSetProperties(lineDataSet2, R.color.primary)
+                    setDataSetProperties(lineDataSet3, R.color.brawn)
+                    setDataSetProperties(lineDataSet4, R.color.light_grean)
+                    setDataSetProperties(lineDataSet5, R.color.colorAccent)
+                    setDataSetProperties(lineDataSet6, R.color.purple_200)
+
+                    chart_YAxis(chart, tcmax!!, tcmin!!)
+                    chart_YAxis(chart2, domax!!, domin!!)
+                    chart_YAxis(chart3, phmax!!, phmin!!)
+                    chart_YAxis(chart4, samax!!, samin!!)
+                    val yAxis: YAxis = chart5.axisLeft
+                    chart5.axisRight.isEnabled = false
+                    yAxis.enableGridDashedLine(10f, 10f, 0f)
+
+                    yAxis.axisMaximum = orpmax!! * 2
+                    if (orpmin!! <= 250) {
+                        yAxis.axisMinimum = -500f
+                    } else {
+                        yAxis.axisMinimum = orpmin!! * -2
+                    }
+
+                    val yAxis2: YAxis = chart6.axisLeft
+                    chart6.axisRight.isEnabled = false
+                    yAxis2.enableGridDashedLine(10f, 10f, 0f)
+
+                    yAxis2.axisMaximum = turmax!! * 2
+                    if (turmin!! <= 250) {
+                        yAxis2.axisMinimum = -500f
+                    } else {
+                        yAxis2.axisMinimum = turmin!! * -2
+                    }
+
+                    chart.data = line_data1
+                    chart2.data = line_data2
+                    chart3.data = line_data3
+                    chart4.data = line_data4
+                    chart5.data = line_data5
+                    chart6.data = line_data6
+
+                    chart.invalidate()
+                    chart.setVisibleXRangeMaximum(3f)
+                    chart2.invalidate()
+                    chart2.setVisibleXRangeMaximum(3f)
+                    chart3.invalidate()
+                    chart3.setVisibleXRangeMaximum(3f)
+                    chart4.invalidate()
+                    chart4.setVisibleXRangeMaximum(3f)
+                    chart5.invalidate()
+                    chart5.setVisibleXRangeMaximum(3f)
+                    chart6.invalidate()
+                    chart6.setVisibleXRangeMaximum(3f)
+
                 }
-
-                List_v.reverse()
-
-                for (i in 0 until grap.size) {
-                    val j = grap.size - 1
-                    addDataToList(i, j - i, dataList1, grap[j].Tc)
-                    addDataToList(i, j - i, dataList2, grap[j].DO)
-                    addDataToList(i, j - i, dataList3, grap[j].pH)
-                    addDataToList(i, j - i, dataList4, grap[j].Sa)
-                    addDataToList(i, j - i, dataList5, grap[j].ORP)
-                    addDataToList(i, j - i, dataList6, grap[j].TUR)
-                }
-
-                val lineDataSet1 = LineDataSet(dataList1, "수온(℃)")
-                val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
-                val lineDataSet3 = LineDataSet(dataList3, "pH(pH)")
-                val lineDataSet4 = LineDataSet(dataList4, "염도(ppt)")
-                val lineDataSet5 = LineDataSet(dataList5, "OPR(mV)")
-                val lineDataSet6 = LineDataSet(dataList6, "탁도(NTU)")
-
-                //1. 데이터 셋 만들기
-                createSet(lineDataSet1)
-                createSet(lineDataSet2)
-                createSet(lineDataSet3)
-                createSet(lineDataSet4)
-                createSet(lineDataSet5)
-                createSet(lineDataSet6)
-                //2. 리스트에 데이터셋 추가
-                dataSets1.add(lineDataSet1)
-                dataSets2.add(lineDataSet2)
-                dataSets3.add(lineDataSet3)
-                dataSets4.add(lineDataSet4)
-                dataSets5.add(lineDataSet5)
-                dataSets6.add(lineDataSet6)
-
-                //3. 라인 데이터에 리스트 추가
-                line_data1 = LineData(dataSets1)
-                line_data2 = LineData(dataSets2)
-                line_data3 = LineData(dataSets3)
-                line_data4 = LineData(dataSets4)
-                line_data5 = LineData(dataSets5)
-                line_data6 = LineData(dataSets6)
-
-                chart_shape(chart)
-                chart_shape(chart2)
-                chart_shape(chart3)
-                chart_shape(chart4)
-                chart_shape(chart5)
-                chart_shape(chart6)
-
-                Custom_Legend(chart)
-                Custom_Legend(chart2)
-                Custom_Legend(chart3)
-                Custom_Legend(chart4)
-                Custom_Legend(chart5)
-                Custom_Legend(chart6)
-
-                setDataSetProperties(lineDataSet1, R.color.red)
-                setDataSetProperties(lineDataSet2, R.color.primary)
-                setDataSetProperties(lineDataSet3, R.color.brawn)
-                setDataSetProperties(lineDataSet4, R.color.light_grean)
-                setDataSetProperties(lineDataSet5, R.color.colorAccent)
-                setDataSetProperties(lineDataSet6, R.color.purple_200)
-
-                chart_YAxis(chart, tcmax!!, tcmin!!)
-                chart_YAxis(chart2, domax!!, domin!!)
-                chart_YAxis(chart3, phmax!!, phmin!!)
-                chart_YAxis(chart4, samax!!, samin!!)
-                val yAxis: YAxis = chart5.axisLeft
-                chart5.axisRight.isEnabled = false
-                yAxis.enableGridDashedLine(10f, 10f, 0f)
-
-                yAxis.axisMaximum = orpmax!! * 2
-                if (orpmin!! <= 250) {
-                    yAxis.axisMinimum = -500f
-                } else {
-                    yAxis.axisMinimum = orpmin!! * -2
-                }
-
-                val yAxis2: YAxis = chart6.axisLeft
-                chart6.axisRight.isEnabled = false
-                yAxis2.enableGridDashedLine(10f, 10f, 0f)
-
-                yAxis2.axisMaximum = turmax!! * 2
-                if (turmin!! <= 250) {
-                    yAxis2.axisMinimum = -500f
-                } else {
-                    yAxis2.axisMinimum = turmin!! * -2
-                }
-
-                chart.data = line_data1
-                chart2.data = line_data2
-                chart3.data = line_data3
-                chart4.data = line_data4
-                chart5.data = line_data5
-                chart6.data = line_data6
-
-                chart.invalidate()
-                chart.setVisibleXRangeMaximum(3f)
-                chart2.invalidate()
-                chart2.setVisibleXRangeMaximum(3f)
-                chart3.invalidate()
-                chart3.setVisibleXRangeMaximum(3f)
-                chart4.invalidate()
-                chart4.setVisibleXRangeMaximum(3f)
-                chart5.invalidate()
-                chart5.setVisibleXRangeMaximum(3f)
-                chart6.invalidate()
-                chart6.setVisibleXRangeMaximum(3f)
-
             }
-        }
             override fun onFailure(call: Call<grap_DTO>, t: Throwable) {
                 Log.d("grap_do", "${t.message}")
             }
         })
+
     }
 
     private fun chart_shape(set_chart: LineChart) {
@@ -298,7 +314,6 @@ class GraphFragment : Fragment() {
         mainActivity.runOnUiThread {
             set_chart.animateX(1000)
             set_chart.setTouchEnabled(true)
-            set_chart.setVisibleXRangeMaximum(3f)
             set_chart.setPinchZoom(false)
             set_chart.isDoubleTapToZoomEnabled = false
             set_chart.setExtraOffsets(8f, 16f, 45f, 8f)
@@ -353,6 +368,7 @@ class GraphFragment : Fragment() {
             fillColor = getColor(R.color.white)
             setDrawValues(true)
         }
+
         return set
     }
 
@@ -365,5 +381,4 @@ class GraphFragment : Fragment() {
     fun addDataToList(i: Int, j: Int, data: ArrayList<Entry>, value: Float){
         data.add(Entry(i.toFloat(), value))
     }
-
 }
