@@ -5,5 +5,4 @@ import androidx.lifecycle.AndroidViewModel
 
 class CompanyViewModel(application: Application) : AndroidViewModel(application) {
 
-
 }
