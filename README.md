@@ -9,7 +9,7 @@
 + 추가 기능 webView를 이용한 수조 모니터링
 
 # 오픈 소스 라이브러리
-https://github.com/anastr/SpeedView
+https://github.com/anastr/SpeedView /n
 https://github.com/PhilJay/MPAndroidChart
 
 1. 실시간 센서 데이터 -> 
