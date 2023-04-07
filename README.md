@@ -10,7 +10,6 @@
 
 # 오픈 소스 라이브러리
 https://github.com/anastr/SpeedView
-
 https://github.com/PhilJay/MPAndroidChart
 
 1. 실시간 센서 데이터 -> 
