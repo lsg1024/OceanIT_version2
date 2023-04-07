@@ -7,15 +7,17 @@
 
 1. 종합 수치 및 개별 수치 표현 ->
 
-    1. 소켓 연결 / 레트로핏 연결하는 방식과 비슷하다 느낌
-    2. speedView 라이브러리 이용 기존 라이브러리에서 수치와 측정 그래프 변경
+        1. 소켓 연결 / 레트로핏 연결하는 방식과 비슷하다 느낌
+        2. speedView 라이브러리 이용 기존 라이브러리에서 수치와 측정 그래프 변경
+
 https://github.com/anastr/SpeedView
 
 
 2. 이전 수치 그래프 페이지 ->
 
   1. 소켓 연결 -> API 연결 수정 
-  2. MPAndroidChart 라이브러리 이용 기존 라이브러리에서 LineChart 이용  
+  2. MPAndroidChart 라이브러리 이용 기존 라이브러리에서 LineChart 이용
+  3.   
 https://github.com/PhilJay/MPAndroidChart
 
 
