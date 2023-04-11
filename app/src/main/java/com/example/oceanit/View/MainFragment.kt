@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,28 +13,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.oceanit.DTO.SensorDTO
-import com.example.oceanit.DTO.companyDTO
 import com.example.oceanit.R
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
-import com.example.oceanit.Socket_File.Join_Data
 import com.example.oceanit.Socket_File.Sensor_data
+import com.example.oceanit.ViewModel.CompanyViewModel
 import com.example.oceanit.ViewModel.SensorViewModel
 import com.example.oceanit.ViewModel.SocketViewModel
 import com.example.oceanit.databinding.FragmentMainBinding
 import com.github.anastr.speedviewlib.SpeedView
 import com.github.anastr.speedviewlib.components.Section
-import com.google.gson.Gson
 import com.ramotion.foldingcell.FoldingCell
-import io.socket.client.IO
-import io.socket.client.Socket
-import io.socket.emitter.Emitter
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.net.URISyntaxException
 import java.text.DecimalFormat
 
 
@@ -54,6 +42,7 @@ class MainFragment : Fragment() {
 
     private lateinit var socketViewModel: SocketViewModel
     private lateinit var sensorViewModel: SensorViewModel
+    private lateinit var companyViewModel : CompanyViewModel
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -71,6 +60,7 @@ class MainFragment : Fragment() {
 
         socketViewModel = ViewModelProvider(this)[SocketViewModel::class.java]
         sensorViewModel = ViewModelProvider(this)[SensorViewModel::class.java]
+        companyViewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
 
         val sensorViews = arrayOf(
             binding.speedView1,
@@ -87,7 +77,7 @@ class MainFragment : Fragment() {
             }
         })
 
-        socketViewModel.sensorData.observe(viewLifecycleOwner, Observer { data ->
+        socketViewModel.sensorData.observe(viewLifecycleOwner) { data ->
             data?.let {
                 lifecycleScope.launch {
                     binding.topText1.text = it.Tc.toString()
@@ -104,12 +94,12 @@ class MainFragment : Fragment() {
                     updateBackground(it.ORP.toInt(), binding.speedView5, binding.blinkText5)
                     updateBackground(it.TUR.toInt(), binding.speedView6, binding.blinkText6)
 
-                    binding.speedView1.speedTextListener = { df.format(data.Tc)}
-                    binding.speedView2.speedTextListener = { df.format(data.DO)}
-                    binding.speedView3.speedTextListener = { df.format(data.pH)}
-                    binding.speedView4.speedTextListener = { df.format(data.Sa)}
-                    binding.speedView5.speedTextListener = { df.format(data.ORP)}
-                    binding.speedView6.speedTextListener = { df.format(data.TUR)}
+                    binding.speedView1.speedTextListener = { df.format(data.Tc) }
+                    binding.speedView2.speedTextListener = { df.format(data.DO) }
+                    binding.speedView3.speedTextListener = { df.format(data.pH) }
+                    binding.speedView4.speedTextListener = { df.format(data.Sa) }
+                    binding.speedView5.speedTextListener = { df.format(data.ORP) }
+                    binding.speedView6.speedTextListener = { df.format(data.TUR) }
 
                     binding.speedView1.realSpeedTo(df.format(data.Tc).toFloat())
                     binding.speedView2.realSpeedTo(df.format(data.DO).toFloat())
@@ -120,7 +110,7 @@ class MainFragment : Fragment() {
                 }
             }
 
-        })
+        }
 
         sensorViewModel.getSensorOG()
 
@@ -158,7 +148,6 @@ class MainFragment : Fragment() {
             }
         })
 
-
         setupSpeedView(binding.speedView1)
         setupSpeedView(binding.speedView2)
         setupSpeedView(binding.speedView3)
@@ -168,6 +157,10 @@ class MainFragment : Fragment() {
 
         toggleFoldable(binding.foldingCell, binding.foldingCell2, binding.foldingCell3, binding.foldingCell4, binding.foldingCell5,binding.foldingCell6)
 
+        companyViewModel.companyData.observe(viewLifecycleOwner, Observer {data ->
+            binding.mainName.text = data!!.result.company
+        })
+
         return binding.root
 
 
@@ -175,28 +168,6 @@ class MainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        call?.company(user_key)?.enqueue(object : Callback<companyDTO>{
-
-            override fun onResponse(call: Call<companyDTO>, response: Response<companyDTO>) {
-                if (response.isSuccessful) {
-                    val result : companyDTO? = response.body()
-
-                    Log.d("company_name", "$result")
-
-                    // 회사 이름 textViewd에 넣어주기
-                    binding.mainName.text = result!!.result.company
-
-                }
-            }
-
-            override fun onFailure(call: Call<companyDTO>, t: Throwable) {
-
-                Log.d("company_name", "${t.message}")
-
-            }
-
-        })
 
     }
 

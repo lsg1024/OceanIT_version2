@@ -25,7 +25,7 @@ class SocketRepository() {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    fun initSocket(user_key: Int) {
+    fun initSocket(user_key : Int) {
         try {
             mSocket = IO.socket("http://211.184.227.81:8500")
             Log.d("initSocket", "initSocket called")
