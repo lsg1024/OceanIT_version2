@@ -1,7 +1,7 @@
 package com.example.oceanit.ViewModel
 
 import android.app.Application
-시import android.util.Log
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.oceanit.DTO.companyDTO
