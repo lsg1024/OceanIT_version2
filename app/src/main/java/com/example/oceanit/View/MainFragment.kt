@@ -39,6 +39,7 @@ class MainFragment : Fragment() {
     private var nowValue4 : TextView? = null
     private var nowValue5 : TextView? = null
     private var nowValue6 : TextView? = null
+    lateinit var sensorViews : Array<SpeedView>
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -58,7 +59,7 @@ class MainFragment : Fragment() {
         socketViewModel = ViewModelProvider(this)[SocketViewModel::class.java]
         companyViewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
 
-        val sensorViews = arrayOf(
+        sensorViews = arrayOf(
             binding.speedView1,
             binding.speedView2,
             binding.speedView3,
@@ -176,6 +177,14 @@ class MainFragment : Fragment() {
         nowValue4!!.text = sensorDataArray[0].Sa.toString()
         nowValue5!!.text = sensorDataArray[0].ORP.toString()
         nowValue6!!.text = sensorDataArray[0].TUR.toString()
+
+
+        updateSensorData(sensorDataArray[0].Tc, binding.speedView1)
+        updateSensorData(sensorDataArray[0].DO, binding.speedView2)
+        updateSensorData(sensorDataArray[0].pH, binding.speedView3)
+        updateSensorData(sensorDataArray[0].Sa, binding.speedView4)
+        updateSensorData(sensorDataArray[0].ORP, binding.speedView5)
+        updateSensorData(sensorDataArray[0].TUR, binding.speedView6)
     }
 
 //  SpeedView 라이브러리 기존 소수점 형식 포멧을 통해 변경 0.0 -> 0.00 (데이터 상세 표시를 위해)
