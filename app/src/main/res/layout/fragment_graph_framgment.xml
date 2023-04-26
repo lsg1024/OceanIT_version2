@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.GraphFragment"
-    android:background="#dddddd">
+    android:background="#F3F3F3"
+    tools:context=".View.GraphFragment">
 
     <ScrollView
         android:layout_width="match_parent"

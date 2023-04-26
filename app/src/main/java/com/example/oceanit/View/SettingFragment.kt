@@ -16,69 +16,73 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.oceanit.DB.AppDatabase
 import com.example.oceanit.DTO.*
 import com.example.oceanit.R
 import com.example.oceanit.Retrofit.Loginkey
 import com.example.oceanit.Retrofit.Retrofit2
+import com.example.oceanit.ViewModel.CompanyViewModel
+import com.example.oceanit.ViewModel.LoginServiceViewModel
+import com.example.oceanit.ViewModel.SensorChangeViewModel
 import com.google.android.material.slider.RangeSlider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.DecimalFormat
 
-
-// 자유롭게 변경하고 버튼을 누르면 edittext 값들을 서버로 전송
-// 페이지에 들어왔을 때 onCreateView에서 서버에 저장된 값을 불러온다
-//
-
 class SettingFragment : Fragment() {
 
-    lateinit var rangeSlider: RangeSlider
-    lateinit var rangeSlider2: RangeSlider
-    lateinit var rangeSlider3: RangeSlider
-    lateinit var rangeSlider4: RangeSlider
-    lateinit var rangeSlider5: RangeSlider
-    lateinit var rangeSlider6: RangeSlider
+    private lateinit var rangeSlider: RangeSlider
+    private lateinit var rangeSlider2: RangeSlider
+    private lateinit var rangeSlider3: RangeSlider
+    private lateinit var rangeSlider4: RangeSlider
+    private lateinit var rangeSlider5: RangeSlider
+    private lateinit var rangeSlider6: RangeSlider
 
-    lateinit var watertank_name: TextView
-    lateinit var watertank_name2: TextView
-    lateinit var watertank_name3: TextView
-    lateinit var watertank_name4: TextView
-    lateinit var watertank_name5: TextView
-    lateinit var watertank_name6: TextView
+    private lateinit var watertank_name: TextView
+    private lateinit var watertank_name2: TextView
+    private lateinit var watertank_name3: TextView
+    private lateinit var watertank_name4: TextView
+    private lateinit var watertank_name5: TextView
+    private lateinit var watertank_name6: TextView
 
-    lateinit var num1_1: EditText
-    lateinit var num2_1: EditText
-    lateinit var num3_1: EditText
-    lateinit var num4_1: EditText
-    lateinit var num5_1: EditText
-    lateinit var num6_1: EditText
+    private lateinit var num1_1: EditText
+    private lateinit var num2_1: EditText
+    private lateinit var num3_1: EditText
+    private lateinit var num4_1: EditText
+    private lateinit var num5_1: EditText
+    private lateinit var num6_1: EditText
 
-    lateinit var num1_2: EditText
-    lateinit var num2_2: EditText
-    lateinit var num3_2: EditText
-    lateinit var num4_2: EditText
-    lateinit var num5_2: EditText
-    lateinit var num6_2: EditText
+    private lateinit var num1_2: EditText
+    private lateinit var num2_2: EditText
+    private lateinit var num3_2: EditText
+    private lateinit var num4_2: EditText
+    private lateinit var num5_2: EditText
+    private lateinit var num6_2: EditText
 
-    lateinit var name : TextView
-    lateinit var addr : TextView
-    lateinit var tel : TextView
-    lateinit var ceo : TextView
-    lateinit var button: Button
+    private lateinit var name : TextView
+    private lateinit var addr : TextView
+    private lateinit var tel : TextView
+    private lateinit var ceo : TextView
+    private lateinit var button: Button
 
-    lateinit var constraint : ConstraintLayout
+    private lateinit var constraint : ConstraintLayout
 
-    var number1: String = ""
-    lateinit var logout_btn : Button
+    private var number1: String = ""
+    private lateinit var logout_btn : Button
 
-    val call by lazy { Retrofit2.getInstance() }
+    private val call by lazy { Retrofit2.getInstance() }
 
     private var user_key : Int = 0
     private var user_token : String = ""
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
+
+    private lateinit var companyViewModel : CompanyViewModel
+    private lateinit var  sensorChangeViewModel : SensorChangeViewModel
+    private lateinit var loginServiceViewModel: LoginServiceViewModel
 
 
     override fun onCreateView(
@@ -129,38 +133,32 @@ class SettingFragment : Fragment() {
 
         mainActivity = context as MainActivity
 
+        companyViewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
+        sensorChangeViewModel = ViewModelProvider(this)[SensorChangeViewModel::class.java]
+        loginServiceViewModel = ViewModelProvider(this)[LoginServiceViewModel::class.java]
+
+        companyViewModel.companyData.observe(viewLifecycleOwner, Observer {data ->
+            name.text = data!!.result.company
+            addr.text = data.result.addr
+            tel.text = data.result.tel
+            ceo.text = data.result.ceo
+        })
+
+        button.setOnClickListener {
+            sensorChangeViewModel.sendSensorData(user_key, getSensorData())
+        }
+
+//        logout_btn.setOnClickListener {
+//            loginServiceViewModel.
+//        }
+
         val db = AppDatabase.getDBInstance(mainActivity)
 
         user_key = Loginkey.getUserKey(mainActivity).toInt()
         user_token = Loginkey.getTokenKey(mainActivity)
         Log.d("user_token_get", user_token)
 
-        call?.company(user_key)?.enqueue(object : Callback<companyDTO>{
-
-            override fun onResponse(call: Call<companyDTO>, response: Response<companyDTO>) {
-                if (response.isSuccessful) {
-                    val result : companyDTO? = response.body()
-
-                    Log.d("company_name", "$result")
-
-                    // 회사 이름 textViewd에 넣어주기
-                    name.text = result!!.result.company
-                    addr.text = result.result.addr
-                    tel.text = result.result.tel
-                    ceo.text = result.result.ceo
-
-                }
-            }
-
-
-            override fun onFailure(call: Call<companyDTO>, t: Throwable) {
-
-                Log.d("company_name", "${t.message}")
-
-            }
-
-        })
-
+//      임계치 최대치를 입력받아 슬라이더 최대 값을 설정해준다.
         call?.Sensor_OG(user_key)?.enqueue(object : Callback<SensorDTO> {
 
             @SuppressLint("SetTextI18n")
@@ -273,7 +271,7 @@ class SettingFragment : Fragment() {
                         val result : logoutDTO? = response.body()
 
                         result!!.result.user_token
-                        Log.d("logout_retrofit2", "${result!!.result.user_token}")
+                        Log.d("logout_retrofit2", "${result.result.user_token}")
                         result.result.user_key
                         Log.d("logout_retrofit2", "${result.result.user_key}")
                     }
@@ -285,6 +283,7 @@ class SettingFragment : Fragment() {
                 }
 
             })
+
             Loginkey.removeKey(mainActivity)
             Loginkey.removeTokenKey(mainActivity)
             db!!.UserDao()!!.deleteAllUsers()
@@ -316,112 +315,73 @@ class SettingFragment : Fragment() {
 
 
         // 데이터 입력하는 값 수조 / 서버에서 수조 이름 받아오기 / 데이터 스크롤 + EditText 값 변경
+//        button.setOnClickListener{
+//
+//
+//            val formattedValue = inputNum.map {
+//                val floatValue = it.text.toString().toFloat()
+//                mFormat.format(floatValue).toFloat()
+//            }
+//
+//            call?.Sensor_CG(user_key, Sensor_Body(
+//                Tc_low = formattedValue[0],
+//                Tc_high = formattedValue[1],
+//                DO_low = formattedValue[2],
+//                DO_high = formattedValue[3],
+//                pH_low = formattedValue[4],
+//                pH_high = formattedValue[5],
+//                Sa_low =  formattedValue[6],
+//                Sa_high = formattedValue[7],
+//                ORP_low = formattedValue[8],
+//                ORP_high = formattedValue[9],
+//                TUR_low = formattedValue[10],
+//                TUR_high = formattedValue[11]
+//            ))?.enqueue(object : Callback<Sensor_CG_DTO>{
+//
+//                override fun onResponse(call: Call<Sensor_CG_DTO>, response: Response<Sensor_CG_DTO>) {
+//                    if (response.isSuccessful) {
+//                        val result : Sensor_CG_DTO? = response.body()
+//
+//                        num1_1.setText("")
+//                        num1_2.setText("")
+//                        num2_1.setText("")
+//                        num2_2.setText("")
+//                        num3_1.setText("")
+//                        num3_2.setText("")
+//                        num4_1.setText("")
+//                        num4_2.setText("")
+//                        num5_1.setText("")
+//                        num5_2.setText("")
+//                        num6_1.setText("")
+//                        num6_2.setText("")
+//
+//                        Log.d("retrofit_sensor_cg", "${num1_1.text}")
+//                        Log.d("change_sensor", "$result")
+//
+//                        Toast.makeText(context, "서버에 변경된 데이터를 전송했습니다", Toast.LENGTH_SHORT).show()
+//
+//                        change_value()
+//                    }
+//                }
+//
+//
+//                override fun onFailure(call: Call<Sensor_CG_DTO>, t: Throwable) {
+//
+//                    Log.d("change_sensor", "${t.message}")
+//
+//                }
+//
+//            })
+//
+//        }
 
-        user_key = Loginkey.getUserKey(mainActivity).toInt()
+        val rangeSliders = listOf(rangeSlider, rangeSlider2, rangeSlider3, rangeSlider4, rangeSlider5, rangeSlider6)
 
-        button.setOnClickListener{
-
-            val mFormat = DecimalFormat("#.##")
-
-            // 모듈화 예정
-            var fnum1_1 = num1_1.text.toString().toFloat()
-            fnum1_1 = mFormat.format(fnum1_1).toFloat()
-
-            var fnum1_2 = num1_2.text.toString().toFloat()
-            fnum1_2 =mFormat.format(fnum1_2).toFloat()
-
-            var fnum2_1 = num2_1.text.toString().toFloat()
-            fnum2_1 = mFormat.format(fnum2_1).toFloat()
-
-            var fnum2_2 = num2_2.text.toString().toFloat()
-            fnum2_2 = mFormat.format(fnum2_2).toFloat()
-
-            var fnum3_1 = num3_1.text.toString().toFloat()
-            fnum3_1 = mFormat.format(fnum3_1).toFloat()
-
-            var fnum3_2 = num3_2.text.toString().toFloat()
-            fnum3_2 = mFormat.format(fnum3_2).toFloat()
-
-            var fnum4_1 = num4_1.text.toString().toFloat()
-            fnum4_1 = mFormat.format(fnum4_1).toFloat()
-
-            var fnum4_2 = num4_2.text.toString().toFloat()
-            fnum4_2 = mFormat.format(fnum4_2).toFloat()
-
-            var fnum5_1 = num5_1.text.toString().toFloat()
-            fnum5_1 = mFormat.format(fnum5_1).toFloat()
-
-            var fnum5_2 = num5_2.text.toString().toFloat()
-            fnum5_2 = mFormat.format(fnum5_2).toFloat()
-
-            var fnum6_1 = num6_1.text.toString().toFloat()
-            fnum6_1 = mFormat.format(fnum6_1).toFloat()
-
-            var fnum6_2 = num6_2.text.toString().toFloat()
-            fnum6_2 = mFormat.format(fnum6_2).toFloat()
-
-            Log.d("retrofit2_bbb", String.format("%.2f",fnum1_1))
-
-            call?.Sensor_CG(user_key, Sensor_Body(
-                Tc_low = fnum1_1,
-                Tc_high = fnum1_2,
-                DO_low = fnum2_1,
-                DO_high =fnum2_2,
-                pH_low = fnum3_1,
-                pH_high = fnum3_2,
-                Sa_low =  fnum4_1,
-                Sa_high = fnum4_2,
-                ORP_low = fnum5_1,
-                ORP_high = fnum5_2,
-                TUR_low = fnum6_1,
-                TUR_high = fnum6_2
-            ))?.enqueue(object : Callback<Sensor_CG_DTO>{
-
-                override fun onResponse(call: Call<Sensor_CG_DTO>, response: Response<Sensor_CG_DTO>) {
-                    if (response.isSuccessful) {
-                        val result : Sensor_CG_DTO? = response.body()
-
-
-                        num1_1.setText("")
-                        num1_2.setText("")
-                        num2_1.setText("")
-                        num2_2.setText("")
-                        num3_1.setText("")
-                        num3_2.setText("")
-                        num4_1.setText("")
-                        num4_2.setText("")
-                        num5_1.setText("")
-                        num5_2.setText("")
-                        num6_1.setText("")
-                        num6_2.setText("")
-
-                        Log.d("retrofit_sensor_cg", "${num1_1.text}")
-                        Log.d("change_sensor", "$result")
-
-                        Toast.makeText(context, "서버에 변경된 데이터를 전송했습니다", Toast.LENGTH_SHORT).show()
-
-                        change_value()
-                    }
-                }
-
-
-                override fun onFailure(call: Call<Sensor_CG_DTO>, t: Throwable) {
-
-                    Log.d("change_sensor", "${t.message}")
-
-                }
-
-            })
-
-        }
-
+        val numPackage = listOf(num1_1 to num1_2, num2_1 to num2_2, num3_1 to num3_2, num4_1 to num4_2, num5_1 to num5_2, num6_1 to num6_2)
         // 바 움직이면서 min max 값
-        rangeSlider.addOnSliderTouchListener(range_Listner(num1_1, num1_2, rangeSlider))
-        rangeSlider2.addOnSliderTouchListener(range_Listner(num2_1, num2_2, rangeSlider2))
-        rangeSlider3.addOnSliderTouchListener(range_Listner(num3_1, num3_2, rangeSlider3))
-        rangeSlider4.addOnSliderTouchListener(range_Listner(num4_1, num4_2, rangeSlider4))
-        rangeSlider5.addOnSliderTouchListener(range_Listner(num5_1, num5_2, rangeSlider5))
-        rangeSlider6.addOnSliderTouchListener(range_Listner(num6_1, num6_2, rangeSlider6))
+        rangeSliders.forEachIndexed { index, rangeSlider ->
+            rangeSlider.addOnSliderTouchListener(range_Listner(numPackage[index].first, numPackage[index].second, rangeSlider))
+        }
 
     }
 
@@ -531,6 +491,43 @@ class SettingFragment : Fragment() {
             }
 
         })
+    }
+
+    // 센서 데이터 가져오기
+    private fun getSensorData(): Sensor_Body {
+
+        val mFormat = DecimalFormat("#.##")
+
+        // 임계치 수치 EditText 리스트
+        val inputNum = listOf(
+            num1_1, num1_2,
+            num2_1, num2_2,
+            num3_1, num3_2,
+            num4_1, num4_2,
+            num5_1, num5_2,
+            num6_1, num6_2)
+
+        // 데이터 수치 0.00 자리로 포멧
+        val formattedValue = inputNum.map {
+            val floatValue = it.text.toString().toFloat()
+            mFormat.format(floatValue).toFloat()
+        }
+
+//      포멧 데이터 반환
+        return Sensor_Body(
+            Tc_low = formattedValue[0],
+            Tc_high = formattedValue[1],
+            DO_low = formattedValue[2],
+            DO_high = formattedValue[3],
+            pH_low = formattedValue[4],
+            pH_high = formattedValue[5],
+            Sa_low = formattedValue[6],
+            Sa_high = formattedValue[7],
+            ORP_low = formattedValue[8],
+            ORP_high = formattedValue[9],
+            TUR_low = formattedValue[10],
+            TUR_high = formattedValue[11]
+        )
     }
 
 

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.SettingFragment"
-    android:background="#0000001A">
+    android:background="#F3F3F3"
+    tools:context=".View.SettingFragment">
 
 
     <ScrollView
@@ -17,7 +17,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#dddddd">
+            android:background="#FFFFFF">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/customlayout01"
@@ -553,7 +553,7 @@
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/white_edge"
                 android:backgroundTint="#516AD5"
-                android:elevation="5dp"
+                android:elevation="10dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
