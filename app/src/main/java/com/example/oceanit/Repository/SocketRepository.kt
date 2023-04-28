@@ -29,7 +29,6 @@ class SocketRepository() {
     private val _sensorBeforeData = MutableLiveData<Array<Sensor_data>?>()
     val sensorBeforeData: MutableLiveData<Array<Sensor_data>?> = _sensorBeforeData
 
-    private val retrofit = Retrofit2.getInstance()
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
     private val call = Retrofit2.getInstance()
