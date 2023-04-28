@@ -184,7 +184,7 @@ class GraphFragment : Fragment() {
                 if (response.isSuccessful){
                     val grap = response.body()!!.result
 
-                    // 리스트에 시간 정보를 넣는다
+                    // 리스트에 시간 정보를 포멧 후 넣는다
                     for (i in 0 until grap.size) {
                         val j = grap[i].date
                         val date = j.chunked(2)
@@ -195,13 +195,15 @@ class GraphFragment : Fragment() {
 
                     for (i in 0 until grap.size) {
                         val j = grap.size - 1
-                        addDataToList(i, j - i, dataList1, grap[j].Tc)
-                        addDataToList(i, j - i, dataList2, grap[j].DO)
-                        addDataToList(i, j - i, dataList3, grap[j].pH)
-                        addDataToList(i, j - i, dataList4, grap[j].Sa)
-                        addDataToList(i, j - i, dataList5, grap[j].ORP)
-                        addDataToList(i, j - i, dataList6, grap[j].TUR)
+                        Log.d("j데이터 값", "${j - i}")
+                        addDataToList(i, dataList1, grap[j-i].Tc)
+                        addDataToList(i, dataList2, grap[j-i].DO)
+                        addDataToList(i, dataList3, grap[j-i].pH)
+                        addDataToList(i, dataList4, grap[j-i].Sa)
+                        addDataToList(i, dataList5, grap[j-i].ORP)
+                        addDataToList(i, dataList6, grap[j-i].TUR)
                     }
+
 
                     val lineDataSet1 = LineDataSet(dataList1, "수온(℃)")
                     val lineDataSet2 = LineDataSet(dataList2, "산소(mg/L)")
@@ -217,6 +219,7 @@ class GraphFragment : Fragment() {
                     createSet(lineDataSet4)
                     createSet(lineDataSet5)
                     createSet(lineDataSet6)
+
                     //2. 리스트에 데이터셋 추가
                     dataSets1.add(lineDataSet1)
                     dataSets2.add(lineDataSet2)
@@ -258,6 +261,7 @@ class GraphFragment : Fragment() {
                     chart_YAxis(chart2, domax!!, domin!!)
                     chart_YAxis(chart3, phmax!!, phmin!!)
                     chart_YAxis(chart4, samax!!, samin!!)
+
                     val yAxis: YAxis = chart5.axisLeft
                     chart5.axisRight.isEnabled = false
                     yAxis.enableGridDashedLine(10f, 10f, 0f)
@@ -335,26 +339,29 @@ class GraphFragment : Fragment() {
         }
     }
 
+//    차트 내 데이터 크기 및 공간 주기
     private fun Custom_Legend(set_chart: LineChart) {
         val legend: Legend = set_chart.legend
         legend.formSize = 10f
         legend.textSize = 15f
     }
 
+//    Y 차트 높이 조절하는 함수
     private fun chart_YAxis(set_chart: LineChart, max_data:Float, min_data: Float) {
 
         set_chart.axisRight.isEnabled = false
         set_chart.axisLeft.apply {
             enableGridDashedLine(10f, 10f, 0f)
             axisMaximum = max_data * 3
-            if (min_data <= 20) {
-                axisMinimum = -40f
+            axisMinimum = if (min_data <= 20) {
+                -40f
             } else {
-                axisMinimum = min_data * -2
+                min_data * -2
             }
         }
     }
 
+//    차트 속성 정하기
     private fun createSet(set: LineDataSet): LineDataSet {
 
         set.apply {
@@ -372,13 +379,15 @@ class GraphFragment : Fragment() {
         return set
     }
 
+//   차트 내부 색 정하기 및 데이터 포멧 -> 소수점 2자리까지 자르기
     private fun setDataSetProperties(lineDataSet: LineDataSet, color: Int){
         lineDataSet.color = ContextCompat.getColor(mainActivity, color)
         lineDataSet.setCircleColor(ContextCompat.getColor(mainActivity, color))
         lineDataSet.valueFormatter = MyValueFormatter()
     }
 
-    fun addDataToList(i: Int, j: Int, data: ArrayList<Entry>, value: Float){
+//    차트 데이터 넣기
+    fun addDataToList(i: Int, data: ArrayList<Entry>, value: Float){
         data.add(Entry(i.toFloat(), value))
     }
 }
