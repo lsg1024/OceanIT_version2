@@ -186,7 +186,7 @@ class MainFragment : Fragment() {
         updateSensorData(sensorDataArray[0].TUR, binding.speedView6)
     }
 
-//  SpeedView 라이브러리 기존 소수점 형식 포멧을 통해 변경 0.0 -> 0.00 (데이터 상세 표시를 위해)
+//  SpeedView 라이브러리 기존 소수점 형식 포멧을 통해 변경 0.0 -> 0.00 (데이터 상세 표시를 위해) 현재 값 표시
     private fun updateSensorData(value: Float, speedView: SpeedView) {
         speedView.speedTextListener = { df.format(value) }
         speedView.realSpeedTo(df.format(value).toFloat())
