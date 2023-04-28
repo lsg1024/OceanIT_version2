@@ -19,6 +19,7 @@ class NetWorkCheck : AppCompatActivity() {
         setContentView(R.layout.networkcheck)
 
         layoutDisconnected = findViewById(R.id.layoutDisconnected)
+        layoutDisconnected.visibility = View.GONE
 
         viewModel.checkNetworkConnection()
 
